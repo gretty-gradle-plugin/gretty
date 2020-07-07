@@ -78,7 +78,6 @@ class JettyConfigurerImpl implements JettyConfigurer {
     if(params.httpEnabled && !httpConn) {
       newHttpConnector = true
       httpConn = new ServerConnector(server, new HttpConnectionFactory(http_config))
-      httpConn.soLingerTime = -1
     }
 
     if(httpConn) {
@@ -108,7 +107,6 @@ class JettyConfigurerImpl implements JettyConfigurer {
       httpsConn = new ServerConnector(server,
         new SslConnectionFactory(new SslContextFactory(), 'http/1.1'),
         new HttpConnectionFactory(https_config))
-      httpsConn.soLingerTime = -1
     }
 
     if(httpsConn) {
