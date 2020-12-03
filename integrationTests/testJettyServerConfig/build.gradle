@@ -10,4 +10,4 @@ dependencies {
 }
 
 defineIntegrationTest()
-testAll.dependsOn defineIntegrationTestAllContainers(['jetty7', 'jetty8', 'jetty9'])
+testAll.dependsOn defineIntegrationTestAllContainers(['jetty7', 'jetty8', 'jetty9', 'jetty10'])
