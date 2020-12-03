@@ -8,6 +8,9 @@ include 'libs:gretty-runner-jetty'
 include 'libs:gretty-runner-jetty7'
 include 'libs:gretty-runner-jetty8'
 include 'libs:gretty-runner-jetty9'
+if (JavaVersion.current().isJava11Compatible()) {
+  include 'libs:gretty-runner-jetty10'
+}
 // we don't try to compile gretty-runner-jetty93/4 against jdk prior to 8
 if (JavaVersion.current().isJava8Compatible()) {
   include 'libs:gretty-runner-jetty93'

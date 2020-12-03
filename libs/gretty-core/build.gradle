@@ -29,6 +29,8 @@ tasks.processResources {
     jetty93Version: project.jetty93_version,
     jetty94Version: project.jetty94_version,
     jetty9ServletApiVersion: project.jetty9_servlet_api_version,
+    jetty10Version: project.jetty10_version,
+    jetty10ServletApiVersion: project.jetty10_servlet_api_version,
     tomcat85Version: project.tomcat85_version,
     tomcat85ServletApiVersion: project.tomcat85_servlet_api_version,
     tomcat9Version: project.tomcat9_version,

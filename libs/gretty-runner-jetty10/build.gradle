@@ -8,15 +8,14 @@ configurations {
 
 dependencies {
   compile project(':libs:gretty-runner-jetty')
-  compile "javax.servlet:javax.servlet-api:$jetty9_servlet_api_version"
-  compile "org.eclipse.jetty:jetty-server:$jetty94_version"
-  compile "org.eclipse.jetty:jetty-servlet:$jetty94_version"
-  compile "org.eclipse.jetty:jetty-webapp:$jetty94_version"
-  compile "org.eclipse.jetty:jetty-security:$jetty94_version"
-  compile "org.eclipse.jetty:apache-jsp:$jetty94_version"
-  compile "org.eclipse.jetty:jetty-annotations:$jetty94_version"
-  compile "org.eclipse.jetty:jetty-plus:$jetty94_version"
-  compile "org.eclipse.jetty.websocket:javax-websocket-server-impl:$jetty94_version"
+  compile "javax.servlet:javax.servlet-api:$jetty10_servlet_api_version"
+  compile "org.eclipse.jetty:jetty-server:$jetty10_version"
+  compile "org.eclipse.jetty:jetty-servlet:$jetty10_version"
+  compile "org.eclipse.jetty:jetty-webapp:$jetty10_version"
+  compile "org.eclipse.jetty:jetty-security:$jetty10_version"
+  compile "org.eclipse.jetty:apache-jsp:$jetty10_version"
+  compile "org.eclipse.jetty:jetty-annotations:$jetty10_version"
+  compile "org.eclipse.jetty:jetty-plus:$jetty10_version"
   compile "org.ow2.asm:asm:$asm_version"
   compile "org.ow2.asm:asm-commons:$asm_version"
 }
