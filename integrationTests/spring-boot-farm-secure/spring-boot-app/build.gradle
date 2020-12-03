@@ -27,7 +27,7 @@ farm {
 
 defineIntegrationTest()
 
-testAll.dependsOn defineFarmIntegrationTestAllContainers(['jetty8', 'jetty9', 'tomcat85', 'tomcat9'], {
+testAll.dependsOn defineFarmIntegrationTestAllContainers(['jetty8', 'jetty9', 'jetty10', 'tomcat85', 'tomcat9'], {
   webapp project
   webapp ':spring-boot-farm-secure:spring-boot-webservice'
   webapp ':spring-boot-farm-secure:jee-webservice'
