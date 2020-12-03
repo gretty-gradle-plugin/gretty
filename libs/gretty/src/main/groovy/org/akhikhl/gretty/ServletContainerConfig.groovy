@@ -250,6 +250,7 @@ class ServletContainerConfig {
                   force "org.eclipse.jetty:apache-jsp:$jetty10_version"
                   force "org.eclipse.jetty:jetty-annotations:$jetty10_version"
                   force "org.eclipse.jetty:jetty-plus:$jetty10_version"
+                  force "org.eclipse.jetty.websocket:websocket-javax-server:$jetty10_version"
                   def asm_version = project.ext.asmVersion
                   force "org.ow2.asm:asm:$asm_version"
                   force "org.ow2.asm:asm-commons:$asm_version"
