@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.0.0
+
+* Gretty requires JDK11+.
+
+* Gretty supports only Tomcat 10 and Jetty 11 (`Jakarta` versions of the containers). All thanks goes to [@f4lco](https://github.com/f4lco).
+
 ### Version 3.0.6
 
 * JDK 16 support
