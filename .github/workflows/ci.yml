@@ -6,6 +6,7 @@ jobs:
   build-and-test:
     name: Java ${{ matrix.java }}
     runs-on: ubuntu-latest
+    environment: Bintray
 
     strategy:
       matrix:
@@ -16,6 +17,8 @@ jobs:
       TRAVIS_REPO_SLUG: ${{ github.repository }}
       GRADLE_VERSION: 6.7
       GECKO_DRIVER_VERSION: 0.28.0
+      BINTRAY_REPO: maven
+      BINTRAY_PACKAGE: org.gretty
 
     steps:
       - uses: actions/checkout@v2
@@ -45,4 +48,7 @@ jobs:
 
       - name: Publish to Bintray
         if: ${{ matrix.java == 11 }}
+        env:
+          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
         run: ./gradlew --no-daemon artifactoryPublish -PbintrayUser=$BINTRAY_USER -PbintrayKey=$BINTRAY_KEY -PbintrayRepo=$BINTRAY_REPO -PbintrayPackage=$BINTRAY_PACKAGE
