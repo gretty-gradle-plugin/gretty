@@ -14,7 +14,6 @@ jobs:
 
     env:
       TEST_ALL_CONTAINERS: "['tomcat10','jetty11']"
-      TRAVIS_REPO_SLUG: ${{ github.repository }}
       GRADLE_VERSION: 6.7
       GECKO_DRIVER_VERSION: 0.28.0
       BINTRAY_REPO: maven
