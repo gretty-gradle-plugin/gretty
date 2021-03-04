@@ -18,7 +18,7 @@ class FarmStartTask extends StartBaseTask {
 
   String farmName = ''
 
-  @Delegate
+  @Delegate(methodAnnotations = true)
   protected final ServerConfig serverConfig = new ServerConfig()
 
   // key is project path or war path, value is options
