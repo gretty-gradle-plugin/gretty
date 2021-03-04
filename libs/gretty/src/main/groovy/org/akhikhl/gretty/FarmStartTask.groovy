@@ -14,11 +14,11 @@ import org.gradle.api.Project
  *
  * @author akhikhl
  */
-class FarmStartTask extends StartBaseTask {
+class FarmStartTask extends StartBaseTask implements ServerConfigWithInputs {
 
   String farmName = ''
 
-  @Delegate(methodAnnotations = true)
+  @Delegate
   protected final ServerConfig serverConfig = new ServerConfig()
 
   // key is project path or war path, value is options
