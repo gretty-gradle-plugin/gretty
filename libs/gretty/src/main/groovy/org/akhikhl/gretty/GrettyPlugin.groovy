@@ -810,17 +810,20 @@ class GrettyPlugin implements Plugin<Project> {
             afterEvaluateClosure()
           }
 
-          // FIXME does not use task configuration avoidance #41
-          if(!project.tasks."farmBeforeIntegrationTest$fname".integrationTestTaskAssigned)
-            project.tasks."farmBeforeIntegrationTest$fname".integrationTestTask null // default binding
+          project.tasks.named("farmBeforeIntegrationTest$fname").configure { task ->
+            if(!task.integrationTestTaskAssigned)
+              task.integrationTestTask null // default binding
+          }
 
-          // FIXME does not use task configuration avoidance #41
-          if(!project.tasks."farmIntegrationTest$fname".integrationTestTaskAssigned)
-            project.tasks."farmIntegrationTest$fname".integrationTestTask null // default binding
+          project.tasks.named("farmIntegrationTest$fname").configure { task ->
+            if(!task.integrationTestTaskAssigned)
+              task.integrationTestTask null // default binding
+          }
 
-          // FIXME does not use task configuration avoidance #41
-          if(!project.tasks."farmAfterIntegrationTest$fname".integrationTestTaskAssigned)
-            project.tasks."farmAfterIntegrationTest$fname".integrationTestTask null // default binding
+          project.tasks.named("farmAfterIntegrationTest$fname").configure { task ->
+            if(!task.integrationTestTaskAssigned)
+              task.integrationTestTask null // default binding
+          }
         }
     }
   }
