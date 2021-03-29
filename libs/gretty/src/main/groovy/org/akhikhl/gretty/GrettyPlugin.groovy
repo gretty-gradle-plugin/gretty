@@ -868,18 +868,17 @@ class GrettyPlugin implements Plugin<Project> {
 
     addExtensions(project)
     addConfigurations(project)
+    project.afterEvaluate {
+      afterProjectEvaluate(project)
+    }
 
+    //there can be multiple submodules applying this plugin and we want to register callback only once
     if(!project.rootProject.hasProperty('gretty_')) {
       Project rootProject = project.rootProject
       rootProject.ext.gretty_ = [:]
-      rootProject.ext.gretty_.evalProjectCount = rootProject.allprojects.sum 0, { it.state.executed ? 0 : 1 }
-      for(def p in rootProject.allprojects)
-        p.afterEvaluate { proj ->
-          afterProjectEvaluate(proj)
-          rootProject.ext.gretty_.evalProjectCount = rootProject.ext.gretty_.evalProjectCount - 1
-          if(rootProject.ext.gretty_.evalProjectCount == 0)
-            afterAllProjectsEvaluate(rootProject)
-        }
+      rootProject.getGradle().projectsEvaluated {
+        afterAllProjectsEvaluate(rootProject)
+      }
     }
   } // apply
 }
