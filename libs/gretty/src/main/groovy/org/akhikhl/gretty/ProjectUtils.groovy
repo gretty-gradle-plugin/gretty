@@ -253,7 +253,10 @@ final class ProjectUtils {
   }
 
   static boolean isSpringBootApp(Project project, WebAppConfig wconfig) {
-    wconfig.springBoot || (wconfig.projectPath && isSpringBootApp(project.project(wconfig.projectPath)))
+    if(wconfig.springBoot != null) {
+      return wconfig.springBoot
+    }
+    wconfig.projectPath && isSpringBootApp(project.project(wconfig.projectPath))
   }
 
   static void prepareExplodedWebAppFolder(Project project) {
