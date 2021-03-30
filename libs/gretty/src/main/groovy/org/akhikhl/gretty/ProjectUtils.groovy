@@ -246,17 +246,17 @@ final class ProjectUtils {
     new File(getWebAppDir(project), 'WEB-INF')
   }
 
-  // ATTENTION: this function resolves compile configuration!
-  static boolean isSpringBootApp(Project project) {
-    def compileConfig = project.configurations.findByName('compileClasspath')
-    compileConfig && compileConfig.resolvedConfiguration.resolvedArtifacts.find { it.moduleVersion.id.group == 'org.springframework.boot' }
-  }
-
   static boolean isSpringBootApp(Project project, WebAppConfig wconfig) {
     if(wconfig.springBoot != null) {
       return wconfig.springBoot
     }
-    wconfig.projectPath && isSpringBootApp(project.project(wconfig.projectPath))
+    if(!wconfig.projectPath) {
+      return false;
+    }
+    def compileConfig = project.project(wconfig.projectPath).configurations.findByName('compileClasspath')
+    compileConfig && compileConfig.resolvedConfiguration.resolvedArtifacts.find {
+      it.moduleVersion.id.group == 'org.springframework.boot'
+    }
   }
 
   static void prepareExplodedWebAppFolder(Project project) {
