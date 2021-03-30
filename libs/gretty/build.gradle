@@ -29,8 +29,7 @@ pluginBundle {
   description = 'Advanced gradle plugin for running web-apps on jetty and tomcat.'
 
   plugins {
-    gretty {
-      id = 'org.gretty'
+    grettyPlugin {
       displayName = 'Gretty plugin'
       tags = [ 'gretty', 'jetty', 'tomcat', 'gradle', 'plugin', 'spring', 'spring-boot' ]
     }
