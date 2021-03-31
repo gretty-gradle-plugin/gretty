@@ -246,6 +246,7 @@ final class ProjectUtils {
     new File(getWebAppDir(project), 'WEB-INF')
   }
 
+  // ATTENTION: this function resolves compile configuration!
   static boolean isSpringBootApp(Project project, WebAppConfig wconfig) {
     if(wconfig.springBoot != null) {
       return wconfig.springBoot
