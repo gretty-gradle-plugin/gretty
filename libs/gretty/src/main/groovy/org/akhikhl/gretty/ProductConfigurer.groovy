@@ -167,7 +167,7 @@ class ProductConfigurer {
       dependsOn buildProductTask
 
       archiveBaseName = productName ?: project.name
-      archiveVersion = project.version
+      archiveVersion = project.version.toString()
       destinationDirectory = baseOutputDir
 
       from outputDir, { into outputDir.name }
