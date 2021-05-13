@@ -1,13 +1,4 @@
 buildscript {
-  project.ext {
-    if (has('privateRepoDir')) {
-      privateRepoDir = privateRepoDir instanceof File ? privateRepoDir.path : privateRepoDir.toString()
-      if (!new File(privateRepoDir).isAbsolute())
-        privateRepoDir = new File(projectDir, privateRepoDir).canonicalPath
-    } else
-      privateRepoDir = new File(project.projectDir, '../build/privateRepo').canonicalPath
-  }
-
   def parentGradleProps = new Properties()
   new File(project.projectDir, '../gradle.properties').withInputStream {
     parentGradleProps.load(it)
@@ -20,14 +11,11 @@ buildscript {
   }
 
   repositories {
-    maven {
-      url "file:$privateRepoDir"
-    }
     mavenCentral()
   }
 
   dependencies {
-    classpath "org.gretty:gretty:${parentGradleProps.version}"
+    classpath "org.gretty:gretty"
     classpath "org.gretty.internal.integrationTests:gretty-integrationTest:${parentGradleProps.version}"
   }
 }

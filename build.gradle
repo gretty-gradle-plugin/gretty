@@ -1,14 +1,3 @@
-buildscript {
-  project.ext {
-    if (has('privateRepoDir')) {
-      privateRepoDir = privateRepoDir instanceof File ? privateRepoDir.path : privateRepoDir.toString()
-      if (!new File(privateRepoDir).isAbsolute())
-        privateRepoDir = new File(projectDir, privateRepoDir).canonicalPath
-    } else
-      privateRepoDir = new File(project.buildDir, 'privateRepo').canonicalPath
-  }
-}
-
 import groovyx.net.http.ContentType
 
 plugins {

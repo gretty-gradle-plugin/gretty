@@ -6,7 +6,7 @@ dependencies {
   implementation gradleApi()
   implementation "commons-configuration:commons-configuration:$commons_configuration_version"
   implementation "de.undercouch:gradle-download-task:$gradle_download_task_version"
-  implementation "org.gretty:gretty:$version"
+  implementation "org.gretty:gretty"
 }
 
 def projectProps = [

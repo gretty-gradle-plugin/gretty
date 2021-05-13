@@ -7,9 +7,6 @@ plugins {
 }
 
 repositories {
-    maven {
-        url "file:${project.property("privateRepoDir")}"
-    }
     mavenCentral()
 }
 
@@ -60,12 +57,6 @@ ext.configurePublications = { String publicationName ->
             }
         }
     }
-
-    project.task('publishToPrivateRepository') {
-        dependsOn "publish${capitalizedPublicationName}PublicationToPrivateRepository"
-    }
-    project.tasks.build.dependsOn project.tasks.publishToPrivateRepository
-    rootProject.tasks.testAllIntegrationTests.dependsOn project.tasks.publishToPrivateRepository
 
     tasks.artifactoryPublish {
         dependsOn { project.tasks."generatePomFileFor${capitalizedPublicationName}Publication" }
@@ -122,14 +113,5 @@ tasks.named("javadocJar", Jar).configure {
 afterEvaluate {
     dependencies {
         testImplementation libs.spock
-    }
-
-    publishing {
-        repositories {
-            maven {
-                name 'private'
-                url "file:/${project.rootProject.ext.privateRepoDir}"
-            }
-        }
     }
 } // afterEvaluate

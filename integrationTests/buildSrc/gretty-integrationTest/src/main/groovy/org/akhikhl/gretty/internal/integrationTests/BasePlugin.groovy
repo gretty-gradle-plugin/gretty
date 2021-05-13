@@ -32,9 +32,6 @@ class BasePlugin implements Plugin<Project> {
 
   protected void configurePublications(Project project) {
 
-    if(project.tasks.findByName('publishToPrivateRepository'))
-      return
-
     project.publishing {
       publications {
         if(project.plugins.findPlugin('war'))
@@ -46,33 +43,11 @@ class BasePlugin implements Plugin<Project> {
             from project.components.java
           }
       }
-      repositories {
-        maven {
-          name 'private'
-          url "file:/${project.privateRepoDir}"
-        }
-      }
-    }
-
-    project.task('publishToPrivateRepository') {
-      if(project.plugins.findPlugin('war'))
-        dependsOn "publishMavenWebPublicationToPrivateRepository"
-      if(project.plugins.findPlugin('java'))
-        dependsOn "publishMavenJavaPublicationToPrivateRepository"
-      if(project.tasks.findByName('check'))
-        mustRunAfter project.tasks.check
     }
   }
 
   protected void configureRepositories(Project project) {
-    if(project.repositories.find { it.name == 'privateRepo' })
-      return
     project.repositories {
-      assert project.hasProperty('privateRepoDir')
-      maven {
-        name 'privateRepo'
-        url "file:${project.privateRepoDir}"
-      }
       mavenCentral()
     }
   }

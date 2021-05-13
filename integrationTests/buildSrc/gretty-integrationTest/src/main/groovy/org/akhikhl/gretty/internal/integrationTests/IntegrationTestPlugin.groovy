@@ -39,7 +39,7 @@ class IntegrationTestPlugin extends BasePlugin {
       }
       integrationTestImplementation "org.seleniumhq.selenium:selenium-support:${project.seleniumVersion}"
       integrationTestImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${project.seleniumVersion}"
-      integrationTestImplementation "org.gretty:gretty-spock:${project.version}"
+      integrationTestImplementation "org.gretty:gretty-spock"
     }
   }
 
