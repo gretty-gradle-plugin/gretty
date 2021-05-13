@@ -31,7 +31,7 @@ class BasePlugin implements Plugin<Project> {
   }
 
   protected void configurePublications(Project project) {
-
+    if (project.publishing.publications) return
     project.publishing {
       publications {
         if(project.plugins.findPlugin('war'))

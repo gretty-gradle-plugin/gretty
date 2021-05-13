@@ -1,2 +1,3 @@
 rootProject.name = rootProjectName
+includeBuild '../..'
 include 'gretty-integrationTest'
