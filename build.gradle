@@ -88,12 +88,6 @@ task testAllIntegrationTests(type: GradleBuild) {
   onlyIf { !project.tasks.testAll.getState().getFailure() }
 }
 
-task cleanIntegrationTests(type: GradleBuild) {
-  dir = file('integrationTests')
-  tasks = [ 'clean' ]
-  project.tasks.clean.dependsOn it
-}
-
 artifactory {
   contextUrl = artifactory_contextUrl
   publish {
