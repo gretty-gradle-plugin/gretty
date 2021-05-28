@@ -99,9 +99,16 @@ task testAllIntegrationTests(type: GradleBuild) {
   onlyIf { !project.tasks.testAll.getState().getFailure() }
 }
 
-task cleanIntegrationTests(type: GradleBuild) {
-  dir = file('integrationTests')
-  tasks = [ 'clean' ]
+task cleanIntegrationTests() {
+  doLast {
+    def directoriesToDelete = []
+    file('integrationTests').eachDirRecurse {
+      if (it.name == 'build') {
+        directoriesToDelete << it
+      }
+    }
+    directoriesToDelete.each { it.deleteDir() }
+  }
   project.tasks.clean.dependsOn it
 }
 
