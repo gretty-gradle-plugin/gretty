@@ -85,6 +85,10 @@ class IntegrationTestPlugin extends BasePlugin {
       integrationTestContainers.each { String container ->
 
         project.task('integrationTest_' + container, type: Test) { thisTask ->
+
+          def conf = project.configurations.detachedConfiguration(project.dependencies.create("org.gretty:gretty-runner-$container"))
+          inputs.files(conf)
+
           outputs.upToDateWhen { false }
           include '**/*IT.*', '**/*Spec.*', '**/*Test.*'
           if (project.gradle.gradleVersion.startsWith('2.') || project.gradle.gradleVersion.startsWith('3.'))

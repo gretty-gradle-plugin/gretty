@@ -1,4 +1,6 @@
 rootProject.name = rootProjectName
+includeBuild '..'
+includeBuild 'integrationTestPlugin'
 include 'helloGretty'
 include 'helloGrettyMultiproject'
 include 'helloGrettyMultiproject:subproject'
