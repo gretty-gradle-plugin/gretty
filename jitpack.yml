@@ -1,0 +1,6 @@
+# We want to build releases with Gradle 6 so we support both Gradle 6 and 7:
+# https://github.com/gretty-gradle-plugin/gretty/pull/214#issuecomment-812289131
+# And JitPack uses the Gradle Wrapper when building a new snapshot
+install:
+  - ./gradlew --no-daemon wrapper --gradle-version 6.9 --distribution-type all
+  - ./gradlew --no-daemon --warning-mode all --stacktrace -Pspock_version=1.3-groovy-2.5 -PgebVersion=2.3.1 publishToMavenLocal
