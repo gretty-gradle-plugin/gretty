@@ -12,11 +12,10 @@ jobs:
       matrix:
         java: [8, 11]
         gradle: ['6.9']
-        properties: ['-Pspock_version=1.3-groovy-2.5 -PgebVersion=2.3.1']
         include:
           - java: 16
             gradle: '7.1'
-            properties: ''
+            properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0-milestone-2'
 
     env:
       TEST_ALL_CONTAINERS: "['jetty9.3','jetty9.4','tomcat85','tomcat9']"
