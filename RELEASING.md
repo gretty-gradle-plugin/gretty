@@ -85,7 +85,7 @@ CTRL-D
 To release to Maven Central Staging, after build run:
 
 ```
-./gradlew uploadArchives
+./gradlew publish
 ```
 
 ... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release.

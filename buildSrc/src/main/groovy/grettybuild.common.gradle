@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
     id 'groovy'
-    id 'maven'
     id 'maven-publish'
     id 'com.jfrog.artifactory'
     id 'com.jfrog.bintray'
@@ -37,53 +36,50 @@ compileGroovy {
     groovyOptions.configurationScript = file("${rootProject.projectDir}/gradle/config.groovy")
 }
 
-uploadArchives {
-  def thisProject = project
-
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-      if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
-        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-          authentication(userName: ossrhUsername, password: ossrhPassword)
+publishing {
+    repositories {
+        if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
+            maven {
+                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                url = project.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
         }
-
-        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-          authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-      }
-
-      pom.project {
-        name thisProject.name
-        packaging 'jar'
-        // optionally artifactId can be defined here
-        description thisProject.description
-        url thisProject.project_website
-
-        scm {
-          connection thisProject.project_scm
-          developerConnection thisProject.project_scm
-          url thisProject.project_scm
-        }
-
-        licenses {
-          license {
-            name thisProject.license
-            url thisProject.license_url
-            distribution 'repo'
-          }
-        }
-
-        developers {
-          developer {
-            id thisProject.developerId
-            name thisProject.developerName
-          }
-        }
-      }
     }
-  }
+
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = project.name
+                packaging = 'jar'
+                // optionally artifactId can be defined here
+                description = project.description
+                url = project.project_website
+
+                scm {
+                    connection = project.project_scm
+                    developerConnection = project.project_scm
+                    url = project.project_scm
+                }
+
+                licenses {
+                    license {
+                        name = project.license
+                        url = project.license_url
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = project.developerId
+                        name = project.developerName
+                    }
+                }
+            }
+        }
+    }
 }
 
 ext.configurePublications = { String publicationName ->
@@ -203,5 +199,6 @@ if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
     signing {
         useGpgCmd()
         sign configurations.archives
+        sign publishing.publications.mavenJava
     }
 }
