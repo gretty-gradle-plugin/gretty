@@ -82,6 +82,20 @@ publishing {
     }
 }
 
+task assertJDKVersion {
+    outputs.upToDateWhen { false }
+
+    doFirst {
+        if (JavaVersion.current() != project.targetCompatibility) {
+            throw new GradleException('This build must be run with java ' + project.targetCompatibility)
+        }
+    }
+}
+
+tasks.withType(PublishToMavenRepository) { task ->
+   task.dependsOn assertJDKVersion
+}
+
 ext.configurePublications = { String publicationName ->
     String capitalizedPublicationName = publicationName.capitalize()
 
