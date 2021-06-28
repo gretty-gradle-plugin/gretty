@@ -4,6 +4,7 @@ plugins {
     id 'maven-publish'
     id 'com.jfrog.artifactory'
     id 'com.jfrog.bintray'
+    id 'signing'
 }
 
 repositories {
@@ -19,6 +20,16 @@ version = rootProject.version
 configurations {
     providedCompile
     api.extendsFrom providedCompile
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
 
 compileGroovy {
@@ -133,3 +144,12 @@ afterEvaluate {
         }
     }
 } // afterEvaluate
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    useGpgCmd()
+    sign configurations.archives
+}
