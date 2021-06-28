@@ -43,3 +43,36 @@ gradle.publish.secret=<secret>
 - Update version on `master` to new version number with `-SNAPSHOT` suffix.
 - Update version links in [README.md](README.md).
 - Add/edit the release created on GitHub.
+
+## Transition documentation - uploading to Maven Central
+
+Bintray and JCenter are dead for releases, so upload to Maven Central is being implemented.
+
+In order to deploy you need:
+
+- Minimum of these properties in ~/.gradle/gradle.properties:
+
+```
+ossrhUsername=javabrett
+ossrhPassword=<secret>
+
+signing.gnupg.useLegacyGpg=true
+signing.gnupg.keyName=<secret>
+```
+
+The simplest way to sign is to use a GPG Agent with passphrase caching, and prime it before running a build with:
+
+```
+gpg -s
+type something
+CTRL-D
+(enter passphrase)
+```
+
+To release to Maven Central Staging, after build run:
+
+```
+./gradlew uploadArchives
+```
+
+... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release.
