@@ -1,17 +1,15 @@
 buildscript {
   repositories {
-    jcenter()
-    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
   }
 
   dependencies {
-    classpath 'org.gretty:gretty:3.0.5-SNAPSHOT'
+    classpath 'org.gretty:gretty:3.0.6-SNAPSHOT'
   }
 }
 
 repositories {
-  jcenter()
-  maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+  maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 if (!project.plugins.findPlugin(org.akhikhl.gretty.GrettyPlugin))

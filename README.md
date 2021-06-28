@@ -2,7 +2,7 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg?branch=gretty-3.x)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2021.svg)
-[![Latest release](https://img.shields.io/badge/release-3.0.4-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.0.4)
+[![Latest release](https://img.shields.io/badge/release-3.0.5-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.0.5)
 [![Snapshot](https://img.shields.io/badge/current-3.0.5--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
@@ -19,6 +19,74 @@ A complete list of Gretty features is available in [feature overview](https://gr
 If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.github.io/gretty-doc/Getting-started.html) page.
 
 #### :star: What's new
+
+March 30, 2021, Gretty 3.0.5 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Changes in this version:
+
+* Added some release details for Maven Central.
+
+* Added uploadArchives for upload to Maven Central.
+
+* Restored simple GPG signing in prep for replacement of Bintray with Maven Central.
+
+* Build with Gradle 6.x in Jitpack
+
+* Use a fixed Gecko driver version
+
+* Use Gradle 6.9 for the "global" build
+
+* Fix the `gradle clean` task
+
+* Update some packages
+
+* Gradle defines version as an object so we need to make sure we are doing explicit to String conversion
+
+* Revert "Purge identical builds by removing 'pull_request' trigger from GH actions"
+
+* Replace deprecated JavaExec.main usage with JavaExec.mainClass property
+
+* Merge pull request #218 from brandonramirez/loopback_address_bind
+
+* Update Gradle wrapper to 7.0-rc-2
+
+* Remove Gradle wrapper task definitions
+
+* Add Java 16 and build only against currently supported versions of Java
+
+* Update `actions/setup-java`
+
+* Purge identical builds by removing 'pull_request' trigger from GH actions
+
+* Run tests on JUnit 5 on Gradle 7
+
+* Upgrade dependencies in Gradle 7 build
+
+* Replace jcenter repository with Maven Central
+
+* Rely on Groovy version shipped with Gradle
+
+* Add Gradle 7 build job
+
+* Explicitly bind to loopback address rather than local address to fix a BindException.
+
+* Use the `springBoot` option when it is not null (#213)
+
+* Avoid calling afterEvaluate on already evaluated project
+
+* Remove unused import
+
+* Improve the code structure
+
+* Improve the dependency resolving logic
+
+* Update Gradle's version in CI
+
+* [skip ci] Remove mentions of Tomcat 10 in the `changes.md` file too
+
+* Remove publishing to Bintray on push
+
+* Fixed 'multiple plugins are using the same ID' error in publishPlugins. (#211)
 
 March 30, 2021, Gretty 3.0.4 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Bintray](https://bintray.com/javabrett/maven/org.gretty/view).
 
@@ -171,7 +239,7 @@ May 21, 2018, Gretty(.org) 2.2.0 is out and immediately available at [Gradle Plu
 * Bumped versions of asm (6.1.1, was 6.0), Groovy (2.4.15, was 2.4.13) and Spring (4.3.16, was 4.3.9) (thanks Henrik Brautaset Aronsen).
 
 * Fixed incompatibility with java-library plugin (thanks Ollie Freeman).
- 
+
 * Dev: various build and test improvements.
 
 See also: [complete list of changes](changes.md) for more information.
