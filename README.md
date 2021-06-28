@@ -22,6 +22,9 @@ If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.g
 
 March 30, 2021, Gretty 3.0.5 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
+**Please note that Gretty 3.0.5 is the first one not using `JCenter` but rather `Maven Central`. Be sure
+to change your `jcenter()` to `mavenCentral()` in your Gradle files.**
+
 * Changes in this version:
 
 * Added some release details for Maven Central.
