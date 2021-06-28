@@ -199,7 +199,9 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-signing {
-    useGpgCmd()
-    sign configurations.archives
+if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
+    signing {
+        useGpgCmd()
+        sign configurations.archives
+    }
 }
