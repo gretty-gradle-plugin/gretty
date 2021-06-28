@@ -2,6 +2,72 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.0.5
+
+* Added some release details for Maven Central.
+
+* Added uploadArchives for upload to Maven Central.
+
+* Restored simple GPG signing in prep for replacement of Bintray with Maven Central.
+
+* Build with Gradle 6.x in Jitpack
+
+* Use a fixed Gecko driver version
+
+* Use Gradle 6.9 for the "global" build
+
+* Fix the `gradle clean` task
+
+* Update some packages
+
+* Gradle defines version as an object so we need to make sure we are doing explicit to String conversion
+
+* Revert "Purge identical builds by removing 'pull_request' trigger from GH actions"
+
+* Replace deprecated JavaExec.main usage with JavaExec.mainClass property
+
+* Merge pull request #218 from brandonramirez/loopback_address_bind
+
+* Update Gradle wrapper to 7.0-rc-2
+
+* Remove Gradle wrapper task definitions
+
+* Add Java 16 and build only against currently supported versions of Java
+
+* Update `actions/setup-java`
+
+* Purge identical builds by removing 'pull_request' trigger from GH actions
+
+* Run tests on JUnit 5 on Gradle 7
+
+* Upgrade dependencies in Gradle 7 build
+
+* Replace jcenter repository with Maven Central
+
+* Rely on Groovy version shipped with Gradle
+
+* Add Gradle 7 build job
+
+* Explicitly bind to loopback address rather than local address to fix a BindException.
+
+* Use the `springBoot` option when it is not null (#213)
+
+* Avoid calling afterEvaluate on already evaluated project
+
+* Remove unused import
+
+* Improve the code structure
+
+* Improve the dependency resolving logic
+
+* Update Gradle's version in CI
+
+* [skip ci] Remove mentions of Tomcat 10 in the `changes.md` file too
+
+* Remove publishing to Bintray on push
+
+* Fixed 'multiple plugins are using the same ID' error in publishPlugins. (#211)
+
 ### Version 3.0.4
 
 * Gradle 7 support

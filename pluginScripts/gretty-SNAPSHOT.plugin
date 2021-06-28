@@ -1,7 +1,6 @@
 buildscript {
   repositories {
-    jcenter()
-    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+    mavenCentral()
   }
 
   dependencies {
@@ -10,8 +9,7 @@ buildscript {
 }
 
 repositories {
-  jcenter()
-  maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+  mavenCentral()
 }
 
 if (!project.plugins.findPlugin(org.akhikhl.gretty.GrettyPlugin))
