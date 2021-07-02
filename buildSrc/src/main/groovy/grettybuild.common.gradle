@@ -92,8 +92,8 @@ task assertJDKVersion {
     }
 }
 
-tasks.withType(PublishToMavenRepository) { task ->
-   task.dependsOn assertJDKVersion
+tasks.named('publish').configure {
+   dependsOn assertJDKVersion
 }
 
 ext.configurePublications = { String publicationName ->
