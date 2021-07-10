@@ -38,6 +38,13 @@ class ServletContainerConfig {
           project.dependencies.add 'runtimeOnly', "org.gretty:gretty-filter:${project.ext.grettyVersion}", {
             exclude group: 'javax.servlet', module: 'servlet-api'
           }
+
+          // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+          // Fingers crossed that users of gretty-filter update Gradle and Groovy versions in tandem.
+          // Likely, building a Groovy 2 project with a build system of Gradle 7 / Groovy 3 would not work
+          // because below drags in the wrong versions.
+          project.dependencies.add("runtimeOnly", "org.codehaus.groovy:groovy-jmx:${GroovySystem.version}")
+          project.dependencies.add("runtimeOnly", "org.codehaus.groovy:groovy-servlet:${GroovySystem.version}")
           alteredDependencies = true
         }
       }
