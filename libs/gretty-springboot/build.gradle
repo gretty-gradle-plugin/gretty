@@ -3,8 +3,10 @@ plugins {
 }
 
 dependencies {
+  // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+  compileOnly localGroovy()
+
   providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
-  api localGroovy()
   api "org.springframework.boot:spring-boot-starter-web:$springBootVersion", {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }

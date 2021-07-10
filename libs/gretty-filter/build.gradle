@@ -7,8 +7,11 @@ dependencies {
   api 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1', {
     exclude group: 'commons-logging', module: 'commons-logging'
   }
-  api localGroovy()
-  api "org.codehaus.groovy:groovy-jmx:${GroovySystem.version}"
-  api "org.codehaus.groovy:groovy-servlet:${GroovySystem.version}"
+
+  // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+  compileOnly localGroovy()
+  compileOnly "org.codehaus.groovy:groovy-jmx:${GroovySystem.version}"
+  compileOnly "org.codehaus.groovy:groovy-servlet:${GroovySystem.version}"
+
   api "org.slf4j:slf4j-api:$slf4j_version"
 }
