@@ -3,7 +3,10 @@ plugins {
 }
 
 dependencies {
-  api "org.codehaus.groovy:groovy-cli-commons:${GroovySystem.version}"
+  // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+  compileOnly localGroovy()
+  compileOnly "org.codehaus.groovy:groovy-cli-commons:${GroovySystem.version}"
+
   api project(':libs:gretty-core')
 }
 
