@@ -1,9 +1,7 @@
 buildscript {
   repositories {
     mavenCentral()
-    maven {
-      url 'https://oss.sonatype.org/content/repositories/snapshots'
-    }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
   }
 
   dependencies {
@@ -13,9 +11,7 @@ buildscript {
 
 repositories {
   mavenCentral()
-  maven {
-    url 'https://oss.sonatype.org/content/repositories/snapshots'
-  }
+  maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 if (!project.plugins.findPlugin(org.akhikhl.gretty.GrettyPlugin))
