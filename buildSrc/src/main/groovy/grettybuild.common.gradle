@@ -36,52 +36,6 @@ compileGroovy {
     groovyOptions.configurationScript = file("${rootProject.projectDir}/gradle/config.groovy")
 }
 
-publishing {
-    repositories {
-        if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
-            maven {
-                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-                url = project.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-        }
-    }
-
-    publications {
-        mavenJava(MavenPublication) {
-            pom {
-                name = project.name
-                packaging = 'jar'
-                // optionally artifactId can be defined here
-                description = project.description
-                url = project.project_website
-
-                scm {
-                    connection = project.project_scm
-                    developerConnection = project.project_scm
-                    url = project.project_scm
-                }
-
-                licenses {
-                    license {
-                        name = project.license
-                        url = project.license_url
-                        distribution = 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = project.developerId
-                        name = project.developerName
-                    }
-                }
-            }
-        }
-    }
-}
-
 task assertJDKVersion {
     outputs.upToDateWhen { false }
 
@@ -210,6 +164,53 @@ artifacts {
 }
 
 if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
+    publishing {
+        repositories {
+            maven {
+                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                url = project.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+
+        publications {
+            mavenJava(MavenPublication) {
+                pom {
+                    name = project.name
+                    packaging = 'jar'
+                    // optionally artifactId can be defined here
+                    description = project.description
+                    url = project.project_website
+
+                    scm {
+                        connection = project.project_scm
+                        developerConnection = project.project_scm
+                        url = project.project_scm
+                    }
+
+                    licenses {
+                        license {
+                            name = project.license
+                            url = project.license_url
+                            distribution = 'repo'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = project.developerId
+                            name = project.developerName
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     signing {
         useGpgCmd()
         sign configurations.archives
