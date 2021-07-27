@@ -1,3 +1,14 @@
+## Setting up GPG
+
+- The simplest way to sign is to use a GPG Agent with passphrase caching, and prime it before running a build with:
+
+```
+gpg -s
+type something
+CTRL-D
+(enter passphrase)
+```
+
 ## Running a release
 
 - Set release version, drop `-SNAPSHOT`.
@@ -7,65 +18,13 @@
 - Tag release using `git tag -a -s -m "release ?.?.?" v?.?.?`.
 - Checkout tag.
 - Set JDK path to a JDK8 installation.
-- `./gradlew build`
-- Export required variables.  I precede these with a space and have `HISTCONTROL=ignorespace` so they won't appear in my history:
 
-```
- export BINTRAY_USER="javabrett"
- export BINTRAY_KEY="<secret>"
- export BINTRAY_REPO="maven"
- export BINTRAY_PACKAGE="org.gretty"
- export GPG_PASSPHRASE="<secret>"
-```
-
-If releasing to a shared/org repository in Bintray, instead set:
-
-```
- export BINTRAY_USER="<your-bintray-username>"
- export BINTRAY_KEY="<secret>"
- export BINTRAY_USER_ORG="gretty-gradle-plugin"
- export BINTRAY_REPO="gretty"
- export BINTRAY_PACKAGE="org.gretty"
-```
-
-... i.e. don't set `GPG_PASSPHRASE` (Bintray signs it with their key) and instead set `BINTRAY_USER_ORG`.
-
-- Check `~/.gradle/gradle.properties` for credentials for plugins.gradle.org:
+- Check `~/.gradle/gradle.properties` for credentials for `plugins.gradle.org` and `Sonatype` and for a GPG key name:
 
 ```
 gradle.publish.key=<secret>
 gradle.publish.secret=<secret>
-```
 
-- Push to bintray (again I lead with a space):
-
-```
- ./gradlew bintrayUpload -PbintrayUser=${BINTRAY_USER} -PbintrayKey=${BINTRAY_KEY} -PbintrayUserOrg=${BINTRAY_USER_ORG} -PbintrayRepo=${BINTRAY_REPO} -PbintrayPackage=${BINTRAY_PACKAGE} -PgpgPassphrase="${GPG_PASSPHRASE}"
-
-```
-
-- Publish to plugins.gradle.org:
-
-```
- ./gradlew publishPlugins
-```
-
-- Release files on Bintray - login and release stages files.
-- Update a test-project to use the new Gretty version number and confirm download and build.
-- Push tags: `git push origin --tags`.
-- Update version on `master` to new version number with `-SNAPSHOT` suffix.
-- Update version links in [README.md](README.md).
-- Add/edit the release created on GitHub.
-
-## Transition documentation - uploading to Maven Central
-
-Bintray and JCenter are dead for releases, so upload to Maven Central is being implemented.
-
-In order to deploy you need:
-
-- Minimum of these properties in ~/.gradle/gradle.properties:
-
-```
 ossrhUsername=javabrett
 ossrhPassword=<secret>
 
@@ -73,19 +32,29 @@ signing.gnupg.useLegacyGpg=true
 signing.gnupg.keyName=<secret>
 ```
 
-The simplest way to sign is to use a GPG Agent with passphrase caching, and prime it before running a build with:
+- Build:
 
 ```
-gpg -s
-type something
-CTRL-D
-(enter passphrase)
+./gradlew build
 ```
 
-To release to Maven Central Staging, after build run:
+- Release to Maven Central Staging:
 
 ```
-./gradlew publish
+./gradlew publishMavenJavaPublicationToMavenRepository
 ```
 
 ... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release.
+
+Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour).
+
+- Publish to `plugins.gradle.org`:
+
+```
+./gradlew publishPlugins
+```
+
+- Update a test-project to use the new Gretty version number and confirm download and build.
+- Push tags: `git push origin --tags`.
+- Update version on `master` to new version number with `-SNAPSHOT` suffix.
+- Add/edit the release created on GitHub.
