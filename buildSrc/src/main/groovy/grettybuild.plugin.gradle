@@ -3,6 +3,14 @@ plugins {
     id 'java-gradle-plugin'
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
 afterEvaluate {
     configurePublications('pluginMaven')
 }
