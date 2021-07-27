@@ -2,8 +2,6 @@ plugins {
     id 'java-library'
     id 'groovy'
     id 'maven-publish'
-    id 'com.jfrog.artifactory'
-    id 'com.jfrog.bintray'
     id 'signing'
 }
 
@@ -92,42 +90,6 @@ ext.configurePublications = { String publicationName ->
     }
     project.tasks.build.dependsOn project.tasks.publishToPrivateRepository
     rootProject.tasks.testAllIntegrationTests.dependsOn project.tasks.publishToPrivateRepository
-
-    tasks.artifactoryPublish {
-        dependsOn { project.tasks."generatePomFileFor${capitalizedPublicationName}Publication" }
-        publications publicationName
-    }
-
-    bintray {
-        user = project.bintrayUser
-        key = project.bintrayKey
-        publications = [publicationName]
-        pkg {
-            repo = thisProject.bintrayRepo
-            userOrg = thisProject.bintrayUserOrg
-            name = thisProject.bintrayPackage
-            desc = thisProject.description
-            licenses = [ thisProject.license ]
-            vcsUrl = thisProject.project_scm
-            labels = thisProject.projectLabels.split(',')
-            version {
-                name = thisProject.version
-                vcsTag = thisProject.version
-                gpg {
-                    sign = true
-                    passphrase = thisProject.gpgPassphrase
-                }
-            }
-        }
-        dryRun = thisProject.bintrayDryRun
-    }
-
-    tasks.bintrayUpload.dependsOn assemble
-
-    if (!bintrayDryRun && gpgPassphrase) {
-        tasks.bintrayUpload.finalizedBy rootProject.tasks.bintraySign
-        rootProject.tasks.bintraySign.onlyIf { !tasks.bintrayUpload.getState().getFailure() }
-    }
 }
 
 sourceCompatibility = 1.8
