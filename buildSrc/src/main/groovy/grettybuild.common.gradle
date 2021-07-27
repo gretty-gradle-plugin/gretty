@@ -58,6 +58,7 @@ ext.configurePublications = { String publicationName ->
     publishing {
         publications.named(publicationName, MavenPublication) {
             pom {
+                name = thisProject.name
                 packaging = 'jar'
                 description = thisProject.description
                 url = thisProject.project_website
