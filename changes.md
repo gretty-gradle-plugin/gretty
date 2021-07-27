@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.0.6
+
+* JDK 16 support
+
 ### Version 3.0.5
 
 * Added some release details for Maven Central.
