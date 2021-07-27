@@ -5,15 +5,10 @@ plugins {
 repositories {
     gradlePluginPortal()
     mavenCentral()
-    maven {
-        url 'https://dl.bintray.com/content/noamt/gradle-plugins'
-    }
 }
 
 dependencies {
     implementation 'org.apache.commons:commons-lang3:3.4'
-    implementation 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-    implementation 'org.jfrog.buildinfo:build-info-extractor-gradle:4.11.0'
     implementation "org._10ne.gradle:rest-gradle-plugin:0.4.2"
     implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
 }

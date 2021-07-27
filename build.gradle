@@ -16,63 +16,13 @@ plugins {
   id 'maven-publish'
 }
 
-apply plugin: 'com.jfrog.artifactory'
 apply plugin: "org.tenne.rest"
 
 ext {
   project_website = "https://github.com/${developerId}/${projectId}"
   project_scm = "https://github.com/${developerId}/${projectId}.git"
   license_url = "https://raw.github.com/${developerId}/${projectId}/master/LICENSE"
-
-  if (!has('bintrayUser'))
-    bintrayUser = ''
-
-  if (!has('bintrayUserOrg'))
-    bintrayUserOrg = ''
-
-  if (!has('bintrayKey'))
-    bintrayKey = ''
-
-  if (!has('bintrayRepo'))
-    bintrayRepo = ''
-
-  if (!has('bintrayPackage'))
-    bintrayPackage = ''
-
-  bintrayGpgRequestBody = [:]
-
-  if (!has('bintraySubject'))
-    bintraySubject = ''
-  else
-    bintrayGpgRequestBody.put('subject', bintraySubject)
-
-  if (!has( 'gpgPassphrase'))
-    gpgPassphrase = ''
-  else
-    bintrayGpgRequestBody.put('passphrase', gpgPassphrase)
-
-  if (!has('gpgKey'))
-    gpgKey = ''
-  else
-    bintrayGpgRequestBody.put('private_key', gpgKey)
-
-  if (!has('bintrayDryRun'))
-    bintrayDryRun = false
-
-  if (!has('artifactory_contextUrl'))
-    artifactory_contextUrl = 'https://oss.jfrog.org/artifactory'
 }
-
-if (!bintrayDryRun)
-  task bintraySign(type: org._10ne.gradle.rest.RestTask) {
-    description 'Push to bintray and sign it.'
-    httpMethod = 'post'
-    uri = "https://api.bintray.com/gpg/${project.bintrayUser}/${project.bintrayRepo}/${project.bintrayPackage}/versions/${project.version}"
-    username = project.bintrayUser
-    password = project.bintrayKey
-    requestBody = project.bintrayGpgRequestBody
-    contentType = ContentType.JSON
-  }
 
 task testAll(dependsOn: tasks.build)
 
@@ -110,25 +60,6 @@ task cleanIntegrationTests() {
     directoriesToDelete.each { it.deleteDir() }
   }
   project.tasks.clean.dependsOn it
-}
-
-artifactory {
-  contextUrl = artifactory_contextUrl
-  publish {
-    repository {
-      if (project.version.endsWith('-SNAPSHOT'))
-        repoKey = 'oss-snapshot-local'
-      else
-        repoKey = 'oss-release-local'
-      username = project.bintrayUser
-      password = project.bintrayKey
-    }
-  }
-  resolve {
-    repository {
-      repoKey = 'repo'
-    }
-  }
 }
 
 ext.libs = [
