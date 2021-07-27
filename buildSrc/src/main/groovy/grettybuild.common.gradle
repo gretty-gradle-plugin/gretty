@@ -48,6 +48,20 @@ tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
    dependsOn assertJDKVersion
 }
 
+task assertPublishedVersion {
+    outputs.upToDateWhen { false }
+
+    doFirst {
+        if (project.version.endsWith('SNAPSHOT')) {
+            throw new GradleException('Should not try to publish a SNAPSHOT version to GPP')
+        }
+    }
+}
+
+tasks.named('publishPlugins').configure {
+    dependsOn assertPublishedVersion
+}
+
 ext.configurePublications = { String publicationName ->
     String capitalizedPublicationName = publicationName.capitalize()
 
