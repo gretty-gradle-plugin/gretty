@@ -45,7 +45,7 @@ task assertJDKVersion {
 }
 
 tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
-   dependsOn assertJDKVersion
+    dependsOn assertJDKVersion
 }
 
 task assertPublishedVersion {
