@@ -15,7 +15,7 @@ jobs:
         include:
           - java: 15
             gradle: '7.1.1'
-            properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0-milestone-2'
+            properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
 
     env:
       TEST_ALL_CONTAINERS: "['tomcat10','jetty11']"
