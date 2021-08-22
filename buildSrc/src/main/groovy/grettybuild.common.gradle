@@ -44,10 +44,6 @@ task assertJDKVersion {
     }
 }
 
-tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
-    dependsOn assertJDKVersion
-}
-
 task assertPublishedVersion {
     outputs.upToDateWhen { false }
 
@@ -56,10 +52,6 @@ task assertPublishedVersion {
             throw new GradleException('Should not try to publish a SNAPSHOT version to GPP')
         }
     }
-}
-
-tasks.named('publishPlugins').configure {
-    dependsOn assertPublishedVersion
 }
 
 ext.configurePublications = { String publicationName ->
@@ -122,6 +114,10 @@ tasks.named("javadocJar", Jar).configure {
 }
 
 afterEvaluate {
+    tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
+        dependsOn assertJDKVersion
+    }
+
     dependencies {
         testImplementation libs.spock
     }
