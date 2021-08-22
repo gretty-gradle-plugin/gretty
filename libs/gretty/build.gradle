@@ -39,3 +39,7 @@ pluginBundle {
 validatePlugins {
   enableStricterValidation = true
 }
+
+tasks.named('publishPlugins').configure {
+  dependsOn assertPublishedVersion
+}
