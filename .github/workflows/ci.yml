@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         java: [11]
-        gradle: ['6.9']
+        gradle: ['6.9.1']
         include:
           - java: 15
             gradle: '7.1.1'
