@@ -114,10 +114,6 @@ tasks.named("javadocJar", Jar).configure {
 }
 
 afterEvaluate {
-    tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
-        dependsOn assertJDKVersion
-    }
-
     dependencies {
         testImplementation libs.spock
     }
@@ -137,6 +133,12 @@ artifacts {
 }
 
 if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
+    afterEvaluate {
+        tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
+            dependsOn assertJDKVersion
+        }
+    }
+
     publishing {
         repositories {
             maven {
