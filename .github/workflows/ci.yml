@@ -6,7 +6,6 @@ jobs:
   build-and-test:
     name: Gradle ${{ matrix.gradle }} on Java ${{ matrix.java }}
     runs-on: ubuntu-latest
-    environment: Bintray
 
     strategy:
       matrix:
