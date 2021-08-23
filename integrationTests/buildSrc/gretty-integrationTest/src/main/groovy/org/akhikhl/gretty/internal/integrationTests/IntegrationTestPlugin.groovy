@@ -33,10 +33,10 @@ class IntegrationTestPlugin extends BasePlugin {
       integrationTestImplementation localGroovy()
       integrationTestImplementation "org.codehaus.groovy:groovy-macro:${GroovySystem.version}"
       integrationTestImplementation project.dependencies.create("org.spockframework:spock-core:${project.spock_version}") {
-        exclude module: "groovy-all"
+        exclude group: 'org.codehaus.groovy'
       }
       integrationTestImplementation project.dependencies.create("org.gebish:geb-spock:${project.gebVersion}") {
-        exclude module: "groovy-all"
+        exclude group: 'org.codehaus.groovy'
       }
       integrationTestImplementation "org.seleniumhq.selenium:selenium-support:${project.seleniumVersion}"
       integrationTestImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${project.seleniumVersion}"

@@ -64,6 +64,6 @@ task cleanIntegrationTests() {
 
 ext.libs = [
   spock: dependencies.create("org.spockframework:spock-core:$spock_version") {
-    exclude module: "groovy-all"
+    exclude group: 'org.codehaus.groovy'
   }
 ]
