@@ -13,12 +13,14 @@ import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 /**
  *
  * @author akhikhl
  */
+@DisableCachingByDefault
 abstract class FarmServiceTask extends DefaultTask {
 
   private static Logger log = LoggerFactory.getLogger(FarmServiceTask)

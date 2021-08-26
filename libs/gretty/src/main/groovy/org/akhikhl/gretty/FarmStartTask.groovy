@@ -12,11 +12,13 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
+import org.gradle.work.DisableCachingByDefault
 
 /**
  *
  * @author akhikhl
  */
+@DisableCachingByDefault
 class FarmStartTask extends StartBaseTask implements TaskWithServerConfig {
 
   @Input

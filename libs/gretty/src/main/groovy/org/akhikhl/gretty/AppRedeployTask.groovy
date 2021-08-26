@@ -1,10 +1,12 @@
 package org.akhikhl.gretty
 
 import org.gradle.api.tasks.Internal
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * @author sala
  */
+@DisableCachingByDefault
 class AppRedeployTask extends AppServiceTask {
   @Internal
   List webapps = []

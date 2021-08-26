@@ -18,12 +18,14 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.work.DisableCachingByDefault
 /**
  * Base task for starting jetty
  *
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
+@DisableCachingByDefault
 abstract class StartBaseTask extends DefaultTask {
 
   @Internal

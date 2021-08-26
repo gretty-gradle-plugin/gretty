@@ -14,6 +14,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
+@DisableCachingByDefault
 abstract class AppServiceTask extends DefaultTask {
 
   private static Logger log = LoggerFactory.getLogger(AppServiceTask)
