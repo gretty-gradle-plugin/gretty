@@ -11,6 +11,7 @@ package org.akhikhl.gretty
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.gradle.api.tasks.Internal
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * Gradle task for starting jetty
@@ -18,6 +19,7 @@ import org.gradle.api.tasks.Internal
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
+@DisableCachingByDefault
 class AppStartTask extends StartBaseTask implements TaskWithServerConfig, TaskWithWebAppConfig {
 
   @Delegate

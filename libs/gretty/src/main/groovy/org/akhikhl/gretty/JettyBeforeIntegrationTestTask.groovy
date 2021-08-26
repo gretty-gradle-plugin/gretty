@@ -8,6 +8,8 @@
  */
 package org.akhikhl.gretty
 
+import org.gradle.work.DisableCachingByDefault
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory
  *
  * @author akhikhl
  */
+@DisableCachingByDefault
 class JettyBeforeIntegrationTestTask extends AppBeforeIntegrationTestTask {
 
   protected static final Logger log = LoggerFactory.getLogger(JettyBeforeIntegrationTestTask)

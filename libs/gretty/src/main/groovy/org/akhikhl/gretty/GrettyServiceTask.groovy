@@ -8,12 +8,15 @@
  */
 package org.akhikhl.gretty
 
+import org.gradle.work.DisableCachingByDefault
+
 /**
  * This class is deprecated, please use AppStopTask and AppRestartTask instead.
  *
  * @author akhikhl
  */
 @Deprecated
+@DisableCachingByDefault
 class GrettyServiceTask extends AppServiceTask {
 
   String command

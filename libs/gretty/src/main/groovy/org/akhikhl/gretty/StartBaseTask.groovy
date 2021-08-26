@@ -21,6 +21,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.work.DisableCachingByDefault
 import org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer
 import org.springframework.boot.devtools.livereload.LiveReloadServer
 /**
@@ -29,6 +30,7 @@ import org.springframework.boot.devtools.livereload.LiveReloadServer
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
+@DisableCachingByDefault
 abstract class StartBaseTask extends DefaultTask {
 
   @Internal

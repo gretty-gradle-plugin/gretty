@@ -8,10 +8,13 @@
  */
 package org.akhikhl.gretty
 
+import org.gradle.work.DisableCachingByDefault
+
 /**
  *
  * @author akhikhl
  */
+@DisableCachingByDefault
 class AppStopTask extends AppServiceTask {
 
   String getCommand() {

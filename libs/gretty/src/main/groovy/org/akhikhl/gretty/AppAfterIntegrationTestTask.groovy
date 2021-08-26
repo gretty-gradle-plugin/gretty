@@ -12,6 +12,7 @@ import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
+@DisableCachingByDefault
 class AppAfterIntegrationTestTask extends AppStopTask {
 
   private static final Logger log = LoggerFactory.getLogger(AppAfterIntegrationTestTask)
