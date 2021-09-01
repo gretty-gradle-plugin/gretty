@@ -15,7 +15,7 @@ CTRL-D
 - Update all required doc files - see a previous release tag for an example of what should be updated.
 - Final release commit should be signed with `-S -s`.
 - Check build passes on GitHub Actions.
-- Tag release using `git tag -a -s -m "release ?.?.?" v?.?.?`.
+- Tag new release commit using `git tag -a -s -m "release ?.?.?" v?.?.?` or `git tag v?.?.? <commit-hash>` if using an existing commit.
 - Checkout tag.
 - Set JDK path to a JDK8 installation.
 
