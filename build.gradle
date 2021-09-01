@@ -62,6 +62,13 @@ task cleanIntegrationTests() {
   project.tasks.clean.dependsOn it
 }
 
+task cleanBuildSrc() {
+  doLast {
+    file('buildSrc/build').deleteDir()
+  }
+  project.tasks.clean.dependsOn it
+}
+
 ext.libs = [
   spock: dependencies.create("org.spockframework:spock-core:$spock_version") {
     exclude group: 'org.codehaus.groovy'
