@@ -14,6 +14,7 @@ import org.apache.commons.io.FilenameUtils
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.artifacts.dsl.dependencies.DependencyFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -33,6 +34,11 @@ final class ProjectUtils {
             project.dependencies.create("org.codehaus.groovy:groovy-cli-commons:${GroovySystem.version}"),
             project.dependencies.create("org.codehaus.groovy:groovy-json:${GroovySystem.version}"),
     )
+  }
+
+  static FileCollection getRunnerFileCollection(Project project, String servletContainerName) {
+    def servletContainerConfig = ServletContainerConfig.getConfig(servletContainerName)
+    project.configurations.grettyNoSpringBoot + project.configurations[servletContainerConfig.servletContainerRunnerConfig] + getCurrentGroovy(project)
   }
 
   static boolean anyWebAppUsesSpringBoot(Project project, Iterable<WebAppConfig> wconfigs) {
