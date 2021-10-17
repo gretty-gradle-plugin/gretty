@@ -307,7 +307,7 @@ Version: ${project.version}"""
 
   protected FileCollection getRunnerFileCollection() {
     def servletContainerConfig = ServletContainerConfig.getConfig(sconfig.servletContainer)
-    project.configurations.grettyNoSpringBoot + project.configurations[servletContainerConfig.servletContainerRunnerConfig]
+    project.configurations.grettyNoSpringBoot + project.configurations[servletContainerConfig.servletContainerRunnerConfig] + ProjectUtils.getCurrentGroovy(project)
   }
 
   private String getRunnerLogbackConfig() {

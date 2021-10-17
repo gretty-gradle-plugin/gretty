@@ -89,6 +89,7 @@ class GrettyPlugin implements Plugin<Project> {
 
     project.dependencies {
       grettyStarter "org.gretty:gretty-starter:$grettyVersion"
+      grettyStarter ProjectUtils.getCurrentGroovy(project).dependencies
       grettySpringLoaded "org.springframework:springloaded:$springLoadedVersion"
     }
 
