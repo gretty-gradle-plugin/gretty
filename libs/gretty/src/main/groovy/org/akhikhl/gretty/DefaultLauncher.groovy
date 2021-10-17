@@ -30,9 +30,7 @@ class DefaultLauncher extends LauncherBase {
   }
 
   static Collection<URL> getRunnerClassPath(Project project, ServerConfig sconfig) {
-    def files = project.configurations.grettyNoSpringBoot.files +
-        project.configurations[ServletContainerConfig.getConfig(sconfig.servletContainer).servletContainerRunnerConfig].files +
-            ProjectUtils.getCurrentGroovy(project)
+    def files = ProjectUtils.getRunnerFileCollection(project, sconfig.servletContainer)
     (files.collect { it.toURI().toURL() }) as LinkedHashSet
   }
 
