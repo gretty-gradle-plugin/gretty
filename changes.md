@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.0.7
+
+* Fix inability to build a product due to missing Groovy dependencies (#238)
+
 ### Version 3.0.6
 
 * JDK 16 support
