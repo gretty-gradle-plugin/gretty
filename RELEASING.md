@@ -12,11 +12,11 @@ CTRL-D
 ## Running a release
 
 - Set release version, drop `-SNAPSHOT`.
-- Update all required doc files - see a previous release tag for an example of what should be updated.
+- Update all required doc files - see a previous release tag for an example of what should be updated (e.g. 482794f75982b9ec80e39dedabd400776cfd24a7)
 - Final release commit should be signed with `-S -s`.
 - Check build passes on GitHub Actions.
 - Tag new release commit using `git tag -a -s -m "release ?.?.?" v?.?.?` or `git tag v?.?.? <commit-hash>` if using an existing commit.
-- Checkout tag.
+- Make sure that `git status` shows a clean working directory
 - Set JDK path to a JDK8 installation.
 
 - Check `~/.gradle/gradle.properties` for credentials for `plugins.gradle.org` and `Sonatype` and for a GPG key name:
@@ -35,6 +35,7 @@ signing.gnupg.keyName=<secret>
 - Build:
 
 ```
+./gradlew clean
 ./gradlew build
 ```
 
@@ -44,7 +45,12 @@ signing.gnupg.keyName=<secret>
 ./gradlew publishMavenJavaPublicationToMavenRepository
 ```
 
-... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release.
+... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release:
+
+- Go to `Staging Repositories`.
+- Select the newly created repository.
+- Click `Close` and wait for the process to complete. You can follow the progress in the `Activity` tab below by using the `Refresh` button.
+- Click `Release` and be sure that `Automatically Drop` is checked. Again wait the process and check the progress.
 
 Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour).
 
