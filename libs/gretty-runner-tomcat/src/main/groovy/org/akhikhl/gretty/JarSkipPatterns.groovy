@@ -34,6 +34,15 @@ class JarSkipPatterns {
     'h2*.jar',
     'hamcrest*.jar',
     'hibernate*.jar',
+
+    // The Jakarta migration JAR must not be scanned, because the artefact does not only contain
+    // the class file transformer implementing the migration, but also contains the command line
+    // application. As a CLI app, this JAR has a manifest denoting the main class and additional
+    // dependencies, which the app expects in the same directory as 'jakartaee-migration-*.jar'.
+    // As a result, the scanner would throw FileNotFoundExceptions for those 'missing' dependencies
+    // and spam the log.
+    'jakartaee-migration-*.jar',
+
     'jmx*.jar',
     'jmx-tools-*.jar',
     'jta*.jar',
