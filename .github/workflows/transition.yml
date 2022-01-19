@@ -6,7 +6,7 @@
 # In particular, we must ensure that Gretty built with
 #     Gradle 6, Groovy 2, Java 8
 # works well on
-#      Gradle 7, Groovy 3, Java 16
+#      Gradle 7, Groovy 3, Java 17
 
 name: the-great-divide
 
@@ -34,13 +34,13 @@ jobs:
         run: ./gradlew --no-daemon --warning-mode all build
 
       - name: Download Gradle 7
-        run: ./gradlew --no-daemon wrapper --gradle-version 7.1.1 --distribution-type all
+        run: ./gradlew --no-daemon wrapper --gradle-version 7.3.3 --distribution-type all
 
-      - name: Set up JDK 16
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: 16
+          java-version: 17
 
       - name: Test
         run: cd integrationTests && ../gradlew --no-daemon --warning-mode all $GRADLE7_PROPERTIES -PgeckoDriverPlatform=linux64 -PtestAllContainers=$TEST_ALL_CONTAINERS testAll
