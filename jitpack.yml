@@ -5,5 +5,5 @@ jdk:
   - openjdk11
 install:
   - java -version
-  - ./gradlew --no-daemon wrapper --gradle-version 6.9.1 --distribution-type all
+  - ./gradlew --no-daemon wrapper --gradle-version 6.9.2 --distribution-type all
   - ./gradlew --no-daemon --warning-mode all --stacktrace -Pspock_version=1.3-groovy-2.5 -PgebVersion=2.3.1 publishToMavenLocal
