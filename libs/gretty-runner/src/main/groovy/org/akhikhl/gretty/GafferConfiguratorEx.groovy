@@ -8,16 +8,17 @@
  */
 package org.akhikhl.gretty
 
-import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
-
+import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.gaffer.ConfigurationDelegate
-import ch.qos.logback.classic.gaffer.GafferConfigurator
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder
+import ch.qos.logback.core.joran.util.ConfigurationWatchListUtil
 import ch.qos.logback.core.status.OnConsoleStatusListener
 import ch.qos.logback.core.util.ContextUtil
 import ch.qos.logback.core.util.OptionHelper
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.ImportCustomizer
 
 /**
  * Extends logback GafferConfigurator with run method accepting Binding
@@ -25,11 +26,29 @@ import org.codehaus.groovy.control.CompilerConfiguration
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
-class GafferConfiguratorEx extends GafferConfigurator {
+class GafferConfiguratorEx {
+
+  LoggerContext context
+  static final String DEBUG_SYSTEM_PROPERTY_KEY = "logback.debug"
 
   GafferConfiguratorEx(LoggerContext context) {
-    super(context)
+    this.context = context
   }
+
+  protected void informContextOfURLUsedForConfiguration(URL url) {
+    ConfigurationWatchListUtil.setMainWatchURL(context, url);
+  }
+
+  void run(URL url) {
+    informContextOfURLUsedForConfiguration(url);
+    run(url.text);
+  }
+
+  void run(File file) {
+    informContextOfURLUsedForConfiguration(file.toURI().toURL());
+    run(file.text);
+  }
+
 
   void run(Binding binding, String dslText) {
 
@@ -57,6 +76,29 @@ class GafferConfiguratorEx extends GafferConfigurator {
     dslScript.metaClass.getDeclaredOrigin = { dslScript }
 
     dslScript.run()
+  }
+
+  protected ImportCustomizer importCustomizer() {
+    def customizer = new ImportCustomizer()
+
+
+    def core = 'ch.qos.logback.core'
+    customizer.addStarImports(core, "${core}.encoder", "${core}.read", "${core}.rolling", "${core}.status",
+            "ch.qos.logback.classic.net")
+
+    customizer.addImports(PatternLayoutEncoder.class.name)
+
+    customizer.addStaticStars(Level.class.name)
+
+    customizer.addStaticImport('off', Level.class.name, 'OFF')
+    customizer.addStaticImport('error', Level.class.name, 'ERROR')
+    customizer.addStaticImport('warn', Level.class.name, 'WARN')
+    customizer.addStaticImport('info', Level.class.name, 'INFO')
+    customizer.addStaticImport('debug', Level.class.name, 'DEBUG')
+    customizer.addStaticImport('trace', Level.class.name, 'TRACE')
+    customizer.addStaticImport('all', Level.class.name, 'ALL')
+
+    customizer
   }
 }
 
