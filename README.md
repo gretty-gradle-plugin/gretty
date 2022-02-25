@@ -1,7 +1,7 @@
 ![logo](https://akhikhl.github.io/gretty/media/gretty_logo_1.x.png "gretty logo")
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg?branch=gretty-3.x)
-![Maintenance Status](https://img.shields.io/maintenance/yes/2021.svg)
+![Maintenance Status](https://img.shields.io/maintenance/yes/2022.svg)
 [![Latest release](https://img.shields.io/badge/release-3.0.7-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.0.7)
 [![Snapshot](https://img.shields.io/badge/current-3.0.8--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/gretty-3.x)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
