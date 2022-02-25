@@ -46,7 +46,7 @@ signing.gnupg.keyName=<secret>
 
 ... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release.
 
-Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour).
+Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour - and note the last `/` - it's important!).
 
 - Publish to `plugins.gradle.org`:
 
