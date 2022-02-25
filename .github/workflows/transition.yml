@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew --no-daemon --warning-mode all build
 
       - name: Download Gradle 7
-        run: ./gradlew --no-daemon wrapper --gradle-version 7.3.3 --distribution-type all
+        run: ./gradlew --no-daemon wrapper --gradle-version 7.4 --distribution-type all
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
