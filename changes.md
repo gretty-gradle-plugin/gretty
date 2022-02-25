@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.0.1
+
+* Fix inability to build a product due to missing Groovy dependencies (#238).
+
+* Version upgrades to mitigate some CVEs (#252). Thanks to @dutta1kartik3.
+
 ### Version 4.0.0
 
 * Gretty requires JDK11+.
