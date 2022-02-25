@@ -52,7 +52,7 @@ signing.gnupg.keyName=<secret>
 - Click `Close` and wait for the process to complete. You can follow the progress in the `Activity` tab below by using the `Refresh` button.
 - Click `Release` and be sure that `Automatically Drop` is checked. Again wait the process and check the progress.
 
-Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour).
+Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour - and note the last `/` - it's important!).
 
 - Publish to `plugins.gradle.org`:
 
