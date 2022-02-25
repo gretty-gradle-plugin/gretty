@@ -28,7 +28,7 @@ February 25, 2022, Gretty 4.0.1 is out and available at [Gradle Plugins](https:/
 
 * Fix inability to build a product due to missing Groovy dependencies (#238).
 
-* Version upgrades to mitigate some CVEs (#252). Thanks to @dutta1kartik3.
+* Version upgrades to mitigate some CVEs (#252). Thanks to [@dutta1kartik3](https://github.com/dutta1kartik3).
 
 September 1, 2021, Gretty 4.0.0 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
