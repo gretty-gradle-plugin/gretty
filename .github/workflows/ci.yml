@@ -13,11 +13,9 @@ jobs:
         gradle: ['6.9.2']
         include:
           - java: 17
-            gradle: '7.3.3'
-            properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
-          - java: 17
             gradle: '7.4'
             properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
+
     env:
       TEST_ALL_CONTAINERS: "['tomcat10','jetty11']"
       GRADLE_VERSION: ${{ matrix.gradle }}
