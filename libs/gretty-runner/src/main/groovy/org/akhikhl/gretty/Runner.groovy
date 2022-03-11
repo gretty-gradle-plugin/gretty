@@ -72,15 +72,20 @@ final class Runner {
       logbackConfigText = new File(serverParams.logbackConfigFile).getText('UTF-8')
     }
     else
-      logbackConfigText = Runner.class.getResourceAsStream('/grettyRunnerLogback.groovy').getText('UTF-8')
-    Binding binding = new Binding()
-    binding.loggingLevel = stringToLoggingLevel(serverParams.loggingLevel)
-    binding.consoleLogEnabled = Boolean.valueOf(serverParams.consoleLogEnabled == null ? true : serverParams.consoleLogEnabled)
-    binding.fileLogEnabled = Boolean.valueOf(serverParams.fileLogEnabled == null ? true : serverParams.fileLogEnabled)
-    binding.logFileName = serverParams.logFileName
-    binding.logDir = serverParams.logDir
-    binding.grettyDebug = params.debug
-    new GafferConfiguratorEx(logCtx).run(binding, logbackConfigText)
+      logbackConfigText = "" // Runner.class.getResourceAsStream('/grettyRunnerLogback.groovy').getText('UTF-8')
+
+    Level level = stringToLoggingLevel(serverParams.loggingLevel?.toString())
+    boolean consoleLogEnabled = serverParams.getOrDefault('consoleLogEnabled', true)
+    boolean fileLogEnabled = serverParams.getOrDefault('fileLogEnabled', true)
+    boolean grettyDebug = params.getOrDefault('debug', true)
+    LogUtil.configureLogging(
+            level,
+            consoleLogEnabled,
+            fileLogEnabled,
+            serverParams.logFileName?.toString(),
+            serverParams.logDir?.toString(),
+            grettyDebug,
+    )
   }
 
   private static Level stringToLoggingLevel(String str) {
