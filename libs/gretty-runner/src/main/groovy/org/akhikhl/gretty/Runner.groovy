@@ -72,27 +72,20 @@ final class Runner {
       logbackConfigText = new File(serverParams.logbackConfigFile).getText('UTF-8')
     }
     else
-      logbackConfigText = Runner.class.getResourceAsStream('/grettyRunnerLogback.groovy').getText('UTF-8')
-    Binding binding = new Binding()
-    binding.loggingLevel = stringToLoggingLevel(serverParams.loggingLevel)
-    binding.consoleLogEnabled = Boolean.valueOf(serverParams.consoleLogEnabled == null ? true : serverParams.consoleLogEnabled)
-    binding.fileLogEnabled = Boolean.valueOf(serverParams.fileLogEnabled == null ? true : serverParams.fileLogEnabled)
-    binding.logFileName = serverParams.logFileName
-    binding.logDir = serverParams.logDir
-    binding.grettyDebug = params.debug
-    // FIXME #162 logback has temporarily suspended GafferConfigurator.
-    // We do not know if and when it will come back, see news of 2019-10-11:
-    // http://logback.qos.ch/news.html
-    // We've opened an issue in their bug tracker about enabling it again:
-    // https://jira.qos.ch/projects/LOGBACK/issues/LOGBACK-1541
-    // new GafferConfiguratorEx(logCtx).run(binding, logbackConfigText)
-    // Instead we use a fixed configuration file, which does not respect all the different
-    // logging toggles in Gretty:
-    Runner.class.getResource('/grettyRunnerLogback.xml').withInputStream {
-      JoranConfigurator configurator = new JoranConfigurator();
-      configurator.setContext(logCtx)
-      configurator.doConfigure(it)
-    }
+      logbackConfigText = "" // Runner.class.getResourceAsStream('/grettyRunnerLogback.groovy').getText('UTF-8')
+
+    Level level = stringToLoggingLevel(serverParams.loggingLevel?.toString())
+    boolean consoleLogEnabled = serverParams.getOrDefault('consoleLogEnabled', true)
+    boolean fileLogEnabled = serverParams.getOrDefault('fileLogEnabled', true)
+    boolean grettyDebug = params.getOrDefault('debug', true)
+    LogUtil.configureLogging(
+            level,
+            consoleLogEnabled,
+            fileLogEnabled,
+            serverParams.logFileName?.toString(),
+            serverParams.logDir?.toString(),
+            grettyDebug,
+    )
   }
 
   private static Level stringToLoggingLevel(String str) {
