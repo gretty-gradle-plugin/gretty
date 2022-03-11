@@ -35,6 +35,15 @@ class LogUtil {
         }
     }
 
+    static reset() {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory()
+        context.stop()
+        Map<String, Logger> loggerCache = context.@loggerCache
+        loggerCache.keySet().removeIf { loggerName ->
+            !loggerName.startsWith('org.eclipse.jetty')
+        }
+    }
+
     /**
      * Configure a default logging configuration for Gretty.
      *
