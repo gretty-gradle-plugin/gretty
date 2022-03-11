@@ -55,12 +55,8 @@ final class Runner {
   }
 
   void initLogback(Map serverParams) {
+    LogUtil.reset()
     LoggerContext logCtx = LoggerFactory.getILoggerFactory()
-    logCtx.stop()
-    Map loggerCache = LoggerFactory.getILoggerFactory().@loggerCache
-    for(String loggerName in new HashSet(loggerCache.keySet()))
-      if(!loggerName.startsWith('org.eclipse.jetty'))
-        loggerCache.remove(loggerName)
     String logbackConfigText
     if(serverParams.logbackConfigFile) {
       if(serverParams.logbackConfigFile.endsWith('.xml')) {
