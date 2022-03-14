@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
+import ch.qos.logback.classic.joran.JoranConfigurator
 import ch.qos.logback.classic.joran.ReconfigureOnChangeTask
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.Appender
@@ -42,6 +43,13 @@ class LogUtil {
         loggerCache.keySet().removeIf { loggerName ->
             !loggerName.startsWith('org.eclipse.jetty')
         }
+    }
+
+    static configureLoggingWithJoran(File logbackConfigFile) {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory()
+        def configurator = new JoranConfigurator()
+        configurator.setContext(context)
+        configurator.doConfigure(logbackConfigFile)
     }
 
     /**
