@@ -1,0 +1,31 @@
+<configuration scan="true" scanPeriod="30 seconds">
+
+  <property name="ENCODER_PATTERN" value="%-12date{HH:mm:ss} %-5level %logger{35} - %msg%n"/>
+  <property name="LOG_DIR" value="${user.home}/logs"/>
+  <property name="LOG_FILE_NAME" value="spring-boot-app"/>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${ENCODER_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/${LOG_FILE_NAME}.log</file>
+    <append>true</append>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/${LOG_FILE_NAME}-%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${ENCODER_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <root level="WARN">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
+  </root>
+
+  <logger name="org.akhikhl.gretty" level="INFO"/>
+</configuration>
