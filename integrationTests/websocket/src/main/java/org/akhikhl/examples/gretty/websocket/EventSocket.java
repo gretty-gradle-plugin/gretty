@@ -19,6 +19,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.server.ServerEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ClientEndpoint
 @ServerEndpoint(value="/hello")
@@ -26,15 +28,17 @@ public class EventSocket {
 
   private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 
+  private static final Logger log = LoggerFactory.getLogger(EventSocket.class);
+
   @OnOpen
   public void onWebSocketConnect(final Session session) {
-    System.out.println("Socket Connected: " + session);
+    log.info("Socket Connected: {}", session);
     sessions.add(session);
   }
   
   @OnMessage
   public void onWebSocketText(final Session client, String message) throws Exception {
-    System.out.println("Received TEXT message: " + message);
+    log.info("Received TEXT message: {}", message);
     for( final Session session: sessions ) {
       if(session != client)
         session.getBasicRemote().sendText(message);
@@ -43,12 +47,12 @@ public class EventSocket {
 
   @OnClose
   public void onWebSocketClose(final Session session, CloseReason reason) {
-    System.out.println("Socket Closed: " + reason);
+    log.info("Socket Closed: {}", reason);
     sessions.remove(session);
   }
   
   @OnError
   public void onWebSocketError(Throwable cause) {
-    cause.printStackTrace(System.err);
+    log.error("Socket Error", cause);
   }
 }

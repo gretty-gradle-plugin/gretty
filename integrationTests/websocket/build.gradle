@@ -9,6 +9,7 @@ gretty {
 dependencies {
   implementation 'org.webjars:jquery:2.1.1'
   implementation 'org.webjars:sockjs-client:0.3.4-1'
+  implementation "ch.qos.logback:logback-classic:$logback_version"
 }
 
 defineIntegrationTest()
