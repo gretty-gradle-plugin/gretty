@@ -9,14 +9,11 @@
 package org.akhikhl.gretty
 
 import ch.qos.logback.classic.Level
-import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.joran.JoranConfigurator
 import groovy.cli.commons.CliBuilder
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -56,20 +53,28 @@ final class Runner {
 
   void initLogback(Map serverParams) {
     LogUtil.reset()
-    LoggerContext logCtx = LoggerFactory.getILoggerFactory()
-    String logbackConfigText
-    if(serverParams.logbackConfigFile) {
-      if(serverParams.logbackConfigFile.endsWith('.xml')) {
-        JoranConfigurator configurator = new JoranConfigurator();
-        configurator.setContext(logCtx)
-        configurator.doConfigure(new File(serverParams.logbackConfigFile))
-        return
-      }
-      logbackConfigText = new File(serverParams.logbackConfigFile).getText('UTF-8')
+    String logbackConfigFile = serverParams.logbackConfigFile
+    if (logbackConfigFile) {
+      initLogbackFromConfigurationFile(logbackConfigFile)
+    } else {
+      initLogbackFromGrettyConfig(serverParams)
     }
-    else
-      logbackConfigText = "" // Runner.class.getResourceAsStream('/grettyRunnerLogback.groovy').getText('UTF-8')
+  }
 
+  private void initLogbackFromConfigurationFile(String logbackConfigFile) {
+    if (!logbackConfigFile.endsWith(".xml")) {
+      throw new IllegalArgumentException("""
+          | Gretty only supports XML for configuring Logback, and does not support
+          | $logbackConfigFile
+          | Please note Logback dropped support for Gaffer (configuration from Groovy script) in 1.2.9.
+          """.stripMargin()
+      )
+    }
+
+    LogUtil.configureLoggingWithJoran(new File(logbackConfigFile))
+  }
+
+  private void initLogbackFromGrettyConfig(Map serverParams) {
     Level level = stringToLoggingLevel(serverParams.loggingLevel?.toString())
     boolean consoleLogEnabled = serverParams.getOrDefault('consoleLogEnabled', true)
     boolean fileLogEnabled = serverParams.getOrDefault('fileLogEnabled', true)
