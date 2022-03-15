@@ -428,7 +428,7 @@ final class ProjectUtils {
       log.warn 'server configuration file {} is not found', specifiedServerConfigFile.toString()
 
     def specifiedLogbackConfigFile = sconfig.logbackConfigFile
-    def logbackConfigFiles = ( specifiedLogbackConfigFile ? [ specifiedLogbackConfigFile ] : [ 'logback.groovy', 'logback.xml' ]) as LinkedHashSet
+    def logbackConfigFiles = [ specifiedLogbackConfigFile ?: 'logback.xml' ] as LinkedHashSet
     sconfig.logbackConfigFile = new FileResolver(
       ['logback', 'server', 'config', '.' ]
     ).resolveSingleFile(project, logbackConfigFiles)
