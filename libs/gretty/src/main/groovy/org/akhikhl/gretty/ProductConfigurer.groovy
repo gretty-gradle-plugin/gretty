@@ -139,7 +139,7 @@ class ProductConfigurer {
         getRunnerFileCollection()
       }
 
-      inputs.property 'logback-config-template', { getLogbackConfigTemplate() }
+      inputs.property 'logback-config-template', { LogbackTemplate.read() }
 
       outputs.dir outputDir
 
@@ -187,7 +187,7 @@ class ProductConfigurer {
     for(File file in getRunnerFileCollection().files)
       dir.add(file)
 
-    File logbackConfigFile = new File(project.buildDir, 'runner/logback.' + getLogbackConfigExtension())
+    File logbackConfigFile = new File(project.buildDir, 'runner/logback.xml')
     logbackConfigFile.parentFile.mkdirs()
     logbackConfigFile.text = getRunnerLogbackConfig()
     dir.add(logbackConfigFile, 'logback-config')
@@ -202,7 +202,7 @@ class ProductConfigurer {
     for(File file in project.configurations.grettyStarter.files)
       dir.add(file)
 
-    File logbackConfigFile = new File(project.buildDir, 'starter/logback.groovy')
+    File logbackConfigFile = new File(project.buildDir, 'starter/logback.xml')
     logbackConfigFile.parentFile.mkdirs()
     logbackConfigFile.text = getStarterLogbackConfig()
     dir.add(logbackConfigFile, 'logback-config')
@@ -288,23 +288,6 @@ Version: ${project.version}"""
     ['VERSION.txt': text]
   }
 
-  private String getLogbackConfigExtension() {
-    if(sconfig.logbackConfigFile) {
-      def logbackConfigFile = sconfig.logbackConfigFile
-      if(!(logbackConfigFile instanceof File))
-        logbackConfigFile = new File(logbackConfigFile.toString())
-      int extPos = logbackConfigFile.name.lastIndexOf('.')
-      return logbackConfigFile.name.substring(extPos + 1)
-    }
-    'groovy'
-  }
-
-  private String getLogbackConfigTemplate() {
-    ProductConfigurer.class.classLoader.getResourceAsStream('logback-config-template/logback.groovy').withStream {
-      it.text
-    }
-  }
-
   protected FileCollection getRunnerFileCollection() {
     return ProjectUtils.getRunnerFileCollection(project, sconfig.servletContainer)
   }
@@ -325,14 +308,13 @@ Version: ${project.version}"""
     def logFileName = (sconfig.logFileName ?: productName ?: project.name)
 
     def loggingLevel = sconfig.loggingLevel ?: 'INFO'
-
-    new groovy.text.SimpleTemplateEngine().createTemplate(getLogbackConfigTemplate()).make([
-            logDir: logDir,
-            logFileName: logFileName,
-            loggingLevel: loggingLevel,
-            consoleLogEnabled: sconfig.consoleLogEnabled,
-            fileLogEnabled: sconfig.fileLogEnabled
-    ]).toString()
+    return LogbackTemplate.render(
+            logDir,
+            logFileName,
+            loggingLevel,
+            sconfig.consoleLogEnabled,
+            sconfig.fileLogEnabled,
+    )
   }
 
   private String getStarterLogbackConfig() {
@@ -343,14 +325,13 @@ Version: ${project.version}"""
     def logFileName = (sconfig.logFileName ?: productName ?: project.name) + '-starter'
 
     def loggingLevel = sconfig.loggingLevel ?: 'INFO'
-
-    new groovy.text.SimpleTemplateEngine().createTemplate(getLogbackConfigTemplate()).make([
-            logDir: logDir,
-            logFileName: logFileName,
-            loggingLevel: loggingLevel,
-            consoleLogEnabled: sconfig.consoleLogEnabled,
-            fileLogEnabled: sconfig.fileLogEnabled
-    ]).toString()
+    return LogbackTemplate.render(
+            logDir,
+            logFileName,
+            loggingLevel,
+            sconfig.consoleLogEnabled,
+            sconfig.fileLogEnabled,
+    )
   }
 
   protected FileCollection getVisibleRunnerFileCollection() {
