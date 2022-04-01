@@ -8,6 +8,7 @@
  */
 package org.akhikhl.gretty;
 
+import java.util.regex.Pattern;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 
 import java.io.IOException;
@@ -82,6 +83,16 @@ public class FilteringClassLoader extends WebAppClassLoader {
         return Collections.enumeration(resources);
       }
     }
+
+    // FIXME one-off patch for upgrading Logback past 1.1.10
+    // see `libs/gretty-runner-jetty94/src/main/java/org/akhikhl/gretty/FilteringClassLoader.java` for why this hack is needed
+    if (name.equals("META-INF/services/javax.servlet.ServletContainerInitializer")) {
+      List<URL> resources = Collections.list(super.getResources(name));
+      Pattern logbackJar = Pattern.compile("logback-classic(.*?).jar");
+      resources.removeIf(resource -> logbackJar.matcher(resource.toString()).find());
+      return Collections.enumeration(resources);
+    }
+
     return super.getResources(name);
   }
 
