@@ -216,6 +216,8 @@ class JettyConfigurerImpl implements JettyConfigurer {
     FilteringClassLoader classLoader = new FilteringClassLoader(context)
     classLoader.addServerClass('ch.qos.logback.')
     classLoader.addServerClass('org.slf4j.')
+    classLoader.addServerClass('org.apache.commons.cli.')
+    classLoader.addServerClass('org.apache.commons.io.')
     classLoader.addServerClass('org.codehaus.groovy.')
     classLoader.addServerClass('groovy.')
     classLoader.addServerClass('groovyx.')

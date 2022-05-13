@@ -224,6 +224,8 @@ class TomcatServerConfigurer {
     // context.setLogEffectiveWebXml(true) // enable for debugging webxml merge
     FilteringClassLoader parentClassLoader = new FilteringClassLoader(params.parentClassLoader ?: this.getClass().getClassLoader())
     parentClassLoader.addServerClass('ch.qos.logback.')
+    parentClassLoader.addServerClass('org.apache.commons.cli.')
+    parentClassLoader.addServerClass('org.apache.commons.io.')
     parentClassLoader.addServerClass('org.apache.groovy.')
     parentClassLoader.addServerClass('org.slf4j.')
     parentClassLoader.addServerClass('org.codehaus.groovy.')
