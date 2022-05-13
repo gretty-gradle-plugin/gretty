@@ -207,7 +207,9 @@ class JettyConfigurerImpl implements JettyConfigurer {
         '.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$');
 
     context.addServerClassMatcher(new ClassMatcher().tap {
-      include'ch.qos.logback.'
+      include 'ch.qos.logback.'
+      include 'org.apache.commons.cli.'
+      include 'org.apache.commons.io.'
       include 'org.slf4j.'
       include 'org.codehaus.groovy.'
       include 'groovy.'
