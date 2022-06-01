@@ -12,7 +12,7 @@ CTRL-D
 ## Running a release
 
 - Set release version, drop `-SNAPSHOT`.
-- Update all required doc files - see a previous release tag for an example of what should be updated (e.g. 482794f75982b9ec80e39dedabd400776cfd24a7)
+- Update all required doc files - see a previous release tag for an example of what should be updated (e.g. 5cdec58d2030ae1e8719d341afafc01d9f8c14a3)
 - Final release commit should be signed with `-S -s`.
 - Check build passes on GitHub Actions.
 - Tag new release commit using `git tag -a -s -m "release ?.?.?" v?.?.?` or `git tag v?.?.? <commit-hash>` if using an existing commit.
