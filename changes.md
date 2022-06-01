@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.0.8
+
+* Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258  
+  Adding the patterns fixes a bug which gave preference to the `commons-cli` and `commons-io` versions
+  that Gretty uses, rather than using the JARs bundled with the webapp (which is the correct behavior).
+
 ### Version 3.0.7
 
 * Fix inability to build a product due to missing Groovy dependencies (#238)
