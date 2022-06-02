@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2022.svg)
-[![Latest release](https://img.shields.io/badge/release-4.0.1-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.0.1)
-[![Snapshot](https://img.shields.io/badge/current-4.0.2--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
+[![Latest release](https://img.shields.io/badge/release-4.0.2-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.0.2)
+[![Snapshot](https://img.shields.io/badge/current-4.0.3--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -21,6 +21,24 @@ You are looking at Gretty's `master` branch which is for Gretty 4. You also migh
 If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.github.io/gretty-doc/Getting-started.html) page.
 
 #### :star: What's new
+
+June 2, 2022, Gretty 4.0.2 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Changes in this version:
+
+* Use Tomcat 10.0.21
+
+* Use Jetty 11.0.9
+
+* Use Gradle 7.4.2 for testing Gretty
+
+* Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258  
+  Adding the patterns fixes a bug which gave preference to the `commons-cli` and `commons-io` versions
+  that Gretty uses, rather than using the JARs bundled with the webapp (which is the correct behavior).
+
+* Upgrade to Logback 1.3.0-alpha14
+
+* Remove Groovy-based logging configuration in response to Log4Shell #249
 
 February 25, 2022, Gretty 4.0.1 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
