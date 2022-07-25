@@ -13,7 +13,7 @@ jobs:
         gradle: ['6.9.2']
         include:
           - java: 15
-            gradle: '7.4.2'
+            gradle: '7.5'
             properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
 
     env:
