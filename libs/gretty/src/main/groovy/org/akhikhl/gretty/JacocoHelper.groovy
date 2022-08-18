@@ -1,15 +1,15 @@
 package org.akhikhl.gretty
 
-import org.gradle.api.internal.TaskInputsInternal
-import org.gradle.api.internal.TaskInternal
-import org.gradle.api.internal.TaskOutputsInternal
-import org.gradle.api.internal.tasks.TaskStateInternal
+import org.gradle.api.Task
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.TaskInputs
+import org.gradle.api.tasks.TaskOutputs
+import org.gradle.api.tasks.TaskState
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 
-interface JacocoHelper extends TaskInternal, JavaForkOptions, ExtensionAware {
+interface JacocoHelper extends Task, JavaForkOptions, ExtensionAware {
   @Internal
   JacocoTaskExtension getJacoco()
 
@@ -23,15 +23,15 @@ interface JacocoHelper extends TaskInternal, JavaForkOptions, ExtensionAware {
 
   @Internal
   @Override
-  TaskInputsInternal getInputs()
+  TaskInputs getInputs()
 
   @Internal
   @Override
-  TaskOutputsInternal getOutputs()
+  TaskOutputs getOutputs()
 
   @Internal
   @Override
-  TaskStateInternal getState()
+  TaskState getState()
 
   @Internal
   @Override
