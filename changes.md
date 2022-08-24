@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.0.3
+
+* Replace internal Gradle API usage with public API #263  
+  Thank you, @octylFractal, for making Gretty better.
+* Upgraded default versions of Tomcat to 10.0.22, and Jetty to 11.0.11
+
 ### Version 4.0.2
 
 * Use Tomcat 10.0.21
