@@ -13,11 +13,8 @@ import groovy.transform.TypeCheckingMode
 import org.akhikhl.gretty.scanner.JDKScannerManager
 import org.gradle.api.DefaultTask
 import org.gradle.api.Task
-import org.gradle.api.internal.TaskInternal
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
@@ -156,7 +153,7 @@ abstract class StartBaseTask extends DefaultTask {
   private void initJacoco() {
     if(project.extensions.findByName('jacoco') && project.gretty.jacocoEnabled) {
       Task startTask = this
-      jacocoHelper = (TaskInternal.methods.collectEntries({ [it.name, {} ] }) +
+      jacocoHelper = (Task.methods.collectEntries({ [it.name, {} ] }) +
           JavaForkOptions.methods.collectEntries({ [it.name, {} ] }) +
           ExtensionAware.methods.collectEntries({ [it.name, {} ] }) + [
           getExtensions: { startTask.getExtensions() },
