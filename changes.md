@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.0.9
+
+* Replace internal Gradle API usage with public API #263
+
 ### Version 3.0.8
 
 * Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258  
