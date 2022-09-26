@@ -30,6 +30,10 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+compileJava {
+    options.compilerArgs.addAll(['--release', '8'])
+}
+
 compileGroovy {
     groovyOptions.configurationScript = file("${rootProject.projectDir}/gradle/config.groovy")
 }
