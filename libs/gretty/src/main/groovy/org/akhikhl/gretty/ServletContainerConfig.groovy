@@ -233,36 +233,36 @@ class ServletContainerConfig {
           }
       ]
       configs['jetty10'] = [
-              servletContainerType: 'jetty',
-              servletContainerVersion: { project -> project.ext.jetty10Version },
-              servletContainerDescription: { project -> "Jetty ${project.ext.jetty10Version}" },
-              servletContainerRunnerConfig: 'grettyRunnerJetty10',
-              servletContainerRunnerDependencies: { project ->
-                project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-jetty10:$grettyVersion"
-                addRedirectFilter(project, servletContainerRunnerConfig)
-                project.configurations[servletContainerRunnerConfig].resolutionStrategy {
-                  force "javax.servlet:javax.servlet-api:${project.ext.jetty10ServletApiVersion}"
-                  def jetty10_version = project.ext.jetty10Version
-                  force "org.eclipse.jetty:jetty-server:$jetty10_version"
-                  force "org.eclipse.jetty:jetty-servlet:$jetty10_version"
-                  force "org.eclipse.jetty:jetty-webapp:$jetty10_version"
-                  force "org.eclipse.jetty:jetty-security:$jetty10_version"
-                  force "org.eclipse.jetty:apache-jsp:$jetty10_version"
-                  force "org.eclipse.jetty:jetty-annotations:$jetty10_version"
-                  force "org.eclipse.jetty:jetty-plus:$jetty10_version"
-                  force "org.eclipse.jetty.websocket:websocket-javax-server:$jetty10_version"
-                  def asm_version = project.ext.asmVersion
-                  force "org.ow2.asm:asm:$asm_version"
-                  force "org.ow2.asm:asm-commons:$asm_version"
-                }
-              },
-              servletApiVersion: { project -> project.ext.jetty9ServletApiVersion },
-              servletApiDependencies: { project ->
-                project.dependencies {
-                  grettyProvidedCompile "javax.servlet:javax.servlet-api:${project.ext.jetty10ServletApiVersion}"
-                  grettyProvidedCompile 'javax.websocket:javax.websocket-api:1.0'
-                }
-              }
+        servletContainerType: 'jetty',
+        servletContainerVersion: { project -> project.ext.jetty10Version },
+        servletContainerDescription: { project -> "Jetty ${project.ext.jetty10Version}" },
+        servletContainerRunnerConfig: 'grettyRunnerJetty10',
+        servletContainerRunnerDependencies: { project ->
+          project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-jetty10:$grettyVersion"
+          addRedirectFilter(project, servletContainerRunnerConfig)
+          project.configurations[servletContainerRunnerConfig].resolutionStrategy {
+            force "javax.servlet:javax.servlet-api:${project.ext.jetty10ServletApiVersion}"
+            def jetty10_version = project.ext.jetty10Version
+            force "org.eclipse.jetty:jetty-server:$jetty10_version"
+            force "org.eclipse.jetty:jetty-servlet:$jetty10_version"
+            force "org.eclipse.jetty:jetty-webapp:$jetty10_version"
+            force "org.eclipse.jetty:jetty-security:$jetty10_version"
+            force "org.eclipse.jetty:apache-jsp:$jetty10_version"
+            force "org.eclipse.jetty:jetty-annotations:$jetty10_version"
+            force "org.eclipse.jetty:jetty-plus:$jetty10_version"
+            force "org.eclipse.jetty.websocket:websocket-javax-server:$jetty10_version"
+            def asm_version = project.ext.asmVersion
+            force "org.ow2.asm:asm:$asm_version"
+            force "org.ow2.asm:asm-commons:$asm_version"
+          }
+        },
+        servletApiVersion: { project -> project.ext.jetty9ServletApiVersion },
+        servletApiDependencies: { project ->
+          project.dependencies {
+            grettyProvidedCompile "javax.servlet:javax.servlet-api:${project.ext.jetty10ServletApiVersion}"
+            grettyProvidedCompile 'javax.websocket:javax.websocket-api:1.0'
+          }
+        }
       ]
       configs['tomcat9'] = [
         servletContainerType: 'tomcat',
