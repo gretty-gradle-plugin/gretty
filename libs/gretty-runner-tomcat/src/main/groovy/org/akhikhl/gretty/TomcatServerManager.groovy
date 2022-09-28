@@ -41,7 +41,7 @@ class TomcatServerManager implements ServerManager {
   }
 
   @Override
-  void startServer(ServerStartEvent startEvent) {
+  ServerStartEvent startServer() {
     assert tomcat == null
 
     log.debug '{} starting.', params.servletContainerDescription
@@ -66,26 +66,23 @@ class TomcatServerManager implements ServerManager {
       result = true
     } catch(Throwable x) {
       log.error 'Error starting server', x
-      if(startEvent) {
-        Map startInfo = new TomcatServerStartInfo().getInfo(tomcat, null, params)
-        startInfo.status = 'error starting server'
-        startInfo.error = true
-        startInfo.errorMessage = x.getMessage() ?: x.getClass().getName()
-        StringWriter sw = new StringWriter()
-        x.printStackTrace(new PrintWriter(sw))
-        startInfo.stackTrace = sw.toString()
-        startEvent.onServerStart(startInfo)
-      } else
-        throw x
+      Map startInfo = new TomcatServerStartInfo().getInfo(tomcat, null, params)
+      startInfo.status = 'error starting server'
+      startInfo.error = true
+      startInfo.errorMessage = x.getMessage() ?: x.getClass().getName()
+      StringWriter sw = new StringWriter()
+      x.printStackTrace(new PrintWriter(sw))
+      startInfo.stackTrace = sw.toString()
+      return new ServerStartEvent(startInfo)
     }
 
     if(result) {
-      if (startEvent) {
-        Map startInfo = new TomcatServerStartInfo().getInfo(tomcat, null, params)
-        startEvent.onServerStart(startInfo)
-      }
+      Map startInfo = new TomcatServerStartInfo().getInfo(tomcat, null, params)
       log.debug '{} started.', params.servletContainerDescription
+      return new ServerStartEvent(startInfo)
     }
+
+    throw new IllegalStateException()
   }
 
   @Override

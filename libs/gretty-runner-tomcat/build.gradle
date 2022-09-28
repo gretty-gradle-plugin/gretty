@@ -8,7 +8,7 @@ dependencies {
   // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
   compileOnly localGroovy()
 
-  api project(':libs:gretty-runner')
+  api project(':libs:gretty-runner-api')
   api "org.slf4j:log4j-over-slf4j:$slf4j_version"
   // These dependencies are needed for compiling gretty-runner-tomcat.
   // They are replaced by "real" dependencies at runtime.

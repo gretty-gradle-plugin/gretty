@@ -12,4 +12,5 @@ dependencies {
   api "commons-io:commons-io:$commons_io_version"
   api "ch.qos.logback:logback-classic:$logback_version"
   api project(':libs:gretty-common')
+  api project(':libs:gretty-runner-api')
 }

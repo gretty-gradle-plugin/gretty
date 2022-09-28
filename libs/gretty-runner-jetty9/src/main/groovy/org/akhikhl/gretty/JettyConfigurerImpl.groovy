@@ -89,7 +89,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
       if(!httpConn.port)
         httpConn.port = params.httpPort ?: ServerDefaults.defaultHttpPort
 
-      if(httpConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpConn.port = 0
 
       if(params.httpIdleTimeout)
@@ -119,7 +119,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
       if(!httpsConn.port)
         httpsConn.port = params.httpsPort ?: ServerDefaults.defaultHttpsPort
 
-      if(httpsConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpsConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpsConn.port = 0
 
       def sslContextFactory = httpsConn.getConnectionFactories().find { it instanceof SslConnectionFactory }?.getSslContextFactory()

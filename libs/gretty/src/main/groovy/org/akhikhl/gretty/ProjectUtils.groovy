@@ -35,9 +35,17 @@ final class ProjectUtils {
     )
   }
 
-  static FileCollection getRunnerFileCollection(Project project, String servletContainerName) {
+  static FileCollection getRunnerFileCollection(Project project) {
+    def grettyVersion = Externalized.getString("grettyVersion")
+    project.configurations.grettyNoSpringBoot + getCurrentGroovy(project) +
+            project.configurations.detachedConfiguration(
+                    project.dependencies.create("org.gretty:gretty-runner:$grettyVersion")
+            )
+  }
+
+  static FileCollection getServletContainerClasspath(Project project, String servletContainerName) {
     def servletContainerConfig = ServletContainerConfig.getConfig(servletContainerName)
-    project.configurations.grettyNoSpringBoot + project.configurations[servletContainerConfig.servletContainerRunnerConfig] + getCurrentGroovy(project)
+    getCurrentGroovy(project) + project.configurations[servletContainerConfig.servletContainerRunnerConfig]
   }
 
   static boolean anyWebAppUsesSpringBoot(Project project, Iterable<WebAppConfig> wconfigs) {

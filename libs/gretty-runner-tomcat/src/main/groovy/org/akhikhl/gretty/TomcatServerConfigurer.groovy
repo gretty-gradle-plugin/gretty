@@ -105,7 +105,7 @@ class TomcatServerConfigurer {
       if(!httpConn.port || httpConn.port < 0)
         httpConn.port = params.httpPort ?: ServerDefaults.defaultHttpPort
 
-      if(httpConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpConn.port = 0
 
       if(params.httpIdleTimeout)
@@ -134,7 +134,7 @@ class TomcatServerConfigurer {
       if(!httpsConn.port || httpsConn.port < 0)
         httpsConn.port = params.httpsPort ?: ServerDefaults.defaultHttpsPort
 
-      if(httpsConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpsConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpsConn.port = 0
 
       def sslConfig = new SSLHostConfig()

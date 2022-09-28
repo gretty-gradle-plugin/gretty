@@ -88,6 +88,8 @@ abstract class LauncherBase implements Launcher {
 
   protected abstract String getServletContainerDescription()
 
+  protected abstract List<String> getServletContainerClasspath()
+
   Map getServerStartInfo() {
     serverStartInfo
   }
@@ -267,6 +269,7 @@ abstract class LauncherBase implements Launcher {
     json.with {
       servletContainerId self.getServletContainerId()
       servletContainerDescription self.getServletContainerDescription()
+      servletContainerClasspath self.getServletContainerClasspath()
       if(sconfig.host)
         host sconfig.host
       if(sconfig.httpEnabled) {

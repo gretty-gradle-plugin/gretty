@@ -51,6 +51,12 @@ class StarterLauncher extends LauncherBase {
   }
 
   @Override
+  protected List<String> getServletContainerClasspath() {
+    // FIXME
+    return Collections.emptyList();
+  }
+
+  @Override
   protected void javaExec(JavaExecParams params) {
     String javaExe = PlatformUtils.isWindows() ? 'java.exe' : 'java'
     String javaPath = new File(System.getProperty("java.home"), "bin/$javaExe").absolutePath

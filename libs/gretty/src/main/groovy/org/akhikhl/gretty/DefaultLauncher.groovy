@@ -29,8 +29,8 @@ class DefaultLauncher extends LauncherBase {
     project.file("${project.buildDir}/${serverConfig.portPropertiesFileName}")
   }
 
-  static Collection<URL> getRunnerClassPath(Project project, ServerConfig sconfig) {
-    def files = ProjectUtils.getRunnerFileCollection(project, sconfig.servletContainer)
+  static Collection<URL> getRunnerClassPath(Project project) {
+    def files = ProjectUtils.getRunnerFileCollection(project)
     (files.collect { it.toURI().toURL() }) as LinkedHashSet
   }
 
@@ -53,7 +53,7 @@ class DefaultLauncher extends LauncherBase {
 
   @Override
   void beforeLaunch() {
-    runnerClasspath = getRunnerClassPath(project, sconfig)
+    runnerClasspath = getRunnerClassPath(project)
     super.beforeLaunch()
   }
 
@@ -92,6 +92,11 @@ class DefaultLauncher extends LauncherBase {
   @Override
   protected String getServletContainerDescription() {
     ServletContainerConfig.getConfig(sconfig.servletContainer).servletContainerDescription(project)
+  }
+
+  @Override
+  protected List<String> getServletContainerClasspath() {
+    return ProjectUtils.getServletContainerClasspath(project, sconfig.servletContainer).toList().collect { it.toString()}
   }
 
   @Override
