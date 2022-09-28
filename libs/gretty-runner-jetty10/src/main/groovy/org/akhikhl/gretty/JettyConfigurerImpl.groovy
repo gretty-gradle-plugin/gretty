@@ -200,6 +200,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
   def createWebAppContext(Map serverParams, Map webappParams) {
     List<String> webappClassPath = webappParams.webappClassPath
     JettyWebAppContext context = new JettyWebAppContext()
+    context.setThrowUnavailableOnStartupException(true)
     context.setWebInfLib(webappClassPath.findAll { it.endsWith('.jar') }.collect { new File(it) })
     context.setExtraClasspath(webappClassPath.collect { it.endsWith('.jar') ? it : (it.endsWith('/') ? it : it + '/') }.join(';'))
     context.setInitParameter('org.eclipse.jetty.servlet.Default.useFileMappedBuffer', serverParams.productMode ? 'true' : 'false')

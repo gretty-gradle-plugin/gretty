@@ -208,6 +208,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
     List<String> webappClassPath = webappParams.webappClassPath
     String webappClasspathScanPattern = webappParams.webInfIncludeJarPattern
     JettyWebAppContext context = new JettyWebAppContext()
+    context.setThrowUnavailableOnStartupException(true)
     context.setAttribute("org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern", webappClasspathScanPattern)
     context.setWebInfLib(webappClassPath.findAll { it.endsWith('.jar') }.collect { new File(it) })
     context.setExtraClasspath(webappClassPath.collect { it.endsWith('.jar') ? it : (it.endsWith('/') ? it : it + '/') }.join(';'))
