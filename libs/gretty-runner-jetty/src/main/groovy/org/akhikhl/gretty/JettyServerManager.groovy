@@ -36,7 +36,7 @@ final class JettyServerManager implements ServerManager {
   }
 
   @Override
-  void startServer(ServerStartEvent startEvent) {
+  ServerStartEvent startServer() {
     assert server == null
 
     log.debug '{} starting.', params.servletContainerDescription
@@ -66,26 +66,24 @@ final class JettyServerManager implements ServerManager {
         for(Throwable xx in x.getThrowables())
           log.error 'Error', xx
       }
-      if(startEvent) {
-        Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
-        startInfo.status = 'error starting server'
-        startInfo.error = true
-        startInfo.errorMessage = x.getMessage() ?: x.getClass().getName()
-        StringWriter sw = new StringWriter()
-        x.printStackTrace(new PrintWriter(sw))
-        startInfo.stackTrace = sw.toString()
-        startEvent.onServerStart(startInfo)
-      } else
-        throw x
+
+      Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
+      startInfo.status = 'error starting server'
+      startInfo.error = true
+      startInfo.errorMessage = x.getMessage() ?: x.getClass().getName()
+      StringWriter sw = new StringWriter()
+      x.printStackTrace(new PrintWriter(sw))
+      startInfo.stackTrace = sw.toString()
+      return new ServerStartEvent(startInfo)
     }
 
     if(result) {
-      if(startEvent) {
-        Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
-        startEvent.onServerStart(startInfo)
-      }
+      Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
       log.debug '{} started.', params.servletContainerDescription
+      return new ServerStartEvent(startInfo)
     }
+
+    throw new IllegalStateException()
   }
 
   private JettyServerConfigurer createServerConfigurer() {

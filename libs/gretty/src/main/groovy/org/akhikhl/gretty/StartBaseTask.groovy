@@ -255,7 +255,7 @@ abstract class StartBaseTask extends DefaultTask {
 
   @Internal
   Collection<URL> getRunnerClassPath() {
-    DefaultLauncher.getRunnerClassPath(project, getStartConfig().serverConfig)
+    DefaultLauncher.getRunnerClassPath(project)
   }
 
   @Internal

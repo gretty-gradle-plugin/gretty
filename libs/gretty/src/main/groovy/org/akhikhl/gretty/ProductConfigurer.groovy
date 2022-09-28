@@ -289,7 +289,7 @@ Version: ${project.version}"""
   }
 
   protected FileCollection getRunnerFileCollection() {
-    return ProjectUtils.getRunnerFileCollection(project, sconfig.servletContainer)
+    return ProjectUtils.getRunnerFileCollection(project)
   }
 
   private String getRunnerLogbackConfig() {

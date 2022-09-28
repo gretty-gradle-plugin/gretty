@@ -24,21 +24,6 @@ final class Runner {
 
   protected final Map params
 
-  static class ServerStartEventImpl implements ServerStartEvent {
-    private final ServiceProtocol.Writer writer
-
-    ServerStartEventImpl(final ServiceProtocol.Writer writer) {
-      this.writer = writer
-    }
-
-    @Override
-    void onServerStart(Map serverStartInfo) {
-      JsonBuilder json = new JsonBuilder()
-      json serverStartInfo
-      writer.writeMayFail(json.toString())
-    }
-  }
-
   static void main(String[] args) {
     def cli = new CliBuilder()
     cli.with {
@@ -117,9 +102,7 @@ final class Runner {
   private void run() {
     LogUtil.setLevel(params.debug)
     boolean paramsLoaded = false
-    def ServerManagerFactory = Class.forName(params.serverManagerFactory, true, this.getClass().classLoader)
-    ServerManager serverManager = ServerManagerFactory.createServerManager()
-
+    def serverManager = null
     final def reader = ServiceProtocol.createReader()
     final def writer = ServiceProtocol.createWriter(params.statusPort)
     try {
@@ -131,8 +114,20 @@ final class Runner {
           paramsLoaded = true
           if(!Boolean.valueOf(System.getProperty('grettyProduct')))
             initLogback(params)
-          serverManager.setParams(params)
-          serverManager.startServer(new ServerStartEventImpl(writer))
+
+          def cl = createClassLoader()
+          ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()
+          Thread.currentThread().setContextClassLoader(cl)
+          try {
+            def ServerManagerFactory = Class.forName(params.serverManagerFactory, true, cl)
+            serverManager = ServerManagerFactory.createServerManager()
+            serverManager.setParams(params)
+            def event = serverManager.startServer()
+            onServerStarted(writer, event.getServerStartInfo())
+          }
+          finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader)
+          }
           // Note that server is already in listening state.
           // If client sends a command immediately after 'started' signal,
           // the command is queued, so that socket.accept gets it anyway.
@@ -150,7 +145,8 @@ final class Runner {
         }
         else if(data == 'restartWithEvent') {
           serverManager.stopServer()
-          serverManager.startServer(new ServerStartEventImpl(writer))
+          def event = serverManager.startServer()
+          onServerStarted(writer, event.getServerStartInfo())
         }
         else if (data.startsWith('redeploy ')) {
           List<String> webappList = data.replace('redeploy ', '').split(' ').toList()
@@ -161,5 +157,27 @@ final class Runner {
     } finally {
       reader.close()
     }
+  }
+
+  private ClassLoader createClassLoader() {
+    URL[] urls = new URL[params.servletContainerClasspath.size()]
+    for (int index = 0; index < params.servletContainerClasspath.size(); index++) {
+      urls[index] = new File(params.servletContainerClasspath[index]).toURI().toURL()
+    }
+    return new URLClassLoader(urls, findBootClassLoader())
+  }
+
+  protected ClassLoader findBootClassLoader() {
+    def bootClassLoader = getClass().getClassLoader()
+      while(bootClassLoader.getParent() != null) {
+        bootClassLoader = bootClassLoader.getParent();
+      }
+    bootClassLoader
+  }
+
+  private onServerStarted(ServiceProtocol.Writer writer, Map<String, String> serverStartInfo) {
+    JsonBuilder json = new JsonBuilder()
+    json serverStartInfo
+    writer.writeMayFail(json.toString())
   }
 }

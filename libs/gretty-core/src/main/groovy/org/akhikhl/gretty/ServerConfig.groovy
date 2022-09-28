@@ -20,7 +20,7 @@ import groovy.transform.TypeCheckingMode
 @ToString
 class ServerConfig {
 
-  static final int RANDOM_FREE_PORT = PortUtils.RANDOM_FREE_PORT
+  static final int RANDOM_FREE_PORT = -1
 
   List<String> jvmArgs
   Map<String, String> systemProperties
