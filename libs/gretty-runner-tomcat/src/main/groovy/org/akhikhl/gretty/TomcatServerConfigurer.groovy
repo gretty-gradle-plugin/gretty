@@ -220,20 +220,8 @@ class TomcatServerConfigurer {
     context.path = effectiveContextPath
     configurer.setResourceBase(context, webapp)
     // context.setLogEffectiveWebXml(true) // enable for debugging webxml merge
-    FilteringClassLoader parentClassLoader = new FilteringClassLoader(params.parentClassLoader ?: this.getClass().getClassLoader())
-    parentClassLoader.addServerClass('ch.qos.logback.')
-    parentClassLoader.addServerClass('org.apache.commons.cli.')
-    parentClassLoader.addServerClass('org.apache.commons.io.')
-    parentClassLoader.addServerClass('org.apache.groovy.')
-    parentClassLoader.addServerClass('org.slf4j.')
-    parentClassLoader.addServerClass('org.codehaus.groovy.')
-    parentClassLoader.addServerClass('groovy.')
-    parentClassLoader.addServerClass('groovyx.')
-    parentClassLoader.addServerClass('groovyjarjarantlr.')
-    parentClassLoader.addServerClass('groovyjarjarasm.')
-    parentClassLoader.addServerClass('groovyjarjarcommonscli.')
     URL[] classpathUrls = (webapp.webappClassPath ?: []).collect { new URL(it) } as URL[]
-    URLClassLoader classLoader = new URLClassLoader(classpathUrls, parentClassLoader)
+    URLClassLoader classLoader = new URLClassLoader(classpathUrls, params.parentClassLoader ?: this.getClass().getClassLoader())
     if (webapp.springBoot) {
       context.addParameter('GRETTY_SPRING_BOOT_MAIN_CLASS', webapp.springBootMainClass)
     }

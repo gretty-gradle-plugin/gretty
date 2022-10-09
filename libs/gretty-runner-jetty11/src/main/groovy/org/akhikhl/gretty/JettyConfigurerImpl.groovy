@@ -39,9 +39,8 @@ class JettyConfigurerImpl implements JettyConfigurer {
 
   @Override
   def addLifeCycleListener(lifecycle, listener) {
-    def lifeCycleListener = listener as LifeCycle.Listener
-    lifecycle.addLifeCycleListener(lifeCycleListener)
-    lifeCycleListener
+    lifecycle.addLifeCycleListener(listener)
+    listener
   }
 
   @Override
@@ -206,19 +205,6 @@ class JettyConfigurerImpl implements JettyConfigurer {
     context.setInitParameter('org.eclipse.jetty.servlet.Default.useFileMappedBuffer', serverParams.productMode ? 'true' : 'false')
     context.setAttribute(MetaInfConfiguration.CONTAINER_JAR_PATTERN,
         '.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$');
-
-    context.addServerClassMatcher(new ClassMatcher().tap {
-      include 'ch.qos.logback.'
-      include 'org.apache.commons.cli.'
-      include 'org.apache.commons.io.'
-      include 'org.slf4j.'
-      include 'org.codehaus.groovy.'
-      include 'groovy.'
-      include 'groovyx.'
-      include 'groovyjarjarantlr.'
-      include 'groovyjarjarasm.'
-      include 'groovyjarjarcommonscli.'
-    })
 
     context.addSystemClassMatcher(new ClassMatcher().tap {
       // I do not know if the servlet classes are system classes in the truest sense.
