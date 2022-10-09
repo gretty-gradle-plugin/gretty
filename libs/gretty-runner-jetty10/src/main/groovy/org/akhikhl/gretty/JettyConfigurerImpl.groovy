@@ -39,9 +39,8 @@ class JettyConfigurerImpl implements JettyConfigurer {
 
   @Override
   def addLifeCycleListener(lifecycle, listener) {
-    def lifeCycleListener = listener as LifeCycle.Listener
-    lifecycle.addLifeCycleListener(lifeCycleListener)
-    lifeCycleListener
+    lifecycle.addLifeCycleListener(listener)
+    listener
   }
 
   @Override
@@ -206,20 +205,6 @@ class JettyConfigurerImpl implements JettyConfigurer {
     context.setInitParameter('org.eclipse.jetty.servlet.Default.useFileMappedBuffer', serverParams.productMode ? 'true' : 'false')
     context.setAttribute(MetaInfConfiguration.CONTAINER_JAR_PATTERN,
         '.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$');
-
-    context.addServerClassMatcher(new ClassMatcher().tap {
-      include'ch.qos.logback.'
-      include 'org.slf4j.'
-      include 'org.codehaus.groovy.'
-      include 'groovy.'
-      include 'groovyx.'
-    })
-
-    context.addEventListener(new LifeCycle.Listener() {
-      public void lifeCycleStopped(LifeCycle event) {
-        context.classLoader = null
-      }
-    })
     return context
   }
 
