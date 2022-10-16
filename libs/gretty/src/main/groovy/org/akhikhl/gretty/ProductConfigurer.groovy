@@ -137,6 +137,7 @@ class ProductConfigurer {
       inputs.files {
         resolveConfig()
         getRunnerFileCollection()
+        getServletContainerFileCollection()
       }
 
       inputs.property 'logback-config-template', { LogbackTemplate.read() }
@@ -155,6 +156,7 @@ class ProductConfigurer {
         copyAdditionalFiles()
         copyStarter()
         copyRunner()
+        copyServletContainer()
       }
     }
 
@@ -191,6 +193,16 @@ class ProductConfigurer {
     logbackConfigFile.parentFile.mkdirs()
     logbackConfigFile.text = getRunnerLogbackConfig()
     dir.add(logbackConfigFile, 'logback-config')
+
+    dir.cleanup()
+  }
+
+  void copyServletContainer() {
+
+    ManagedDirectory dir = new ManagedDirectory(new File(outputDir, 'servletContainer'))
+
+    for(File file in getServletContainerFileCollection().files)
+      dir.add(file)
 
     dir.cleanup()
   }
@@ -290,6 +302,10 @@ Version: ${project.version}"""
 
   protected FileCollection getRunnerFileCollection() {
     return ProjectUtils.getRunnerFileCollection(project)
+  }
+
+  private FileCollection getServletContainerFileCollection() {
+    return ProjectUtils.getServletContainerClasspath(project, sconfig.servletContainer)
   }
 
   private String getRunnerLogbackConfig() {

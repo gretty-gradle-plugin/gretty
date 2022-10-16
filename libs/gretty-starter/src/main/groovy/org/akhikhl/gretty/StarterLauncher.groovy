@@ -52,8 +52,7 @@ class StarterLauncher extends LauncherBase {
 
   @Override
   protected List<String> getServletContainerClasspath() {
-    // FIXME
-    return Collections.emptyList();
+    return new File(basedir, 'servletContainer').listFiles().collect { it.absolutePath }
   }
 
   @Override
