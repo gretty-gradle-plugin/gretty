@@ -8,6 +8,7 @@ dependencies {
   compileOnly "org.codehaus.groovy:groovy-cli-commons:${GroovySystem.version}"
 
   api project(':libs:gretty-core')
+  api "org.slf4j:slf4j-api:$slf4j_version"
 }
 
 jar {

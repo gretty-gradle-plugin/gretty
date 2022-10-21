@@ -59,7 +59,7 @@ class StarterLauncher extends LauncherBase {
   protected void javaExec(JavaExecParams params) {
     String javaExe = PlatformUtils.isWindows() ? 'java.exe' : 'java'
     String javaPath = new File(System.getProperty("java.home"), "bin/$javaExe").absolutePath
-    def classPath = [ new File(basedir, 'runner/*'), new File(basedir, 'runner/logback-config') ]
+    def classPath = [ new File(basedir, 'runner/*') ]
     classPath = classPath.collect { it.absolutePath }.join(System.getProperty('path.separator'))
     // Note that JavaExecParams debugging properties are intentionally ignored.
     // It is supposed that webapp debugging is performed via DefaultLauncher.
