@@ -8,7 +8,6 @@
  */
 package org.akhikhl.gretty
 
-import ch.qos.logback.classic.Level
 import groovy.cli.commons.CliBuilder
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
@@ -36,71 +35,11 @@ final class Runner {
     new Runner(params).run()
   }
 
-  void initLogback(Map serverParams) {
-    LogUtil.reset()
-    String logbackConfigFile = serverParams.logbackConfigFile
-    if (logbackConfigFile) {
-      initLogbackFromConfigurationFile(logbackConfigFile)
-    } else {
-      initLogbackFromGrettyConfig(serverParams)
-    }
-  }
-
-  private void initLogbackFromConfigurationFile(String logbackConfigFile) {
-    if (!logbackConfigFile.endsWith(".xml")) {
-      throw new IllegalArgumentException("""
-          | Gretty only supports XML for configuring Logback, and does not support
-          | $logbackConfigFile
-          | Please note Logback dropped support for Gaffer (configuration from Groovy script) in 1.2.9.
-          """.stripMargin()
-      )
-    }
-
-    LogUtil.configureLoggingWithJoran(new File(logbackConfigFile))
-  }
-
-  private void initLogbackFromGrettyConfig(Map serverParams) {
-    Level level = stringToLoggingLevel(serverParams.loggingLevel?.toString())
-    boolean consoleLogEnabled = serverParams.getOrDefault('consoleLogEnabled', true)
-    boolean fileLogEnabled = serverParams.getOrDefault('fileLogEnabled', true)
-    boolean grettyDebug = params.getOrDefault('debug', true)
-    LogUtil.configureLogging(
-            level,
-            consoleLogEnabled,
-            fileLogEnabled,
-            serverParams.logFileName?.toString(),
-            serverParams.logDir?.toString(),
-            grettyDebug,
-    )
-  }
-
-  private static Level stringToLoggingLevel(String str) {
-    switch(str?.toUpperCase()) {
-      case 'ALL':
-        return Level.ALL
-      case 'DEBUG':
-        return Level.DEBUG
-      case 'ERROR':
-        return Level.ERROR
-      case 'INFO':
-        return Level.INFO
-      case 'OFF':
-        return Level.OFF
-      case 'TRACE':
-        return Level.TRACE
-      case 'WARN':
-        return Level.WARN
-      default:
-        return Level.INFO
-    }
-  }
-
   private Runner(Map params) {
     this.params = params
   }
 
   private void run() {
-    LogUtil.setLevel(params.debug)
     boolean paramsLoaded = false
     def serverManager = null
     final def reader = ServiceProtocol.createReader()
@@ -112,8 +51,6 @@ final class Runner {
         if(!paramsLoaded) {
           params << new JsonSlurper().parseText(data)
           paramsLoaded = true
-          if(!Boolean.valueOf(System.getProperty('grettyProduct')))
-            initLogback(params)
 
           def cl = createClassLoader()
           ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()

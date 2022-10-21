@@ -123,8 +123,6 @@ class ProductConfigurer {
           result.add sconfig.realmConfigFile
         if(sconfig.serverConfigFile)
           result.add sconfig.serverConfigFile
-        if(sconfig.logbackConfigFile)
-          result.add sconfig.logbackConfigFile
         result
       }
 
@@ -139,8 +137,6 @@ class ProductConfigurer {
         getRunnerFileCollection()
         getServletContainerFileCollection()
       }
-
-      inputs.property 'logback-config-template', { LogbackTemplate.read() }
 
       outputs.dir outputDir
 
@@ -189,11 +185,6 @@ class ProductConfigurer {
     for(File file in getRunnerFileCollection().files)
       dir.add(file)
 
-    File logbackConfigFile = new File(project.buildDir, 'runner/logback.xml')
-    logbackConfigFile.parentFile.mkdirs()
-    logbackConfigFile.text = getRunnerLogbackConfig()
-    dir.add(logbackConfigFile, 'logback-config')
-
     dir.cleanup()
   }
 
@@ -213,11 +204,6 @@ class ProductConfigurer {
 
     for(File file in project.configurations.grettyStarter.files)
       dir.add(file)
-
-    File logbackConfigFile = new File(project.buildDir, 'starter/logback.xml')
-    logbackConfigFile.parentFile.mkdirs()
-    logbackConfigFile.text = getStarterLogbackConfig()
-    dir.add(logbackConfigFile, 'logback-config')
 
     dir.cleanup()
   }
@@ -287,7 +273,7 @@ class ProductConfigurer {
       'DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"\n'
 
     for(String cmd in ['run', 'start', 'stop', 'restart']) {
-      launchScripts[cmd + '.sh'] = shellResolveDir + 'java -Dfile.encoding=UTF8 -cp \"${DIR}/starter/*:${DIR}/starter/logback-config\" ' + mainClass + ' $@ ' + cmd
+      launchScripts[cmd + '.sh'] = shellResolveDir + 'java -Dfile.encoding=UTF8 -cp \"${DIR}/starter/*\" ' + mainClass + ' $@ ' + cmd
       launchScripts[cmd + '.bat'] = '@java.exe -Dfile.encoding=UTF8 -cp \"%~dp0\\starter\\*;%~dp0\\starter\\logback-config\" ' + mainClass + ' %* ' + cmd
     }
   }
@@ -306,48 +292,6 @@ Version: ${project.version}"""
 
   private FileCollection getServletContainerFileCollection() {
     return ProjectUtils.getServletContainerClasspath(project, sconfig.servletContainer)
-  }
-
-  private String getRunnerLogbackConfig() {
-
-    if(sconfig.logbackConfigFile) {
-      def logbackConfigFile = sconfig.logbackConfigFile
-      if(!(logbackConfigFile instanceof File))
-        logbackConfigFile = new File(logbackConfigFile.toString())
-      return logbackConfigFile.text
-    }
-
-    String logDir = sconfig.logDir
-    if(!logDir || logDir == "${System.getProperty('user.home')}/logs")
-      logDir = '${System.getProperty(\'user.home\')}/logs'
-
-    def logFileName = (sconfig.logFileName ?: productName ?: project.name)
-
-    def loggingLevel = sconfig.loggingLevel ?: 'INFO'
-    return LogbackTemplate.render(
-            logDir,
-            logFileName,
-            loggingLevel,
-            sconfig.consoleLogEnabled,
-            sconfig.fileLogEnabled,
-    )
-  }
-
-  private String getStarterLogbackConfig() {
-    String logDir = sconfig.logDir
-    if(!logDir || logDir == "${System.getProperty('user.home')}/logs")
-      logDir = '${System.getProperty(\'user.home\')}/logs'
-
-    def logFileName = (sconfig.logFileName ?: productName ?: project.name) + '-starter'
-
-    def loggingLevel = sconfig.loggingLevel ?: 'INFO'
-    return LogbackTemplate.render(
-            logDir,
-            logFileName,
-            loggingLevel,
-            sconfig.consoleLogEnabled,
-            sconfig.fileLogEnabled,
-    )
   }
 
   protected FileCollection getVisibleRunnerFileCollection() {
