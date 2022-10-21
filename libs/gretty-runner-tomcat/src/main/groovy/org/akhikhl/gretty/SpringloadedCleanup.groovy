@@ -14,8 +14,6 @@ import org.apache.catalina.Lifecycle
 import org.apache.catalina.LifecycleEvent
 import org.apache.catalina.LifecycleListener
 import org.apache.catalina.core.StandardContext
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -23,12 +21,6 @@ import org.slf4j.LoggerFactory
  */
 @CompileStatic(TypeCheckingMode.SKIP)
 class SpringloadedCleanup implements LifecycleListener {
-
-  protected final Logger log
-
-  SpringloadedCleanup() {
-    log = LoggerFactory.getLogger(this.getClass())
-  }
 
   @Override
   public void lifecycleEvent(LifecycleEvent event) {
@@ -48,7 +40,7 @@ class SpringloadedCleanup implements LifecycleListener {
     while(classLoader != null) {
       def typeRegistry = TypeRegistry.getTypeRegistryFor(classLoader)
       if(typeRegistry != null && typeRegistry.@fsWatcher != null) {
-        log.info 'springloaded shutdown: {}', typeRegistry.@fsWatcher.@thread
+        context.logger.info "springloaded shutdown: ${typeRegistry.@fsWatcher.@thread}"
         typeRegistry.@fsWatcher.shutdown()
         typeRegistry.@fsWatcher.@thread.join()
       }

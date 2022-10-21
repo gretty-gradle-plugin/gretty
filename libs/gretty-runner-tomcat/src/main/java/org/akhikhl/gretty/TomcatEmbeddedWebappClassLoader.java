@@ -10,19 +10,12 @@ package org.akhikhl.gretty;
 
 import java.net.URL;
 import org.apache.catalina.loader.WebappClassLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 
-/**
- * The code was copied from:
- * https://github.com/spring-projects/spring-boot/blob/master/spring-boot/src/main/java/org/springframework/boot/context/embedded/tomcat/TomcatEmbeddedWebappClassLoader.java
- * Changes compared to original version: replaced logging to slf4j.
- *
- * @author akhikhl
- */
 public class TomcatEmbeddedWebappClassLoader extends WebappClassLoader {
 
-	private static final Logger log = LoggerFactory.getLogger(TomcatEmbeddedWebappClassLoader.class);
+	private static final Log log = LogFactory.getLog(TomcatEmbeddedWebappClassLoader.class);
 
 	public TomcatEmbeddedWebappClassLoader() {
 	}
@@ -71,7 +64,7 @@ public class TomcatEmbeddedWebappClassLoader extends WebappClassLoader {
 	@Override
 	protected void addURL(URL url) {
 		// Ignore URLs added by the Tomcat 8 implementation (see gh-919)
-    log.trace("Ignoring request to add {} to the tomcat classloader", url);
+    log.trace("Ignoring request to add " + url + " to the tomcat classloader");
 	}
 
 	private Class<?> loadFromParent(String name) {

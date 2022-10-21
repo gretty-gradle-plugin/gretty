@@ -24,8 +24,6 @@ import org.apache.catalina.startup.Tomcat
 import org.apache.catalina.startup.Tomcat.DefaultWebXmlListener
 import org.apache.catalina.startup.Tomcat.FixContextListener
 import org.apache.tomcat.util.net.SSLHostConfig
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.xml.sax.InputSource
 
 /**
@@ -35,12 +33,10 @@ import org.xml.sax.InputSource
 @CompileStatic(TypeCheckingMode.SKIP)
 class TomcatServerConfigurer {
 
-  protected final Logger log
   protected final TomcatConfigurer configurer
   protected final Map params
 
   TomcatServerConfigurer(TomcatConfigurer configurer, Map params) {
-    log = LoggerFactory.getLogger(this.getClass())
     this.configurer = configurer
     this.params = params
   }
@@ -241,7 +237,7 @@ class TomcatServerConfigurer {
 
     def realmConfigFile = webapp.realmConfigFile ?: params.realmConfigFile
     if (realmConfigFile && new File(realmConfigFile).exists()) {
-      log.info '{} -> realm config {}', webapp.contextPath, realmConfigFile
+      context.logger.info "${webapp.contextPath} -> realm config ${realmConfigFile}"
       def realm = new MemoryRealm()
       realm.setPathname(realmConfigFile)
       context.setRealm(realm)
@@ -252,7 +248,7 @@ class TomcatServerConfigurer {
     if (!context.configFile && webapp.contextConfigFile)
       context.configFile = new File(webapp.contextConfigFile).toURI().toURL()
     if (context.configFile)
-      log.info 'Configuring {} with {}', webapp.contextPath, context.configFile
+      context.logger.info "Configuring ${webapp.contextPath} with ${context.configFile}"
 
     context.addLifecycleListener(configurer.createContextConfig(classpathUrls))
 
@@ -264,16 +260,16 @@ class TomcatServerConfigurer {
     if (!context.findChild('default'))
       context.addLifecycleListener(new DefaultWebXmlListener())
 
-    if (log.isDebugEnabled())
+    if (context.logger.isDebugEnabled())
       context.addLifecycleListener(new LifecycleListener() {
         @Override
         public void lifecycleEvent(LifecycleEvent event) {
           if (event.type == Lifecycle.CONFIGURE_START_EVENT) {
             def pipeline = context.getPipeline()
-            log.debug 'START: context={}, pipeline: {} #{}', context.path, pipeline, System.identityHashCode(pipeline)
-            log.debug '  valves:'
+            context.logger.debug "START: context=${context.path}, pipeline: $pipeline #${System.identityHashCode(pipeline)}"
+            context.logger.debug '  valves:'
             for (def v in pipeline.getValves())
-              log.debug '    {} #{}', v, System.identityHashCode(v)
+              context.logger.debug "    $v #${System.identityHashCode(v)}"
           }
         }
       })
