@@ -15,6 +15,9 @@ import org.apache.catalina.startup.Tomcat
 import org.apache.juli.logging.Log
 import org.apache.juli.logging.LogFactory
 
+import java.util.logging.Level
+import java.util.logging.Logger
+
 /**
  *
  * @author akhikhl
@@ -41,9 +44,23 @@ class TomcatServerManager implements ServerManager {
     this.params = params
   }
 
+  private static configureLogging(boolean isDebug) {
+    Logger root = Logger.getLogger("")
+    root.setLevel(isDebug ? Level.FINEST : Level.INFO)
+    root.handlers.each { it.level = isDebug ? Level.FINEST : Level.INFO }
+
+    Logger.getLogger('org.akhikhl.gretty').setLevel(isDebug ? Level.FINEST : Level.INFO)
+    Logger.getLogger('org.apache.catalina').setLevel(Level.WARNING)
+    Logger.getLogger('org.apache.coyote').setLevel(Level.WARNING)
+    Logger.getLogger('org.apache.jasper').setLevel(Level.WARNING)
+    Logger.getLogger('org.apache.tomcat').setLevel(Level.WARNING)
+  }
+
   @Override
   ServerStartEvent startServer() {
     assert tomcat == null
+
+    configureLogging(params.getOrDefault('debug', true))
 
     log.debug "${params.servletContainerDescription} starting."
 
