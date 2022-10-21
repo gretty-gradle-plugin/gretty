@@ -9,7 +9,6 @@ dependencies {
   compileOnly localGroovy()
 
   api project(':libs:gretty-runner-api')
-  api "org.slf4j:log4j-over-slf4j:$slf4j_version"
   // These dependencies are needed for compiling gretty-runner-tomcat.
   // They are replaced by "real" dependencies at runtime.
   compileOnly "javax.servlet:javax.servlet-api:$tomcat85_servlet_api_version"

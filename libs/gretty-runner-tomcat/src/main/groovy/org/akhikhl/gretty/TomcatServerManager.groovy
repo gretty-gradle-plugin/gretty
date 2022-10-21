@@ -12,8 +12,9 @@ import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.apache.catalina.core.StandardContext
 import org.apache.catalina.startup.Tomcat
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.apache.juli.logging.Log
+import org.apache.juli.logging.LogFactory
+
 /**
  *
  * @author akhikhl
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory
 @CompileStatic(TypeCheckingMode.SKIP)
 class TomcatServerManager implements ServerManager {
 
-  private static final Logger log = LoggerFactory.getLogger(TomcatServerManager)
+  private static final Log log = LogFactory.getLog(TomcatServerManager)
 
   private TomcatConfigurer configurer
   protected Map params
@@ -44,7 +45,7 @@ class TomcatServerManager implements ServerManager {
   ServerStartEvent startServer() {
     assert tomcat == null
 
-    log.debug '{} starting.', params.servletContainerDescription
+    log.debug "${params.servletContainerDescription} starting."
 
     TomcatServerConfigurer serverConfigurer = createServerConfigurer()
     tomcat = serverConfigurer.createAndConfigureServer()
@@ -78,7 +79,7 @@ class TomcatServerManager implements ServerManager {
 
     if(result) {
       Map startInfo = new TomcatServerStartInfo().getInfo(tomcat, null, params)
-      log.debug '{} started.', params.servletContainerDescription
+      log.debug "${params.servletContainerDescription} started."
       return new ServerStartEvent(startInfo)
     }
 
@@ -88,19 +89,19 @@ class TomcatServerManager implements ServerManager {
   @Override
   void stopServer() {
     if(tomcat != null) {
-      log.debug '{} stopping.', params.servletContainerDescription
+      log.debug "${params.servletContainerDescription} stopping."
       tomcat.stop()
       tomcat.getServer().await()
       tomcat.destroy()
       tomcat = null
-      log.debug '{} stopped.', params.servletContainerDescription
+      log.debug "${params.servletContainerDescription} stopped."
     }
   }
 
   @Override
   void redeploy(List<String> webapps) {
     if(tomcat != null) {
-      log.debug 'redeploying {}.', webapps.join(", ")
+      log.debug "redeploying ${webapps.join(", ")}."
       def containers = webapps.collect { TomcatServerConfigurer.getEffectiveContextPath(it) }.collect { tomcat.host.findChild(it) }
       //
       containers.each { tomcat.host.removeChild(it) }
