@@ -12,6 +12,4 @@ dependencies {
   compileOnly localGroovy()
   compileOnly "org.codehaus.groovy:groovy-jmx:${GroovySystem.version}"
   compileOnly "org.codehaus.groovy:groovy-servlet:${GroovySystem.version}"
-
-  api "org.slf4j:slf4j-api:$slf4j_version"
 }

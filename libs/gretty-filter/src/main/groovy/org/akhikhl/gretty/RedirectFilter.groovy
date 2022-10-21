@@ -5,12 +5,11 @@ import groovyx.net.http.URIBuilder
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import javax.servlet.*
+import javax.servlet.http.HttpServletRequest
 import java.util.regex.Pattern
 import javax.management.ObjectName
 import org.codehaus.groovy.control.customizers.ImportCustomizer
 import org.codehaus.groovy.control.CompilerConfiguration
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 @CompileStatic(TypeCheckingMode.SKIP)
 class RedirectFilter implements Filter {
@@ -52,8 +51,7 @@ class RedirectFilter implements Filter {
     builder.toURI()
   }
 
-  protected static final Logger log = LoggerFactory.getLogger(RedirectFilter)
-
+  protected ServletContext servletContext
   protected Integer httpPort
   protected Integer httpsPort
   protected File webappDir
@@ -76,7 +74,6 @@ class RedirectFilter implements Filter {
     def filterContext = new Expando()
     filterContext.httpPort = httpPort
     filterContext.httpsPort = httpsPort
-    filterContext.log = log
     filterContext.request = req
     filterContext.response = resp
     def uriBuilder = new URIBuilder(req.getRequestURL().toString())
@@ -87,12 +84,12 @@ class RedirectFilter implements Filter {
     filterContext.redirect = { destination ->
       result.action = FilterAction.REDIRECT
       result.uri = buildURI(destination, filterContext.requestURI)
-      log.trace 'rule redirects to: {}', result.uri
+      servletContext.log('rule redirects to: ' + result.uri)
     }
     filterContext.forward = { destination ->
       result.action = FilterAction.FORWARD
       result.uri = buildURI(destination, filterContext.requestURI)
-      log.trace 'rule forwards to: {}', result.uri
+      servletContext.log('rule forwards to: ' + result.uri)
     }
     List filters = []
     synchronized (filtersLock) {
@@ -120,7 +117,7 @@ class RedirectFilter implements Filter {
         filterContext.requestURI = result.uri
       }
     }
-    log.trace 'doFilter result={}', result
+    servletContext.log('doFilter result=' + result)
     switch(result.action) {
       case FilterAction.CHAIN:
         chain.doFilter(req, resp)
@@ -160,7 +157,7 @@ class RedirectFilter implements Filter {
 
   @Override
   public void init(FilterConfig config) throws ServletException {
-    ServletContext servletContext = config.getServletContext()
+    servletContext = config.getServletContext()
     if(servletContext.hasProperty('contextHandler')) {
       // jetty-specific
       def server = servletContext.contextHandler.server
@@ -189,8 +186,8 @@ class RedirectFilter implements Filter {
           httpsPort = conn.port
       }
     }
-    log.debug 'found httpPort={}', httpPort
-    log.debug 'found httpsPort={}', httpsPort
+    servletContext.log('found httpPort=' + httpPort)
+    servletContext.log('found httpsPort=' + httpsPort)
     String webappDirPath = servletContext.getRealPath('/')
     webappDir = webappDirPath ? new File(webappDirPath) : null
     filterConfigUrl = servletContext.getResource('/WEB-INF/filter.groovy')
