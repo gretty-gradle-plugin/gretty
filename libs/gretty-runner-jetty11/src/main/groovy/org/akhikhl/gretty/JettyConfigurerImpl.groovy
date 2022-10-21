@@ -11,13 +11,14 @@ package org.akhikhl.gretty
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.eclipse.jetty.annotations.AnnotationConfiguration
+import org.eclipse.jetty.logging.JettyLevel
+import org.eclipse.jetty.logging.JettyLogger
 import org.eclipse.jetty.plus.webapp.EnvConfiguration
 import org.eclipse.jetty.plus.webapp.PlusConfiguration
 import org.eclipse.jetty.security.HashLoginService
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.handler.ContextHandlerCollection
 import org.eclipse.jetty.server.session.SessionHandler
-import org.eclipse.jetty.util.component.LifeCycle
 import org.eclipse.jetty.util.resource.PathResource
 import org.eclipse.jetty.util.resource.Resource
 import org.eclipse.jetty.util.resource.ResourceCollection
@@ -36,6 +37,22 @@ class JettyConfigurerImpl implements JettyConfigurer {
   private static final Logger log = LoggerFactory.getLogger(JettyConfigurerImpl)
 
   private SSOAuthenticatorFactory ssoAuthenticatorFactory
+
+  @Override
+  def beforeStart(boolean isDebug) {
+    setLevel( 'org.akhikhl.gretty', isDebug ? JettyLevel.DEBUG : JettyLevel.INFO)
+    setLevel('org.eclipse.jetty', JettyLevel.WARN)
+    setLevel('org.eclipse.jetty.annotations.AnnotationConfiguration', JettyLevel.ERROR)
+    setLevel('org.eclipse.jetty.annotations.AnnotationParser', JettyLevel.ERROR)
+    setLevel('org.eclipse.jetty.util.component.AbstractLifeCycle', JettyLevel.ERROR)
+  }
+
+  private static setLevel(String loggerName, JettyLevel level) {
+    def logger = LoggerFactory.getLogger(loggerName)
+    if (logger instanceof JettyLogger) {
+      ((JettyLogger) logger).setLevel(level)
+    }
+  }
 
   @Override
   def addLifeCycleListener(lifecycle, listener) {
@@ -310,4 +327,23 @@ class JettyConfigurerImpl implements JettyConfigurer {
     handler.start()
   }
 
+  @Override
+  def debug(String message, Object... args) {
+    log.debug(message, args)
+  }
+
+  @Override
+  def info(String message, Object... args) {
+    log.info(message, args)
+  }
+
+  @Override
+  def warn(String message, Object... args) {
+    log.warn(message, args)
+  }
+
+  @Override
+  def error(String message, Object... args) {
+    log.error(message, args)
+  }
 }

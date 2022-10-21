@@ -16,13 +16,13 @@ import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.util.MultiMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.log.Logger;
 
 import static org.eclipse.jetty.security.authentication.FormAuthenticator.*;
 
@@ -32,7 +32,7 @@ import static org.eclipse.jetty.security.authentication.FormAuthenticator.*;
  */
 public class SSOClientCertAuthenticator extends ClientCertAuthenticator {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SSOClientCertAuthenticator.class);
+    private static final Logger LOG = Log.getLogger(SSOClientCertAuthenticator.class);
 
     // "login" is copied without changes from FormAuthenticator
     @Override
