@@ -10,8 +10,6 @@ package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -19,8 +17,6 @@ import org.slf4j.LoggerFactory
  */
 @CompileStatic(TypeCheckingMode.SKIP)
 final class JettyServerManager implements ServerManager {
-
-  private static final Logger log = LoggerFactory.getLogger(JettyServerManager)
 
   private JettyConfigurer configurer
   protected Map params
@@ -38,8 +34,8 @@ final class JettyServerManager implements ServerManager {
   @Override
   ServerStartEvent startServer() {
     assert server == null
-
-    log.debug '{} starting.', params.servletContainerDescription
+    configurer.beforeStart(params.getOrDefault('debug', true))
+    configurer.debug '{} starting.', params.servletContainerDescription
 
     JettyServerConfigurer serverConfigurer = createServerConfigurer()
     server = serverConfigurer.createAndConfigureServer()
@@ -61,7 +57,7 @@ final class JettyServerManager implements ServerManager {
 
       result = true
     } catch(Throwable x) {
-      log.error 'Error starting server', x
+      configurer.error 'Error starting server', x
       if(x.getClass().getName() == 'org.eclipse.jetty.util.MultiException') {
         for(Throwable xx in x.getThrowables())
           log.error 'Error', xx
@@ -79,7 +75,7 @@ final class JettyServerManager implements ServerManager {
 
     if(result) {
       Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
-      log.debug '{} started.', params.servletContainerDescription
+      configurer.debug '{} started.', params.servletContainerDescription
       return new ServerStartEvent(startInfo)
     }
 
@@ -93,19 +89,19 @@ final class JettyServerManager implements ServerManager {
   @Override
   void stopServer() {
     if(server != null) {
-      log.debug '{} stopping.', params.servletContainerDescription
+      configurer.debug '{} stopping.', params.servletContainerDescription
       server.stop()
       server = null
-      log.debug '{} stopped.', params.servletContainerDescription
+      configurer.debug '{} stopped.', params.servletContainerDescription
     }
   }
 
   @Override
   void redeploy(List<String> contextPaths) {
-    log.debug('redeploying {}.', contextPaths.join(' '))
+    configurer.debug('redeploying {}.', contextPaths.join(' '))
     def handlers = configurer.getHandlersByContextPaths(server, contextPaths)
     handlers.each {
-      log.error("removing handlers: ${it}")
+      configurer.error("removing handlers: ${it}")
       configurer.removeHandlerFromServer(server, it)
     }
     //

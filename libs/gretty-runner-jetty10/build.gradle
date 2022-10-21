@@ -21,6 +21,7 @@ dependencies {
   compile "org.eclipse.jetty:apache-jsp:$jetty10_version"
   compile "org.eclipse.jetty:jetty-annotations:$jetty10_version"
   compile "org.eclipse.jetty:jetty-plus:$jetty10_version"
+  compile "org.eclipse.jetty:jetty-slf4j-impl:$jetty10_version"
   compile "org.eclipse.jetty.websocket:websocket-javax-server:$jetty10_version"
   compile "org.ow2.asm:asm:$asm_version"
   compile "org.ow2.asm:asm-commons:$asm_version"

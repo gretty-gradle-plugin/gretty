@@ -167,10 +167,5 @@ class LogUtil {
         logger 'org.apache.coyote', Level.WARN
         logger 'org.apache.jasper', Level.WARN
         logger 'org.apache.tomcat', Level.WARN
-
-        logger 'org.eclipse.jetty', Level.WARN
-        logger 'org.eclipse.jetty.annotations.AnnotationConfiguration', Level.ERROR
-        logger 'org.eclipse.jetty.annotations.AnnotationParser', Level.ERROR
-        logger 'org.eclipse.jetty.util.component.AbstractLifeCycle', Level.ERROR
     }
 }

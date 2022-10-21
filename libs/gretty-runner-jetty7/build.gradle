@@ -13,12 +13,12 @@ configurations {
 dependencies {
   // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
   compileOnly localGroovy()
-  compileOnly("org.slf4j:slf4j-api:$slf4j_version")
 
   api project(':libs:gretty-runner-jetty')
   api "javax.servlet:servlet-api:$jetty7_servlet_api_version"
   api "org.eclipse.jetty:jetty-server:$jetty7_version"
   api "org.eclipse.jetty:jetty-servlet:$jetty7_version"
+  api "org.eclipse.jetty:jetty-util:$jetty7_version"
   api "org.eclipse.jetty:jetty-webapp:$jetty7_version"
   api "org.eclipse.jetty:jetty-security:$jetty7_version"
   api "org.eclipse.jetty:jetty-jsp:$jetty7_version"

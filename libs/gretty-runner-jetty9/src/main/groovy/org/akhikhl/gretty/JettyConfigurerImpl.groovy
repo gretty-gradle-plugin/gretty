@@ -17,15 +17,15 @@ import org.eclipse.jetty.security.HashLoginService
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.handler.ContextHandlerCollection
 import org.eclipse.jetty.server.session.HashSessionManager
-import org.eclipse.jetty.util.component.LifeCycle
+import org.eclipse.jetty.util.log.Log
+import org.eclipse.jetty.util.log.Logger
+import org.eclipse.jetty.util.log.StdErrLog
 import org.eclipse.jetty.util.resource.FileResource
 import org.eclipse.jetty.util.resource.Resource
 import org.eclipse.jetty.util.resource.ResourceCollection
 import org.eclipse.jetty.util.ssl.SslContextFactory
 import org.eclipse.jetty.webapp.*
 import org.eclipse.jetty.xml.XmlConfiguration
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -34,10 +34,26 @@ import org.slf4j.LoggerFactory
 @CompileStatic(TypeCheckingMode.SKIP)
 class JettyConfigurerImpl implements JettyConfigurer {
 
-  private static final Logger log = LoggerFactory.getLogger(JettyConfigurerImpl)
+  private static final Logger log = Log.getLogger(JettyConfigurerImpl)
 
   private SSOAuthenticatorFactory ssoAuthenticatorFactory
   private HashSessionManager sharedSessionManager
+
+  @Override
+  def beforeStart(boolean isDebug) {
+    setLevel( 'org.akhikhl.gretty', isDebug ? StdErrLog.LEVEL_DEBUG : StdErrLog.LEVEL_INFO)
+    setLevel('org.eclipse.jetty', StdErrLog.LEVEL_WARN)
+    setLevel('org.eclipse.jetty.annotations.AnnotationConfiguration', StdErrLog.LEVEL_OFF)
+    setLevel('org.eclipse.jetty.annotations.AnnotationParser', StdErrLog.LEVEL_OFF)
+    setLevel('org.eclipse.jetty.util.component.AbstractLifeCycle', StdErrLog.LEVEL_OFF)
+  }
+
+  private static setLevel(String loggerName, int level) {
+    def logger = Log.getLogger(loggerName)
+    if (logger instanceof StdErrLog) {
+      ((StdErrLog) logger).setLevel(level)
+    }
+  }
 
   @Override
   def addLifeCycleListener(lifecycle, listener) {
@@ -305,4 +321,24 @@ class JettyConfigurerImpl implements JettyConfigurer {
     handler.start()
   }
 
+  @Override
+  def debug(String message, Object... args) {
+    log.debug(message, args)
+  }
+
+  @Override
+  def info(String message, Object... args) {
+    log.info(message, args)
+  }
+
+  @Override
+  def warn(String message, Object... args) {
+    log.warn(message, args)
+  }
+
+  @Override
+  def error(String message, Object... args) {
+    // There is no "error" in Jetty's log facade.
+    log.warn(message, args)
+  }
 }

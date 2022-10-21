@@ -18,8 +18,6 @@ import org.eclipse.jetty.server.Authentication;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.util.MultiMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -34,8 +32,6 @@ import static org.eclipse.jetty.security.authentication.FormAuthenticator.__J_UR
  * @author akhikhl
  */
 public class SSOBasicAuthenticator extends BasicAuthenticator {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SSOBasicAuthenticator.class);
 
     // "login" is copied without changes from FormAuthenticator
     @Override
