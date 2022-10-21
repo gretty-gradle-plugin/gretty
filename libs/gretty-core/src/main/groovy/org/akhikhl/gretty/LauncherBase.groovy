@@ -250,20 +250,6 @@ abstract class LauncherBase implements Launcher {
     writer.write('stop')
   }
 
-  protected void writeLoggingConfig(json) {
-    json.with {
-      if(sconfig.logbackConfigFile)
-        logbackConfigFile sconfig.logbackConfigFile.toString()
-      loggingLevel sconfig.loggingLevel
-      consoleLogEnabled sconfig.consoleLogEnabled
-      fileLogEnabled sconfig.fileLogEnabled
-      if(sconfig.logFileName)
-        logFileName sconfig.logFileName
-      if(sconfig.logDir)
-        logDir sconfig.logDir.toString()
-    }
-  }
-
   protected void writeRunConfigJson(json) {
     def self = this
     json.with {
@@ -304,7 +290,6 @@ abstract class LauncherBase implements Launcher {
         realmConfigFile self.fileToString(sconfig.realmConfigFile)
       if(sconfig.serverConfigFile)
         serverConfigFile self.fileToString(sconfig.serverConfigFile)
-      writeLoggingConfig(json)
       if(config.baseDir)
         baseDir config.baseDir.absolutePath
       if(sconfig.singleSignOn != null)

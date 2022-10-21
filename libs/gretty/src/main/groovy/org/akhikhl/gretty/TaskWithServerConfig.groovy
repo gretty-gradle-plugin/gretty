@@ -95,26 +95,6 @@ interface TaskWithServerConfig {
     @Optional @Input
     Integer getScanInterval()
 
-    @Optional
-    @InputFile
-    @PathSensitive(PathSensitivity.NONE)
-    Object getLogbackConfigFile()
-
-    @Console
-    String getLoggingLevel()
-
-    @Console
-    Boolean getConsoleLogEnabled()
-
-    @Console
-    Boolean getFileLogEnabled()
-
-    @Internal
-    Object getLogFileName()
-
-    @Internal
-    Object getLogDir()
-
     @Internal
     List<Closure> getOnStart()
 
@@ -138,9 +118,6 @@ interface TaskWithServerConfig {
 
     @Optional @Input
     String getSpringVersion()
-
-    @Optional @Input
-    String getLogbackVersion()
 
     @Optional @Input
     Boolean getSingleSignOn()

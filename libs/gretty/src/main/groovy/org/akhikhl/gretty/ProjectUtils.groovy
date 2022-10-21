@@ -433,14 +433,6 @@ final class ProjectUtils {
       sconfig.serverConfigFile = null
     if(sconfig.serverConfigFile == null && specifiedServerConfigFile)
       log.warn 'server configuration file {} is not found', specifiedServerConfigFile.toString()
-
-    def specifiedLogbackConfigFile = sconfig.logbackConfigFile
-    def logbackConfigFiles = [ specifiedLogbackConfigFile ?: 'logback.xml' ] as LinkedHashSet
-    sconfig.logbackConfigFile = new FileResolver(
-      ['logback', 'server', 'config', '.' ]
-    ).resolveSingleFile(project, logbackConfigFiles)
-    if(sconfig.logbackConfigFile == null && specifiedLogbackConfigFile)
-      log.warn 'logback configuration file {} is not found', specifiedLogbackConfigFile.toString()
   }
 
   static void resolveWebAppConfig(Project project, WebAppConfig wconfig, ServerConfig sconfig) {

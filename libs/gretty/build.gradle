@@ -1,27 +1,13 @@
-import org.gradle.util.GradleVersion
-
 plugins {
   id 'grettybuild.plugin'
   id 'com.gradle.plugin-publish' version '0.15.0'
 }
 
 dependencies {
-  api project(':libs:gretty-core'), {
-    // gradle API provides it's own versions of groovy-all and logback.
-    exclude group: 'org.codehaus.groovy', module: 'groovy-all'
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
-  }
+  api project(':libs:gretty-core')
   api "org.springframework.boot:spring-boot-loader-tools:${springBootVersion}"
   api "org.eclipse.jetty:jetty-util:$jetty8_version"
   api gradleApi()
-
-  testImplementation "ch.qos.logback:logback-classic:$logback_version"
-}
-
-tasks.withType(Test).configureEach {
-  if (GradleVersion.current().baseVersion.version.startsWith("7.")) {
-    useJUnitPlatform()
-  }
 }
 
 gradlePlugin {
