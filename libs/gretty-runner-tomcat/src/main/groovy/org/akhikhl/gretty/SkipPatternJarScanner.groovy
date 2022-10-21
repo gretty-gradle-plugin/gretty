@@ -8,6 +8,8 @@
  */
 package org.akhikhl.gretty
 
+import org.apache.juli.logging.Log
+import org.apache.juli.logging.LogFactory
 import org.apache.tomcat.Jar
 
 import jakarta.servlet.ServletContext
@@ -18,8 +20,6 @@ import org.apache.tomcat.util.scan.StandardJarScanFilter
 import org.apache.tomcat.util.scan.StandardJarScanner
 import org.apache.tomcat.JarScanType
 import org.apache.tomcat.util.file.Matcher;
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory
  */
 class SkipPatternJarScanner extends StandardJarScanner {
 
-  private static final Logger log = LoggerFactory.getLogger(SkipPatternJarScanner)
+  private static final Log log = LogFactory.getLog(TomcatServerManager)
 
 	protected final JarScanner jarScanner
 	protected final JarSkipPatterns skipPatterns
@@ -47,12 +47,12 @@ class SkipPatternJarScanner extends StandardJarScanner {
     return new JarScannerCallback() {
 
       void scan(Jar jar, String webappPath, boolean isWebapp) throws IOException {
-        log.debug('jarScannerCallback.scan {}, {}, {}', jar, webappPath, isWebapp)
+        log.debug("jarScannerCallback.scan ${jar}, ${webappPath}, ${isWebapp}")
         callback.scan(jar, webappPath, isWebapp)
       }
 
       void scan(File file, String webappPath, boolean isWebapp) throws IOException {
-        log.debug('jarScannerCallback.scan {}, {}, {}', file, webappPath, isWebapp)
+        log.debug("jarScannerCallback.scan ${file}, ${webappPath}, ${isWebapp}")
         callback.scan(file, webappPath, isWebapp)
       }
 
@@ -66,7 +66,7 @@ class SkipPatternJarScanner extends StandardJarScanner {
   protected boolean checkJar(String path) {
     String name = path.substring(path.lastIndexOf('/') + 1)
     boolean result = !Matcher.matchName(skipPatterns.asSet(), name)
-    log.debug 'filter jar: {} -> {}', name, result
+    log.debug "filter jar: ${name} -> ${result}"
     result
   }
 

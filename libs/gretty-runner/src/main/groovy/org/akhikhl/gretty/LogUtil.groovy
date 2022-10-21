@@ -162,10 +162,5 @@ class LogUtil {
         }
 
         logger 'org.akhikhl.gretty', grettyDebug ? Level.DEBUG : Level.INFO
-
-        logger 'org.apache.catalina', Level.WARN
-        logger 'org.apache.coyote', Level.WARN
-        logger 'org.apache.jasper', Level.WARN
-        logger 'org.apache.tomcat', Level.WARN
     }
 }
