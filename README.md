@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg?branch=gretty-3.x)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2022.svg)
-[![Latest release](https://img.shields.io/badge/release-3.0.9-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.0.9)
-[![Snapshot](https://img.shields.io/badge/current-3.0.10--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/gretty-3.x)
+[![Latest release](https://img.shields.io/badge/release-3.1.0-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.1.0)
+[![Snapshot](https://img.shields.io/badge/current-3.1.1--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/gretty-3.x)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -19,6 +19,13 @@ A complete list of Gretty features is available in [feature overview](https://gr
 If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.github.io/gretty-doc/Getting-started.html) page.
 
 #### :star: What's new
+
+November 11, 2022, Gretty 3.1.0 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Changes in this version:
+* Support of the Jetty 10 servlet container
+* Reworked classloader concept to stop leakage of Gretty's dependencies onto the webapp classpath
+* Dropped support for Logback entirely, because of the slf4j 1.x / 2.x ecosystem split
 
 September 15, 2022, Gretty 3.0.9 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 

@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.0
+
+* Support of the Jetty 10 servlet container
+* Reworked classloader concept to stop leakage of Gretty's dependencies onto the webapp classpath
+* Dropped support for Logback entirely, because of the slf4j 1.x / 2.x ecosystem split
+
 ### Version 3.0.9
 
 * Replace internal Gradle API usage with public API #263
