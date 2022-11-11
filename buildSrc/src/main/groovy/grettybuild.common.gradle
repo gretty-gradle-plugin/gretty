@@ -38,16 +38,6 @@ compileGroovy {
     groovyOptions.configurationScript = file("${rootProject.projectDir}/gradle/config.groovy")
 }
 
-task assertJDKVersion {
-    outputs.upToDateWhen { false }
-
-    doFirst {
-        if (JavaVersion.current() != project.targetCompatibility) {
-            throw new GradleException('This build must be run with java ' + project.targetCompatibility)
-        }
-    }
-}
-
 task assertPublishedVersion {
     outputs.upToDateWhen { false }
 
@@ -137,11 +127,6 @@ artifacts {
 }
 
 if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
-    afterEvaluate {
-        tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
-            dependsOn assertJDKVersion
-        }
-    }
 
     publishing {
         repositories {

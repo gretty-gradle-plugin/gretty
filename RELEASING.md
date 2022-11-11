@@ -17,7 +17,7 @@ CTRL-D
 - Check build passes on GitHub Actions.
 - Tag new release commit using `git tag -a -s -m "release ?.?.?" v?.?.?` or `git tag v?.?.? <commit-hash>` if using an existing commit.
 - Make sure that `git status` shows a clean working directory
-- Set JDK path to a JDK8 installation.
+- Set JDK path to a JDK 11 installation.
 
 - Check `~/.gradle/gradle.properties` for credentials for `plugins.gradle.org` and `Sonatype` and for a GPG key name:
 
