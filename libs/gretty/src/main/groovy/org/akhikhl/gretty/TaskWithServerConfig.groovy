@@ -133,9 +133,6 @@ interface TaskWithServerConfig {
     @Optional @Input
     String getPortPropertiesFileName()
 
-    @Optional @Input
-    Boolean getLiveReloadEnabled()
-
     @Internal
     int getRandomFreePort()
 }
