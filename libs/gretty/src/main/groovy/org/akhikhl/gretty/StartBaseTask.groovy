@@ -18,8 +18,6 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer
-import org.springframework.boot.devtools.livereload.LiveReloadServer
 /**
  * Base task for starting jetty
  *
@@ -54,10 +52,7 @@ abstract class StartBaseTask extends DefaultTask {
   void action() {
     LauncherConfig config = getLauncherConfig()
     Launcher launcher = new DefaultLauncher(project, config)
-    if(config.serverConfig.liveReloadEnabled) {
-      launcher.optionalLiveReloadServer = new OptionalLiveReloadServer(new LiveReloadServer())
-    }
-    launcher.scannerManager = createScannerManager(config, launcher.optionalLiveReloadServer)
+    launcher.scannerManager = createScannerManager(config)
     if(getIntegrationTest()) {
       boolean result = false
       try {
@@ -89,7 +84,7 @@ abstract class StartBaseTask extends DefaultTask {
     serverStartInfo = launcher.getServerStartInfo()
   }
 
-  private ScannerManager createScannerManager(LauncherConfig config, OptionalLiveReloadServer optionalLiveReloadServer) {
+  private ScannerManager createScannerManager(LauncherConfig config) {
     switch (config.serverConfig.scanner) {
       case 'jdk':
         if(JDKScannerManager.available()) {

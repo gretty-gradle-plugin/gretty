@@ -134,9 +134,6 @@ interface TaskWithServerConfig {
     @Optional @Input
     String getPortPropertiesFileName()
 
-    @Optional @Input
-    Boolean getLiveReloadEnabled()
-
     @ReplacedBy("serverConfigFile")
     Object getJettyXmlFile()
 
