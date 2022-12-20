@@ -61,6 +61,6 @@ Wait until the new version is available at `https://repo1.maven.org/maven2/org/g
 ```
 
 - Update a test-project to use the new Gretty version number and confirm download and build.
-- Push tags: `git push origin --tags`.
 - Update version on `master` to new version number with `-SNAPSHOT` suffix.
+- Push tags: `git push origin --tags`.
 - Add/edit the release created on GitHub.
