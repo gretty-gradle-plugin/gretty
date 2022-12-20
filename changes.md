@@ -2,6 +2,11 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.1
+
+* Remove check for missing SLF4J provider (thanks [@ArLau](https://github.com/ArLau))
+* Remove usage of Spring Boot's `LiveReloadServer`
+
 ### Version 3.1.0
 
 * Support of the Jetty 10 servlet container
