@@ -10,8 +10,6 @@ package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -20,17 +18,11 @@ import org.slf4j.LoggerFactory
 @CompileStatic(TypeCheckingMode.SKIP)
 class JettyServerStartInfo {
 
-  protected final Logger log
-
-  JettyServerStartInfo() {
-    log = LoggerFactory.getLogger(this.getClass())
-  }
-
   Map getInfo(server, JettyConfigurer configurer, Map params) {
 
     def portsInfo = server.getConnectors().collect { it.localPort }
     portsInfo = (portsInfo.size() == 1 ? 'port ' : 'ports ') + portsInfo.join(', ')
-    log.info '{} started and listening on {}', params.servletContainerDescription, portsInfo
+    configurer.info '{} started and listening on {}', params.servletContainerDescription, portsInfo
 
     def httpConn = configurer.findHttpConnector(server)
     def httpsConn = configurer.findHttpsConnector(server)
@@ -45,12 +37,12 @@ class JettyServerStartInfo {
         }
       }
       if(handler.respondsTo('getDisplayName'))
-        log.info '{} runs at:', (handler.getDisplayName() - '/')
+        configurer.info '{} runs at:', (handler.getDisplayName() - '/')
       if(handler.respondsTo('getContextPath')) {
         String contextPath = handler.getContextPath()
         if(httpConn) {
           String host = httpConn.host == '0.0.0.0' ? 'localhost' : httpConn.host          
-          log.info '  http://{}:{}{}', host, httpConn.localPort, contextPath
+          configurer.info '  http://{}:{}{}', host, httpConn.localPort, contextPath
           contextInfo.add([
             protocol: 'http',
             host: host,
@@ -61,7 +53,7 @@ class JettyServerStartInfo {
         }
         if(httpsConn) {
           String host = httpsConn.host == '0.0.0.0' ? 'localhost' : httpsConn.host
-          log.info '  https://{}:{}{}', host, httpsConn.localPort, contextPath
+          configurer.info '  https://{}:{}{}', host, httpsConn.localPort, contextPath
           contextInfo.add([
             protocol: 'https',
             host: host,

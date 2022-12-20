@@ -8,7 +8,6 @@
  */
 package org.akhikhl.gretty
 
-import ch.qos.logback.classic.Level
 import groovy.cli.commons.CliBuilder
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
@@ -24,21 +23,6 @@ final class Runner {
 
   protected final Map params
 
-  static class ServerStartEventImpl implements ServerStartEvent {
-    private final ServiceProtocol.Writer writer
-
-    ServerStartEventImpl(final ServiceProtocol.Writer writer) {
-      this.writer = writer
-    }
-
-    @Override
-    void onServerStart(Map serverStartInfo) {
-      JsonBuilder json = new JsonBuilder()
-      json serverStartInfo
-      writer.writeMayFail(json.toString())
-    }
-  }
-
   static void main(String[] args) {
     def cli = new CliBuilder()
     cli.with {
@@ -51,75 +35,13 @@ final class Runner {
     new Runner(params).run()
   }
 
-  void initLogback(Map serverParams) {
-    LogUtil.reset()
-    String logbackConfigFile = serverParams.logbackConfigFile
-    if (logbackConfigFile) {
-      initLogbackFromConfigurationFile(logbackConfigFile)
-    } else {
-      initLogbackFromGrettyConfig(serverParams)
-    }
-  }
-
-  private void initLogbackFromConfigurationFile(String logbackConfigFile) {
-    if (!logbackConfigFile.endsWith(".xml")) {
-      throw new IllegalArgumentException("""
-          | Gretty only supports XML for configuring Logback, and does not support
-          | $logbackConfigFile
-          | Please note Logback dropped support for Gaffer (configuration from Groovy script) in 1.2.9.
-          """.stripMargin()
-      )
-    }
-
-    LogUtil.configureLoggingWithJoran(new File(logbackConfigFile))
-  }
-
-  private void initLogbackFromGrettyConfig(Map serverParams) {
-    Level level = stringToLoggingLevel(serverParams.loggingLevel?.toString())
-    boolean consoleLogEnabled = serverParams.getOrDefault('consoleLogEnabled', true)
-    boolean fileLogEnabled = serverParams.getOrDefault('fileLogEnabled', true)
-    boolean grettyDebug = params.getOrDefault('debug', true)
-    LogUtil.configureLogging(
-            level,
-            consoleLogEnabled,
-            fileLogEnabled,
-            serverParams.logFileName?.toString(),
-            serverParams.logDir?.toString(),
-            grettyDebug,
-    )
-  }
-
-  private static Level stringToLoggingLevel(String str) {
-    switch(str?.toUpperCase()) {
-      case 'ALL':
-        return Level.ALL
-      case 'DEBUG':
-        return Level.DEBUG
-      case 'ERROR':
-        return Level.ERROR
-      case 'INFO':
-        return Level.INFO
-      case 'OFF':
-        return Level.OFF
-      case 'TRACE':
-        return Level.TRACE
-      case 'WARN':
-        return Level.WARN
-      default:
-        return Level.INFO
-    }
-  }
-
   private Runner(Map params) {
     this.params = params
   }
 
   private void run() {
-    LogUtil.setLevel(params.debug)
     boolean paramsLoaded = false
-    def ServerManagerFactory = Class.forName(params.serverManagerFactory, true, this.getClass().classLoader)
-    ServerManager serverManager = ServerManagerFactory.createServerManager()
-
+    def serverManager = null
     final def reader = ServiceProtocol.createReader()
     final def writer = ServiceProtocol.createWriter(params.statusPort)
     try {
@@ -129,10 +51,20 @@ final class Runner {
         if(!paramsLoaded) {
           params << new JsonSlurper().parseText(data)
           paramsLoaded = true
-          if(!Boolean.valueOf(System.getProperty('grettyProduct')))
-            initLogback(params)
-          serverManager.setParams(params)
-          serverManager.startServer(new ServerStartEventImpl(writer))
+
+          def cl = createClassLoader()
+          ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()
+          Thread.currentThread().setContextClassLoader(cl)
+          try {
+            def ServerManagerFactory = Class.forName(params.serverManagerFactory, true, cl)
+            serverManager = ServerManagerFactory.createServerManager()
+            serverManager.setParams(params)
+            def event = serverManager.startServer()
+            onServerStarted(writer, event.getServerStartInfo())
+          }
+          finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader)
+          }
           // Note that server is already in listening state.
           // If client sends a command immediately after 'started' signal,
           // the command is queued, so that socket.accept gets it anyway.
@@ -150,7 +82,8 @@ final class Runner {
         }
         else if(data == 'restartWithEvent') {
           serverManager.stopServer()
-          serverManager.startServer(new ServerStartEventImpl(writer))
+          def event = serverManager.startServer()
+          onServerStarted(writer, event.getServerStartInfo())
         }
         else if (data.startsWith('redeploy ')) {
           List<String> webappList = data.replace('redeploy ', '').split(' ').toList()
@@ -161,5 +94,27 @@ final class Runner {
     } finally {
       reader.close()
     }
+  }
+
+  private ClassLoader createClassLoader() {
+    URL[] urls = new URL[params.servletContainerClasspath.size()]
+    for (int index = 0; index < params.servletContainerClasspath.size(); index++) {
+      urls[index] = new File(params.servletContainerClasspath[index]).toURI().toURL()
+    }
+    return new URLClassLoader(urls, findBootClassLoader())
+  }
+
+  protected ClassLoader findBootClassLoader() {
+    def bootClassLoader = getClass().getClassLoader()
+      while(bootClassLoader.getParent() != null) {
+        bootClassLoader = bootClassLoader.getParent();
+      }
+    bootClassLoader
+  }
+
+  private onServerStarted(ServiceProtocol.Writer writer, Map<String, String> serverStartInfo) {
+    JsonBuilder json = new JsonBuilder()
+    json serverStartInfo
+    writer.writeMayFail(json.toString())
   }
 }

@@ -8,12 +8,9 @@
  */
 package org.akhikhl.gretty
 
-import groovy.util.logging.Slf4j
-
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.CompletableFuture
 
-@Slf4j
 final class ServiceProtocol {
 
   static Reader createReader(int port  = 0) {
@@ -46,7 +43,6 @@ final class ServiceProtocol {
       } finally {
         acceptSocket.close()
       }
-      log.debug 'ServiceProtocol.readMessageFromServerSocket({}) -> {}', serverSocket.getLocalPort(), data
       return data
     }
 
@@ -72,7 +68,6 @@ final class ServiceProtocol {
     }
 
     def write(final String command) {
-      log.debug 'ServiceProtocol.send({}, {})', port, command
       Socket s = new Socket(InetAddress.loopbackAddress, port)
       try {
         OutputStream out = s.getOutputStream()
@@ -87,7 +82,7 @@ final class ServiceProtocol {
       try {
         write(command)
       } catch (e) {
-        log.debug(e.getMessage(), e)
+        e.printStackTrace()
       }
     }
 

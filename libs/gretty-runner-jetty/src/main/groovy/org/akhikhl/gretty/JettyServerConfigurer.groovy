@@ -10,8 +10,6 @@ package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 /**
  *
  * @author akhikhl
@@ -19,12 +17,10 @@ import org.slf4j.LoggerFactory
 @CompileStatic(TypeCheckingMode.SKIP)
 class JettyServerConfigurer {
 
-  protected final Logger log
   protected final JettyConfigurer configurer
   protected final Map params
 
   JettyServerConfigurer(JettyConfigurer configurer, Map params) {
-    log = LoggerFactory.getLogger(this.getClass())
     this.configurer = configurer
     this.params = params
   }
@@ -51,10 +47,10 @@ class JettyServerConfigurer {
     }
     if (realm && realmConfigFile) {
       if (context.securityHandler.loginService == null) {
-        log.info 'Configuring {} with realm \'{}\', {}', context.contextPath, realm, realmConfigFile
+        configurer.info 'Configuring {} with realm \'{}\', {}', context.contextPath, realm, realmConfigFile
         configurer.configureSecurity(context, realm, realmConfigFile.toString(), params.singleSignOn ?: false)
       } else
-        log.warn 'loginService is already configured, ignoring realm \'{}\', {}', realm, realmConfigFile
+        configurer.warn 'loginService is already configured, ignoring realm \'{}\', {}', realm, realmConfigFile
     }
   }
 
@@ -87,7 +83,7 @@ class JettyServerConfigurer {
 
     File tempDir = new File(baseDir, 'webapps-exploded' + context.contextPath)
     tempDir.mkdirs()
-    log.debug 'jetty context temp directory: {}', tempDir
+    configurer.debug 'jetty context temp directory: {}', tempDir
     context.setTempDirectory(tempDir)
     if (context.respondsTo('setPersistTempDirectory')) // not supported on older jetty versions
       context.setPersistTempDirectory(true)
@@ -120,7 +116,7 @@ class JettyServerConfigurer {
     for(def possibleFileName in [ servletContainer + '-env.xml', 'jetty-env.xml' ]) {
       URL url = configurer.findResourceURL(baseResource, 'META-INF/' + possibleFileName)
       if(url) {
-        log.info 'resolved {} to {}', possibleFileName, url
+        configurer.info 'resolved {} to {}', possibleFileName, url
         return url
       }
     }

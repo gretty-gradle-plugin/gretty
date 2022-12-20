@@ -20,7 +20,7 @@ import groovy.transform.TypeCheckingMode
 @ToString
 class ServerConfig {
 
-  static final int RANDOM_FREE_PORT = PortUtils.RANDOM_FREE_PORT
+  static final int RANDOM_FREE_PORT = -1
 
   List<String> jvmArgs
   Map<String, String> systemProperties
@@ -45,12 +45,6 @@ class ServerConfig {
   def serverConfigFile
   String interactiveMode
   Integer scanInterval
-  def logbackConfigFile
-  String loggingLevel
-  Boolean consoleLogEnabled
-  Boolean fileLogEnabled
-  def logFileName
-  def logDir
   List<Closure> onStart
   List<Closure> onStop
   List<Closure> onScan
@@ -60,7 +54,6 @@ class ServerConfig {
   String springBootVersion
   String springLoadedVersion
   String springVersion
-  String logbackVersion
   Boolean singleSignOn
   /**
    * Tomcat-specific: Enables JNDI naming which is disabled by default.
@@ -83,12 +76,7 @@ class ServerConfig {
     result.httpsEnabled = false
     result.interactiveMode = 'stopOnKeyPress'
     result.scanInterval = 1
-    result.loggingLevel = 'INFO'
-    result.consoleLogEnabled = true
-    result.fileLogEnabled = true
-    result.logFileName = serverName
     result.redeployMode = 'restart'
-    result.logDir = "${System.getProperty('user.home')}/logs" as String
     result.scanner = 'jetty'
     result.portPropertiesFileName = 'gretty_ports.properties'
     result.liveReloadEnabled = false

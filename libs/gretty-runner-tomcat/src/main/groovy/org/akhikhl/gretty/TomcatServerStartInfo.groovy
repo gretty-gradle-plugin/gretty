@@ -13,8 +13,8 @@ import groovy.transform.TypeCheckingMode
 import org.apache.catalina.Context
 import org.apache.catalina.connector.Connector
 import org.apache.catalina.startup.Tomcat
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.apache.juli.logging.Log
+import org.apache.juli.logging.LogFactory
 
 /**
  *
@@ -23,11 +23,7 @@ import org.slf4j.LoggerFactory
 @CompileStatic(TypeCheckingMode.SKIP)
 class TomcatServerStartInfo {
 
-  protected final Logger log
-
-  TomcatServerStartInfo() {
-    log = LoggerFactory.getLogger(this.getClass())
-  }
+  private static final Log log = LogFactory.getLog(TomcatServerStartInfo)
 
   def getInfo(Tomcat tomcat, Connector[] connectors, Map params) {
 
@@ -36,7 +32,7 @@ class TomcatServerStartInfo {
 
     def portsInfo = connectors.collect { it.localPort }
     portsInfo = (portsInfo.size() == 1 ? 'port ' : 'ports ') + portsInfo.join(', ')
-    log.info '{} started and listening on {}', params.servletContainerDescription, portsInfo
+    log.info "${params.servletContainerDescription} started and listening on ${portsInfo}"
 
     Connector httpConn = connectors.find { it.scheme == 'http' }
     Connector httpsConn = connectors.find { it.scheme == 'https' }
@@ -46,9 +42,9 @@ class TomcatServerStartInfo {
     String host = tomcat.hostname == '0.0.0.0' ? 'localhost' : tomcat.hostname
 
     for(Context context in tomcat.host.findChildren().findAll { it instanceof Context }) {
-      log.info '{} runs at:', (context.name - '/')
+      log.info "${context.name - '/'} runs at:"
       if(httpConn) {
-        log.info '  http://{}:{}{}', host, httpConn.localPort, context.path
+        log.info "  http://${host}:${httpConn.localPort}${context.path}"
         contextInfo.add([
           protocol: 'http',
           host: host,
@@ -58,7 +54,7 @@ class TomcatServerStartInfo {
         ])
       }
       if(httpsConn) {
-        log.info '  https://{}:{}{}', host, httpsConn.localPort, context.path
+        log.info "  https://${host}:${httpsConn.localPort}${context.path}"
         contextInfo.add([
           protocol: 'https',
           host: host,

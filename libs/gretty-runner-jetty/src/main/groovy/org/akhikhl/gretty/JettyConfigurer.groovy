@@ -13,6 +13,8 @@ package org.akhikhl.gretty
  */
 interface JettyConfigurer {
 
+  def beforeStart(boolean isDebug)
+
   def addLifeCycleListener(lifecycle, listener)
 
   void applyContextConfigFile(webAppContext, URL contextConfigFile)
@@ -50,4 +52,12 @@ interface JettyConfigurer {
   void removeHandlerFromServer(server, handler)
 
   void addHandlerToServer(server, handler)
+
+  def debug(String message, Object... args)
+
+  def info(String message, Object... args)
+
+  def warn(String message, Object... args)
+
+  def error(String message, Object... args)
 }

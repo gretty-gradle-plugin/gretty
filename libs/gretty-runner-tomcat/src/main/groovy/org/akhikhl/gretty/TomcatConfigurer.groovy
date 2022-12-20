@@ -13,7 +13,6 @@ import org.apache.catalina.core.StandardContext
 import org.apache.catalina.startup.ContextConfig
 import org.apache.catalina.startup.Tomcat
 import org.apache.tomcat.JarScanner
-import org.slf4j.Logger
 
 /**
  *

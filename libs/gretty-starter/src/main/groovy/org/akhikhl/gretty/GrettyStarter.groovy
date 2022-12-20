@@ -118,7 +118,6 @@ class GrettyStarter {
       sconfig.sslTrustStorePath = resolveFile(sconfig.sslTrustStorePath)
     sconfig.realmConfigFile = resolveFile(sconfig.realmConfigFile)
     sconfig.serverConfigFile = resolveFile(sconfig.serverConfigFile)
-    sconfig.logbackConfigFile = resolveFile(sconfig.logbackConfigFile)
 
     if(command == 'stop' || command == 'restart') {
       File portPropertiesFile = StarterLauncher.getPortPropertiesFile(basedir)

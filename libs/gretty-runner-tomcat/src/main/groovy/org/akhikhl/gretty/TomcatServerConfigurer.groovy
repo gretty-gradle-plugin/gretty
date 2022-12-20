@@ -24,8 +24,6 @@ import org.apache.catalina.startup.Tomcat
 import org.apache.catalina.startup.Tomcat.DefaultWebXmlListener
 import org.apache.catalina.startup.Tomcat.FixContextListener
 import org.apache.tomcat.util.net.SSLHostConfig
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.xml.sax.InputSource
 
 /**
@@ -35,12 +33,10 @@ import org.xml.sax.InputSource
 @CompileStatic(TypeCheckingMode.SKIP)
 class TomcatServerConfigurer {
 
-  protected final Logger log
   protected final TomcatConfigurer configurer
   protected final Map params
 
   TomcatServerConfigurer(TomcatConfigurer configurer, Map params) {
-    log = LoggerFactory.getLogger(this.getClass())
     this.configurer = configurer
     this.params = params
   }
@@ -103,7 +99,7 @@ class TomcatServerConfigurer {
       if(!httpConn.port || httpConn.port < 0)
         httpConn.port = params.httpPort ?: ServerDefaults.defaultHttpPort
 
-      if(httpConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpConn.port = 0
 
       if(params.httpIdleTimeout)
@@ -132,7 +128,7 @@ class TomcatServerConfigurer {
       if(!httpsConn.port || httpsConn.port < 0)
         httpsConn.port = params.httpsPort ?: ServerDefaults.defaultHttpsPort
 
-      if(httpsConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpsConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpsConn.port = 0
 
       def sslConfig = new SSLHostConfig()
@@ -220,20 +216,8 @@ class TomcatServerConfigurer {
     context.path = effectiveContextPath
     configurer.setResourceBase(context, webapp)
     // context.setLogEffectiveWebXml(true) // enable for debugging webxml merge
-    FilteringClassLoader parentClassLoader = new FilteringClassLoader(params.parentClassLoader ?: this.getClass().getClassLoader())
-    parentClassLoader.addServerClass('ch.qos.logback.')
-    parentClassLoader.addServerClass('org.apache.commons.cli.')
-    parentClassLoader.addServerClass('org.apache.commons.io.')
-    parentClassLoader.addServerClass('org.apache.groovy.')
-    parentClassLoader.addServerClass('org.slf4j.')
-    parentClassLoader.addServerClass('org.codehaus.groovy.')
-    parentClassLoader.addServerClass('groovy.')
-    parentClassLoader.addServerClass('groovyx.')
-    parentClassLoader.addServerClass('groovyjarjarantlr.')
-    parentClassLoader.addServerClass('groovyjarjarasm.')
-    parentClassLoader.addServerClass('groovyjarjarcommonscli.')
     URL[] classpathUrls = (webapp.webappClassPath ?: []).collect { new URL(it) } as URL[]
-    URLClassLoader classLoader = new URLClassLoader(classpathUrls, parentClassLoader)
+    URLClassLoader classLoader = new URLClassLoader(classpathUrls, params.parentClassLoader ?: this.getClass().getClassLoader())
     if (webapp.springBoot) {
       context.addParameter('GRETTY_SPRING_BOOT_MAIN_CLASS', webapp.springBootMainClass)
     }
@@ -252,7 +236,7 @@ class TomcatServerConfigurer {
 
     def realmConfigFile = webapp.realmConfigFile ?: params.realmConfigFile
     if (realmConfigFile && new File(realmConfigFile).exists()) {
-      log.info '{} -> realm config {}', webapp.contextPath, realmConfigFile
+      context.logger.info "${webapp.contextPath} -> realm config ${realmConfigFile}"
       def realm = new MemoryRealm()
       realm.setPathname(realmConfigFile)
       context.setRealm(realm)
@@ -263,7 +247,7 @@ class TomcatServerConfigurer {
     if (!context.configFile && webapp.contextConfigFile)
       context.configFile = new File(webapp.contextConfigFile).toURI().toURL()
     if (context.configFile)
-      log.info 'Configuring {} with {}', webapp.contextPath, context.configFile
+      context.logger.info "Configuring ${webapp.contextPath} with ${context.configFile}"
 
     context.addLifecycleListener(configurer.createContextConfig(classpathUrls))
 
@@ -275,16 +259,16 @@ class TomcatServerConfigurer {
     if (!context.findChild('default'))
       context.addLifecycleListener(new DefaultWebXmlListener())
 
-    if (log.isDebugEnabled())
+    if (context.logger.isDebugEnabled())
       context.addLifecycleListener(new LifecycleListener() {
         @Override
         public void lifecycleEvent(LifecycleEvent event) {
           if (event.type == Lifecycle.CONFIGURE_START_EVENT) {
             def pipeline = context.getPipeline()
-            log.debug 'START: context={}, pipeline: {} #{}', context.path, pipeline, System.identityHashCode(pipeline)
-            log.debug '  valves:'
+            context.logger.debug "START: context=${context.path}, pipeline: $pipeline #${System.identityHashCode(pipeline)}"
+            context.logger.debug '  valves:'
             for (def v in pipeline.getValves())
-              log.debug '    {} #{}', v, System.identityHashCode(v)
+              context.logger.debug "    $v #${System.identityHashCode(v)}"
           }
         }
       })

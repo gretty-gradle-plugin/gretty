@@ -21,6 +21,7 @@ dependencies {
   api "org.eclipse.jetty:apache-jsp:$jetty11_version"
   api "org.eclipse.jetty:jetty-annotations:$jetty11_version"
   api "org.eclipse.jetty:jetty-plus:$jetty11_version"
+  api "org.eclipse.jetty:jetty-slf4j-impl:$jetty11_version"
   api "org.eclipse.jetty.websocket:websocket-jakarta-server:$jetty11_version"
   api "org.eclipse.jetty.websocket:websocket-jetty-server:$jetty11_version"
   api "org.ow2.asm:asm:$asm_version"

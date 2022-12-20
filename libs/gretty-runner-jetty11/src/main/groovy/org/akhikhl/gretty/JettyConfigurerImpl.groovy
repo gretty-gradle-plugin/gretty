@@ -11,13 +11,14 @@ package org.akhikhl.gretty
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.eclipse.jetty.annotations.AnnotationConfiguration
+import org.eclipse.jetty.logging.JettyLevel
+import org.eclipse.jetty.logging.JettyLogger
 import org.eclipse.jetty.plus.webapp.EnvConfiguration
 import org.eclipse.jetty.plus.webapp.PlusConfiguration
 import org.eclipse.jetty.security.HashLoginService
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.handler.ContextHandlerCollection
 import org.eclipse.jetty.server.session.SessionHandler
-import org.eclipse.jetty.util.component.LifeCycle
 import org.eclipse.jetty.util.resource.PathResource
 import org.eclipse.jetty.util.resource.Resource
 import org.eclipse.jetty.util.resource.ResourceCollection
@@ -38,10 +39,25 @@ class JettyConfigurerImpl implements JettyConfigurer {
   private SSOAuthenticatorFactory ssoAuthenticatorFactory
 
   @Override
+  def beforeStart(boolean isDebug) {
+    setLevel( 'org.akhikhl.gretty', isDebug ? JettyLevel.DEBUG : JettyLevel.INFO)
+    setLevel('org.eclipse.jetty', JettyLevel.WARN)
+    setLevel('org.eclipse.jetty.annotations.AnnotationConfiguration', JettyLevel.ERROR)
+    setLevel('org.eclipse.jetty.annotations.AnnotationParser', JettyLevel.ERROR)
+    setLevel('org.eclipse.jetty.util.component.AbstractLifeCycle', JettyLevel.ERROR)
+  }
+
+  private static setLevel(String loggerName, JettyLevel level) {
+    def logger = LoggerFactory.getLogger(loggerName)
+    if (logger instanceof JettyLogger) {
+      ((JettyLogger) logger).setLevel(level)
+    }
+  }
+
+  @Override
   def addLifeCycleListener(lifecycle, listener) {
-    def lifeCycleListener = listener as LifeCycle.Listener
-    lifecycle.addLifeCycleListener(lifeCycleListener)
-    lifeCycleListener
+    lifecycle.addLifeCycleListener(listener)
+    listener
   }
 
   @Override
@@ -86,7 +102,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
       if(!httpConn.port)
         httpConn.port = params.httpPort ?: ServerDefaults.defaultHttpPort
 
-      if(httpConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpConn.port = 0
 
       if(params.httpIdleTimeout)
@@ -115,7 +131,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
       if(!httpsConn.port)
         httpsConn.port = params.httpsPort ?: ServerDefaults.defaultHttpsPort
 
-      if(httpsConn.port == PortUtils.RANDOM_FREE_PORT)
+      if(httpsConn.port == ServerDefaults.RANDOM_FREE_PORT)
         httpsConn.port = 0
 
       def sslContextFactory = httpsConn.getConnectionFactories().find { it instanceof SslConnectionFactory }?.getSslContextFactory()
@@ -200,24 +216,12 @@ class JettyConfigurerImpl implements JettyConfigurer {
   def createWebAppContext(Map serverParams, Map webappParams) {
     List<String> webappClassPath = webappParams.webappClassPath
     JettyWebAppContext context = new JettyWebAppContext()
+    context.setThrowUnavailableOnStartupException(true)
     context.setWebInfLib(webappClassPath.findAll { it.endsWith('.jar') }.collect { new File(it) })
     context.setExtraClasspath(webappClassPath.collect { it.endsWith('.jar') ? it : (it.endsWith('/') ? it : it + '/') }.join(';'))
     context.setInitParameter('org.eclipse.jetty.servlet.Default.useFileMappedBuffer', serverParams.productMode ? 'true' : 'false')
     context.setAttribute(MetaInfConfiguration.CONTAINER_JAR_PATTERN,
         '.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$');
-
-    context.addServerClassMatcher(new ClassMatcher().tap {
-      include 'ch.qos.logback.'
-      include 'org.apache.commons.cli.'
-      include 'org.apache.commons.io.'
-      include 'org.slf4j.'
-      include 'org.codehaus.groovy.'
-      include 'groovy.'
-      include 'groovyx.'
-      include 'groovyjarjarantlr.'
-      include 'groovyjarjarasm.'
-      include 'groovyjarjarcommonscli.'
-    })
 
     context.addSystemClassMatcher(new ClassMatcher().tap {
       // I do not know if the servlet classes are system classes in the truest sense.
@@ -323,4 +327,23 @@ class JettyConfigurerImpl implements JettyConfigurer {
     handler.start()
   }
 
+  @Override
+  def debug(String message, Object... args) {
+    log.debug(message, args)
+  }
+
+  @Override
+  def info(String message, Object... args) {
+    log.info(message, args)
+  }
+
+  @Override
+  def warn(String message, Object... args) {
+    log.warn(message, args)
+  }
+
+  @Override
+  def error(String message, Object... args) {
+    log.error(message, args)
+  }
 }

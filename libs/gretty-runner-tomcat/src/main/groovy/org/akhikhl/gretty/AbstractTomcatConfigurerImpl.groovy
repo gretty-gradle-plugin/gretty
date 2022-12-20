@@ -17,16 +17,12 @@ import org.apache.catalina.startup.Tomcat
 import org.apache.catalina.webresources.StandardRoot
 import org.apache.tomcat.JarScanner
 import org.apache.tomcat.util.descriptor.web.WebXml
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 /**
  *
  * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
 abstract class AbstractTomcatConfigurerImpl implements TomcatConfigurer {
-
-  private static final Logger log = LoggerFactory.getLogger(AbstractTomcatConfigurerImpl)
 
   @Override
   ContextConfig createContextConfig(URL[] classpathUrls) {

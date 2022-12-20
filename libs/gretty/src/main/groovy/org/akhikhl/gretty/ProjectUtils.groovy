@@ -35,9 +35,17 @@ final class ProjectUtils {
     )
   }
 
-  static FileCollection getRunnerFileCollection(Project project, String servletContainerName) {
+  static FileCollection getRunnerFileCollection(Project project) {
+    def grettyVersion = Externalized.getString("grettyVersion")
+    project.configurations.grettyNoSpringBoot + getCurrentGroovy(project) +
+            project.configurations.detachedConfiguration(
+                    project.dependencies.create("org.gretty:gretty-runner:$grettyVersion")
+            )
+  }
+
+  static FileCollection getServletContainerClasspath(Project project, String servletContainerName) {
     def servletContainerConfig = ServletContainerConfig.getConfig(servletContainerName)
-    project.configurations.grettyNoSpringBoot + project.configurations[servletContainerConfig.servletContainerRunnerConfig] + getCurrentGroovy(project)
+    getCurrentGroovy(project) + project.configurations[servletContainerConfig.servletContainerRunnerConfig]
   }
 
   static boolean anyWebAppUsesSpringBoot(Project project, Iterable<WebAppConfig> wconfigs) {
@@ -425,14 +433,6 @@ final class ProjectUtils {
       sconfig.serverConfigFile = null
     if(sconfig.serverConfigFile == null && specifiedServerConfigFile)
       log.warn 'server configuration file {} is not found', specifiedServerConfigFile.toString()
-
-    def specifiedLogbackConfigFile = sconfig.logbackConfigFile
-    def logbackConfigFiles = [ specifiedLogbackConfigFile ?: 'logback.xml' ] as LinkedHashSet
-    sconfig.logbackConfigFile = new FileResolver(
-      ['logback', 'server', 'config', '.' ]
-    ).resolveSingleFile(project, logbackConfigFiles)
-    if(sconfig.logbackConfigFile == null && specifiedLogbackConfigFile)
-      log.warn 'logback configuration file {} is not found', specifiedLogbackConfigFile.toString()
   }
 
   static void resolveWebAppConfig(Project project, WebAppConfig wconfig, ServerConfig sconfig) {

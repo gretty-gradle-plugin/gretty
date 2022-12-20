@@ -7,8 +7,8 @@ import org.apache.tools.ant.filters.*
 dependencies {
   // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
   compileOnly localGroovy()
+  compileOnly "org.slf4j:slf4j-api:$slf4j_version"
 
-  api "ch.qos.logback:logback-classic:$logback_version"
   api "commons-cli:commons-cli:$commons_cli_version"
   api 'commons-configuration:commons-configuration:1.10'
   api "commons-io:commons-io:$commons_io_version"
@@ -28,7 +28,6 @@ tasks.processResources {
     springBootVersion: project.springBootVersion,
     springLoadedVersion: project.springLoadedVersion,
     springVersion: project.springVersion,
-    logbackVersion: project.logback_version,
     asmVersion: project.asm_version
   ]
   inputs.properties props

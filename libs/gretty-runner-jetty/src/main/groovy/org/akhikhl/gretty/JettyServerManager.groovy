@@ -10,8 +10,6 @@ package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  *
@@ -19,8 +17,6 @@ import org.slf4j.LoggerFactory
  */
 @CompileStatic(TypeCheckingMode.SKIP)
 final class JettyServerManager implements ServerManager {
-
-  private static final Logger log = LoggerFactory.getLogger(JettyServerManager)
 
   private JettyConfigurer configurer
   protected Map params
@@ -36,10 +32,10 @@ final class JettyServerManager implements ServerManager {
   }
 
   @Override
-  void startServer(ServerStartEvent startEvent) {
+  ServerStartEvent startServer() {
     assert server == null
-
-    log.debug '{} starting.', params.servletContainerDescription
+    configurer.beforeStart(params.getOrDefault('debug', true))
+    configurer.debug '{} starting.', params.servletContainerDescription
 
     JettyServerConfigurer serverConfigurer = createServerConfigurer()
     server = serverConfigurer.createAndConfigureServer()
@@ -61,31 +57,29 @@ final class JettyServerManager implements ServerManager {
 
       result = true
     } catch(Throwable x) {
-      log.error 'Error starting server', x
+      configurer.error 'Error starting server', x
       if(x.getClass().getName() == 'org.eclipse.jetty.util.MultiException') {
         for(Throwable xx in x.getThrowables())
           log.error 'Error', xx
       }
-      if(startEvent) {
-        Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
-        startInfo.status = 'error starting server'
-        startInfo.error = true
-        startInfo.errorMessage = x.getMessage() ?: x.getClass().getName()
-        StringWriter sw = new StringWriter()
-        x.printStackTrace(new PrintWriter(sw))
-        startInfo.stackTrace = sw.toString()
-        startEvent.onServerStart(startInfo)
-      } else
-        throw x
+
+      Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
+      startInfo.status = 'error starting server'
+      startInfo.error = true
+      startInfo.errorMessage = x.getMessage() ?: x.getClass().getName()
+      StringWriter sw = new StringWriter()
+      x.printStackTrace(new PrintWriter(sw))
+      startInfo.stackTrace = sw.toString()
+      return new ServerStartEvent(startInfo)
     }
 
     if(result) {
-      if(startEvent) {
-        Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
-        startEvent.onServerStart(startInfo)
-      }
-      log.debug '{} started.', params.servletContainerDescription
+      Map startInfo = new JettyServerStartInfo().getInfo(server, configurer, params)
+      configurer.debug '{} started.', params.servletContainerDescription
+      return new ServerStartEvent(startInfo)
     }
+
+    throw new IllegalStateException()
   }
 
   private JettyServerConfigurer createServerConfigurer() {
@@ -95,19 +89,19 @@ final class JettyServerManager implements ServerManager {
   @Override
   void stopServer() {
     if(server != null) {
-      log.debug '{} stopping.', params.servletContainerDescription
+      configurer.debug '{} stopping.', params.servletContainerDescription
       server.stop()
       server = null
-      log.debug '{} stopped.', params.servletContainerDescription
+      configurer.debug '{} stopped.', params.servletContainerDescription
     }
   }
 
   @Override
   void redeploy(List<String> contextPaths) {
-    log.debug('redeploying {}.', contextPaths.join(' '))
+    configurer.debug('redeploying {}.', contextPaths.join(' '))
     def handlers = configurer.getHandlersByContextPaths(server, contextPaths)
     handlers.each {
-      log.error("removing handlers: ${it}")
+      configurer.error("removing handlers: ${it}")
       configurer.removeHandlerFromServer(server, it)
     }
     //
