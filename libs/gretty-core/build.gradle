@@ -14,7 +14,6 @@ dependencies {
   api "commons-io:commons-io:$commons_io_version"
   api 'org.apache.commons:commons-lang3:3.3.2'
   api 'org.bouncycastle:bcprov-jdk15on:1.60'
-  api "org.springframework.boot:spring-boot-devtools:$springBootVersion"
   api project(':libs:gretty-common')
 }
 
