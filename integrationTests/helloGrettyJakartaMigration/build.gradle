@@ -8,7 +8,7 @@ dependencies {
   implementation 'org.webjars:jquery:2.1.1'
   implementation 'org.apache.velocity:velocity:1.7'
 
-  grettyRunnerTomcat10 'org.apache.tomcat:jakartaee-migration:1.0.0'
+  grettyRunnerTomcat10 'org.apache.tomcat:jakartaee-migration:1.0.7'
 }
 
 gretty {
