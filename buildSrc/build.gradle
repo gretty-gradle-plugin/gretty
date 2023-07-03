@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation "org._10ne.gradle:rest-gradle-plugin:0.4.2"
     implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
 }

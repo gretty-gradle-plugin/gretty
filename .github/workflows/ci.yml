@@ -56,7 +56,7 @@ jobs:
           - java: 15
             gradle: '7.6.2'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
-            properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.0'
+            properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
 
     env:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
