@@ -18,9 +18,6 @@ jobs:
           - java: 17
             gradle: '7.6.2'
             properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
-          - java: 17
-            gradle: '8.2'
-            properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
 
     env:
       TEST_ALL_CONTAINERS: "['tomcat10','jetty11']"
