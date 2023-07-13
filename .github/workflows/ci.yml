@@ -56,6 +56,10 @@ jobs:
             gradle: '7.5.1'
             properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
 
+          - java: 17
+            gradle: '8.2.1'
+            properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
+
     env:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
       GRADLE_VERSION: ${{ matrix.gradle }}
