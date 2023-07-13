@@ -49,11 +49,11 @@ jobs:
             gradle: '6.9.4'
 
           - java: 11
-            gradle: '7.5.1'
+            gradle: '7.6.2'
             properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
 
           - java: 17
-            gradle: '7.5.1'
+            gradle: '7.6.2'
             properties: '-Pspock_version=2.0-groovy-3.0 -PgebVersion=5.0'
 
           - java: 17
