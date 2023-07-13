@@ -73,6 +73,12 @@ subprojects {
         mustRunAfter project.tasks.check
       }
 
+      // FIXME this task dependency became obsolete with Gradle 8,
+      //  because Gradle 8 no longer invokes the 'build' task on
+      //  buildSrc projects, just the task that assembles the output.
+      //  https://docs.gradle.org/8.0/release-notes.html#tests-for-buildsrc-are-no-longer-automatically-run
+      //  As a result, we miss the gretty-integrationTest JAR from
+      //  the private repo if we do not explicitly publish the JAR.
       project.build.dependsOn project.tasks.publishToPrivateRepository
 
     } // findPlugin java

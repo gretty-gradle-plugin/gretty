@@ -94,6 +94,17 @@ jobs:
       - name: Set up Gradle ${{ matrix.gradle }}
         run: ./gradlew --no-daemon wrapper --gradle-version $GRADLE_VERSION --distribution-type all
 
+      # begin workaround - see also integrationTests/buildSrc/build.gradle
+      - name: Install buildSrc project (only required for Gradle 8)
+        run: |
+          ../../gradlew --no-daemon \
+            --warning-mode all \
+            -PprivateRepoDir=$PRIVATE_REPO \
+            publishToPrivateRepo
+        if: "startsWith(env.GRADLE_VERSION, '8.')"
+        working-directory: integrationTests/buildSrc
+      # end workaround
+
       - name: Run Integration Tests
         run: |
           ../gradlew --no-daemon \
