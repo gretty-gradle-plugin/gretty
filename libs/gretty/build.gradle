@@ -34,18 +34,6 @@ pluginBundle {
 
 validatePlugins {
   enableStricterValidation = true
-  // FIXME #235 - Pass stricter validation since Gradle 7.2
-  // see PR #236 for the required changes
-  //
-  // We can't ship the improved plugin because passing the plugin validation requires
-  // adding an annotation which is not shipped with Gradle 6.9.
-  // As a result, we need to drop Gradle 6 compat, then add the annotation only present
-  // in Gradle 7.1 onwards, and then we can enable strict validation again.
-  //
-  // Unluckily, there is no way to selectively disable this validation for the Gradle 7
-  // build. Also, faking the presence of the annotation to get the plugin to compile with
-  // Gradle 6 would complicate the build process by a lot.
-  ignoreFailures = true
 }
 
 tasks.named('publishPlugins').configure {
