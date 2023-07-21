@@ -71,6 +71,18 @@ jobs:
           name: gretty-private-repository
           path: ${{ env.PRIVATE_REPO }}
 
+      # Begin workaround: because the current Gradle wrapper does not support Java 17,
+      # we use JDK 15 to bootstrap the appropriate Gradle version, and then proceed
+      # to use a recent version of Gradle and Java.
+      - name: Set up JDK 15
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 15
+      - name: Bootstrap Gradle version
+        run: ./gradlew --no-daemon wrapper --gradle-version $GRADLE_VERSION --distribution-type all
+      # end workaround
+
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
