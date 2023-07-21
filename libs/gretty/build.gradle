@@ -27,7 +27,7 @@ pluginBundle {
   plugins {
     grettyPlugin {
       displayName = 'Gretty plugin'
-      tags = [ 'gretty', 'jetty', 'tomcat', 'gradle', 'plugin', 'spring', 'spring-boot' ]
+      tags = [ 'gretty', 'jetty', 'tomcat', 'spring', 'spring-boot' ]
     }
   }
 }
