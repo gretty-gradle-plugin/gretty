@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.1.0
+
+* Drops Gradle 6 support
+* Enables stricter plugin validation
+* Adds Gradle 8 integration test build
+
 ### Version 4.0.3
 
 * Replace internal Gradle API usage with public API #263  
