@@ -53,7 +53,7 @@ jobs:
             gradle: '6.9.4'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
 
-          - java: 15
+          - java: 17
             gradle: '7.6.2'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
             properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
