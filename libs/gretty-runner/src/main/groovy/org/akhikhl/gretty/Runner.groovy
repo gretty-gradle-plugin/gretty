@@ -44,6 +44,7 @@ final class Runner {
     def serverManager = null
     final def reader = ServiceProtocol.createReader()
     final def writer = ServiceProtocol.createWriter(params.statusPort)
+    def cl = null
     try {
       writer.write("init ${reader.port}")
       while(true) {
@@ -52,7 +53,7 @@ final class Runner {
           params << new JsonSlurper().parseText(data)
           paramsLoaded = true
 
-          def cl = createClassLoader()
+          cl = createClassLoader()
           ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()
           Thread.currentThread().setContextClassLoader(cl)
           try {
@@ -78,12 +79,26 @@ final class Runner {
         }
         else if(data == 'restart') {
           serverManager.stopServer()
-          serverManager.startServer()
+          ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()
+          Thread.currentThread().setContextClassLoader(cl)
+          try {
+            serverManager.startServer()
+          }
+          finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader)
+          }
         }
         else if(data == 'restartWithEvent') {
           serverManager.stopServer()
-          def event = serverManager.startServer()
-          onServerStarted(writer, event.getServerStartInfo())
+          ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()
+          Thread.currentThread().setContextClassLoader(cl)
+          try {
+            def event = serverManager.startServer()
+            onServerStarted(writer, event.getServerStartInfo())
+          }
+          finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader)
+          }
         }
         else if (data.startsWith('redeploy ')) {
           List<String> webappList = data.replace('redeploy ', '').split(' ').toList()
