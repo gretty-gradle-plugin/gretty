@@ -5,5 +5,5 @@ jdk:
   - openjdk11
 install:
   - java -version
-  - ./gradlew --no-daemon wrapper --gradle-version 7.6.2 --distribution-type all
+  - ./gradlew --no-daemon wrapper --gradle-version 7.6.3 --distribution-type all
   - ./gradlew --no-daemon --warning-mode all --stacktrace publishToMavenLocal
