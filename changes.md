@@ -2,6 +2,12 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.1.1
+
+* Fix broken `restart` tasks after runner classpath separation
+* Use appropriate class loader for servermanger commands. Thanks to Shane Hird.
+* Upgrade Tomcat version to 10.1.5. Thanks to [@pranav24gupta](https://github.com/pranav24gupta).
+
 ### Version 4.1.0
 
 * Drops Gradle 6 support
