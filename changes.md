@@ -2,6 +2,11 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.2
+
+* Fix broken `restart` tasks after runner classpath separation
+* Use appropriate class loader for servermanger commands. Thanks to Shane Hird.
+
 ### Version 3.1.1
 
 * Remove check for missing SLF4J provider (thanks [@ArLau](https://github.com/ArLau))
