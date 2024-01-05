@@ -250,7 +250,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
   URL findResourceURL(baseResource, String path) {
     Resource res = baseResource.addPath(path)
     if(res.exists())
-      return res.getURL()
+      return res.getURI().toURL()
     null
   }
 
