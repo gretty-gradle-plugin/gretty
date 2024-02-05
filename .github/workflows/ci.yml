@@ -54,6 +54,9 @@ jobs:
           - java: 17
             gradle: '8.6'
 
+          - java: 21
+            gradle: '8.6'
+
     env:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
       GRADLE_VERSION: ${{ matrix.gradle }}
