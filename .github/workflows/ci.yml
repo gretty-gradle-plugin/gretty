@@ -13,7 +13,7 @@ jobs:
 
     env:
       JDK_VERSION: "17"
-      GRADLE_VERSION: "7.6.3"
+      GRADLE_VERSION: "7.6.4"
 
     steps:
       - uses: actions/checkout@v3
@@ -46,13 +46,13 @@ jobs:
         include:
 
           - java: 11
-            gradle: '7.6.3'
+            gradle: '7.6.4'
 
           - java: 17
-            gradle: '7.6.3'
+            gradle: '7.6.4'
 
           - java: 17
-            gradle: '8.4'
+            gradle: '8.6'
 
     env:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
