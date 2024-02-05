@@ -58,6 +58,10 @@ jobs:
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
             properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
 
+          # TODO: add a JDK-21 build but fix the following issue before that:
+          # groovy.lang.MissingPropertyException: Could not set unknown property 'classifier' for task ':libs:gretty:javadocJar' of type org.gradle.api.tasks.bundling.Jar
+          # https://github.com/gretty-gradle-plugin/gretty/actions/runs/7788654990/job/21238688742
+
     env:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
       GRADLE_VERSION: ${{ matrix.gradle }}
