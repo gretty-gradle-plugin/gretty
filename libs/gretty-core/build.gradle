@@ -13,7 +13,7 @@ dependencies {
   api 'commons-configuration:commons-configuration:1.10'
   api "commons-io:commons-io:$commons_io_version"
   api 'org.apache.commons:commons-lang3:3.12.0'
-  api 'org.bouncycastle:bcprov-jdk15on:1.70'
+  api 'org.bouncycastle:bcprov-jdk18on:1.77'
   api project(':libs:gretty-common')
 }
 
