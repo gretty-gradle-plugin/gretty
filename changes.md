@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.1.3
+
+* Update Tomcat and Bouncy Castle (thanks to [@pranav24gupta](https://github.com/pranav24gupta))
+
 ### Version 4.1.2
 
 * jettyStart throws exception if using jetty-env.xml #299 (special thanks to @gy-chen)
