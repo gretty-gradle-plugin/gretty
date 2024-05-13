@@ -11,6 +11,10 @@ import org.gradle.api.tasks.PathSensitivity
 interface TaskWithServerConfig {
     @Optional
     @Input
+    String getJvmExecutable()
+    
+    @Optional
+    @Input
     List<String> getJvmArgs()
 
     @Optional
