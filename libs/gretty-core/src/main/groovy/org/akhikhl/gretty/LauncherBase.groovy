@@ -188,6 +188,7 @@ abstract class LauncherBase implements Launcher {
           params.debug = config.getDebug()
           params.debugSuspend = config.getDebugSuspend()
           params.debugPort = config.getDebugPort()
+          params.jvmExecutable = sconfig.jvmExecutable
           params.jvmArgs = sconfig.jvmArgs
           params.systemProperties = sconfig.systemProperties
           if(!sconfig.secureRandom) {

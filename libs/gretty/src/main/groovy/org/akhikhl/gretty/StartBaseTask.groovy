@@ -14,8 +14,12 @@ import org.akhikhl.gretty.scanner.JDKScannerManager
 import org.gradle.api.DefaultTask
 import org.gradle.api.Task
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.jvm.toolchain.JavaLauncher
+import org.gradle.jvm.toolchain.JavaToolchainService
+import org.gradle.jvm.toolchain.JavaToolchainSpec
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 /**
@@ -115,6 +119,10 @@ abstract class StartBaseTask extends DefaultTask {
       sconfig.systemProperty 'springloaded', 'exclusions=org.akhikhl.gretty..*'
     }
 
+    getJavaToolchainJvmExecutable().ifPresent({ jvmExecutable ->
+      sconfig.jvmExecutable(jvmExecutable)
+    })
+
     for(Closure c in prepareServerConfigClosures) {
       c = c.rehydrate(sconfig, c.owner, c.thisObject)
       c.resolveStrategy = Closure.DELEGATE_FIRST
@@ -164,6 +172,25 @@ abstract class StartBaseTask extends DefaultTask {
       jacocoHelper.jacoco.enabled = getDefaultJacocoEnabled()
     }
   }
+
+  private Optional<JavaLauncher> getJavaToolchainLauncher() {
+    Optional<JavaToolchainService> toolchainService = Optional.ofNullable(project.extensions.getByType(JavaToolchainService))
+    Optional<JavaLauncher> launcher = Optional.ofNullable(project.extensions.getByType(JavaPluginExtension))
+            .map({ it.getToolchain() })
+            .flatMap({ JavaToolchainSpec spec ->
+              toolchainService
+                      .map({ it.launcherFor(spec) })
+                      .map({ it.getOrElse(null) })
+            })
+
+    return launcher
+  }
+
+  private Optional<String> getJavaToolchainJvmExecutable() {
+    return getJavaToolchainLauncher()
+            .map({ it.executablePath?.asFile?.path })
+  }
+
 
   @Internal
   protected final LauncherConfig getLauncherConfig() {
