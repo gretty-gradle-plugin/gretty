@@ -188,7 +188,10 @@ abstract class BaseScannerManager implements ScannerManager {
             }.each { wconfig ->
                 log.info 'changed file {} affects project {}', f, wconfig.projectPath
                 def proj = project.project(wconfig.projectPath)
-                if(proj.sourceSets.main.allSource.srcDirs.find { f.startsWith(it.absolutePath) }) {
+                if(ProjectReloadUtils.satisfiesOneOfReloadSpecs(f, fastReloadMap[proj.path])) {
+                    log.info 'file {} is in fastReload directories', f
+                    reloadProject(wconfig.projectPath, 'fastReload')
+                } else if(proj.sourceSets.main.allSource.srcDirs.find { f.startsWith(it.absolutePath) }) {
                     if(wconfig.recompileOnSourceChange) {
                         reloadProject(wconfig.projectPath, 'compile')
                         // restart is done when reacting to class change, not source change
@@ -219,9 +222,6 @@ abstract class BaseScannerManager implements ScannerManager {
                         reloadProject(wconfig.projectPath, 'compile')
                         webAppConfigsToRestart.add(wconfig)
                     }
-                } else if(ProjectReloadUtils.satisfiesOneOfReloadSpecs(f, fastReloadMap[proj.path])) {
-                    log.info 'file {} is in fastReload directories', f
-                    reloadProject(wconfig.projectPath, 'fastReload')
                 } else {
                     log.info 'file {} is not in fastReload directories, switching to fullReload', f
                     reloadProject(wconfig.projectPath, 'compile')
