@@ -101,9 +101,15 @@ final class Runner {
           }
         }
         else if (data.startsWith('redeploy ')) {
-          List<String> webappList = data.replace('redeploy ', '').split(' ').toList()
-          serverManager.redeploy(webappList)
-          writer.writeMayFail('redeployed')
+          ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader()
+          Thread.currentThread().setContextClassLoader(cl)
+          try {
+            List<String> webappList = data.replace('redeploy ', '').split(' ').toList()
+            serverManager.redeploy(webappList)
+            writer.writeMayFail('redeployed')
+          } finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader)
+          }
         }
       }
     } finally {
