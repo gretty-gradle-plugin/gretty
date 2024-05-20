@@ -2,6 +2,11 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.3
+
+* Fix jetty redeploy with custom jetty-env.xml 
+* Support folders under "src/resources" in fastReload configuration property
+
 ### Version 3.1.2
 
 * Fix broken `restart` tasks after runner classpath separation
