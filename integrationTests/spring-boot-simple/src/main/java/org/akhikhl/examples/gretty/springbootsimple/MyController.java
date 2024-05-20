@@ -1,24 +1,18 @@
-/*
- * Gretty
- *
- * Copyright (C) 2013-2015 Andrey Hihlovskiy and contributors.
- *
- * See the file "LICENSE" for copying and usage permission.
- * See the file "CONTRIBUTORS" for complete list of contributors.
- */
-package org.akhikhl.examples.gretty.springbootsimple
+package org.akhikhl.examples.gretty.springbootsimple;
 
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 @RestController
-@RequestMapping('/mycontroller')
-class MyController {
-
-  @RequestMapping(value = '/getdate', method = RequestMethod.POST)
-  Map home() {
-    return [ date: new Date().format('EEE, d MMM yyyy') ]
-  }
+@RequestMapping("/mycontroller")
+public class MyController {
+    @RequestMapping(value = "/getdate", method = RequestMethod.POST)
+    public Map<String, ?> home() {
+        return Map.of("date", new SimpleDateFormat("EEE, d MMM yyyy").format(new Date()));
+    }
 }
-
