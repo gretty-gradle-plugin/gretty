@@ -174,13 +174,15 @@ abstract class StartBaseTask extends DefaultTask {
   }
 
   private Optional<JavaLauncher> getJavaToolchainLauncher() {
-    Optional<JavaToolchainService> toolchainService = Optional.ofNullable(project.extensions.getByType(JavaToolchainService))
-    Optional<JavaLauncher> launcher = Optional.ofNullable(project.extensions.getByType(JavaPluginExtension))
+    Optional<JavaToolchainService> toolchainService = Optional.ofNullable(project.extensions.findByName('javaToolchains'))
+            .filter({ it instanceof JavaToolchainService })
+    
+    Optional<JavaLauncher> launcher = Optional.ofNullable(project.extensions.findByType(JavaPluginExtension))
             .map({ it.getToolchain() })
             .flatMap({ JavaToolchainSpec spec ->
               toolchainService
                       .map({ it.launcherFor(spec) })
-                      .map({ it.getOrElse(null) })
+                      .map({ it.getOrNull() })
             })
 
     return launcher
