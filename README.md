@@ -20,7 +20,7 @@ If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.g
 
 #### :star: What's new
 
-May 05, 2024, Gretty 3.1.3 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+May 20, 2024, Gretty 3.1.3 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
 * Changes in this version:
 * Fix jetty redeploy with custom jetty-env.xml 
