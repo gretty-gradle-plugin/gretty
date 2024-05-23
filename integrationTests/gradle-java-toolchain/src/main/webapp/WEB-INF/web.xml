@@ -18,4 +18,16 @@
     <servlet-name>jsp</servlet-name>
     <url-pattern>*.html</url-pattern>
   </servlet-mapping>  
+
+  <servlet>
+    <display-name>ExampleServlet</display-name>
+    <servlet-name>ExampleServlet</servlet-name>
+    <servlet-class>org.akhikhl.examples.gretty.gradle.toolchain.ExampleServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ExampleServlet</servlet-name>
+    <url-pattern>/dynamic</url-pattern>
+  </servlet-mapping>
 </web-app>

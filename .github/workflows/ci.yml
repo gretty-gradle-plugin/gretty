@@ -66,7 +66,7 @@ jobs:
           - java: 17
             gradle: '7.6.4'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
-            toolchainJavaVersion: 17
+            toolchainJavaVersion: 21
             properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
 
           # TODO: add a JDK-21 build but fix the following issue before that:

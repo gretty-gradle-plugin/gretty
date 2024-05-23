@@ -19,13 +19,13 @@ class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
     public static final String PLUGIN_ID = "org.gretty.internal.integrationTests.JavaToolchainIntegrationTestPlugin"
     private static final Logger log = LoggerFactory.getLogger(IntegrationTestPlugin)
 
-    static void applyPluginConditionally(Project project) {
+    public static void applyPluginConditionally(Project project) {
         if (project.findProperty('toolchainJavaVersion')) {
             project.apply plugin: PLUGIN_ID
         }
     }
-    
-    static void whenApplied(Project project, Consumer<JavaToolchainIntegrationTestPlugin> config) {
+
+    public static void whenApplied(Project project, Consumer<JavaToolchainIntegrationTestPlugin> config) {
         project.plugins.withId(PLUGIN_ID, new Action<Plugin>() {
             @Override
             void execute(Plugin plugin) {
@@ -35,11 +35,9 @@ class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
     }
 
     @Override
-    void apply(Project project) {
-        defineToolchainDSL(project, Integer.parseInt("${project.toolchainJavaVersion}"))
-    }
+    public void apply(Project project) {
+        int javaVersion = Integer.parseInt("${project.toolchainJavaVersion}")
 
-    private void defineToolchainDSL(Project project, int javaVersion) {
         project.java {
             toolchain {
                 languageVersion = JavaLanguageVersion.of(javaVersion)
@@ -79,14 +77,23 @@ class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
         return JavaVersion.current()
     }
 
-    public static void skipIrrelevantTasks(Task task) {
+    public static void enableOnlyJavaToolchainAwareProjects(Project project) {
+        ([project] + project.subprojects)*.afterEvaluate({ p ->
+            p.tasks.configureEach { t ->
+                enableOnlyJavaToolchainAwareTasks(t)
+            }
+        })
+    }
+
+    private static void enableOnlyJavaToolchainAwareTasks(Task task) {
         task.project.with {
+            def initialFlag = task.enabled
             if (task.project.findProperty('toolchainJavaVersion')) {
                 task.enabled = false
             }
 
             whenApplied(task.project) {
-                task.enabled = true
+                task.enabled = initialFlag
             }
         }
     }

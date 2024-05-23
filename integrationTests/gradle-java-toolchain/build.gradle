@@ -10,7 +10,6 @@ dependencies {
 }
 
 gretty {
-  springBoot = true
   if (project.javaVersion.isJava9Compatible()) jvmArgs  "--add-opens", "java.base/java.lang=ALL-UNNAMED"
 }
 

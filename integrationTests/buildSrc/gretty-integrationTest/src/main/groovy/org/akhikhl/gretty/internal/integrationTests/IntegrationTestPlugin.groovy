@@ -3,7 +3,6 @@ package org.akhikhl.gretty.internal.integrationTests
 import org.akhikhl.gretty.AppAfterIntegrationTestTask
 import org.akhikhl.gretty.AppBeforeIntegrationTestTask
 import org.akhikhl.gretty.ServletContainerConfig
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.testing.Test
@@ -48,8 +47,6 @@ class IntegrationTestPlugin extends BasePlugin {
   protected void configureExtensions(Project project) {
     super.configureExtensions(project)
 
-    project.extensions.add(JavaVersion, 'javaVersion', JavaToolchainIntegrationTestPlugin.getToolchainJavaVersion(project))
-
     /**
      * The caller project integration test would react on -PtoolchainJavaVersion=17 parameter and define appropriate toolchain DSL
      **/
@@ -72,7 +69,6 @@ class IntegrationTestPlugin extends BasePlugin {
           testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
 
-        JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(it)
         JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
           plugin.forceTaskToUseGradleJvm(it)
         }
@@ -90,7 +86,6 @@ class IntegrationTestPlugin extends BasePlugin {
 
       integrationTestAllContainersTask = project.task('integrationTestAllContainers')
 
-      JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(integrationTestAllContainersTask)
       JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
         plugin.forceTaskToUseGradleJvm(integrationTestAllContainersTask)
       }
@@ -130,7 +125,6 @@ class IntegrationTestPlugin extends BasePlugin {
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
           classpath = project.sourceSets.integrationTest.runtimeClasspath
 
-          JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(thisTask)
           JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
             plugin.forceTaskToUseGradleJvm(thisTask)
           }
@@ -141,13 +135,10 @@ class IntegrationTestPlugin extends BasePlugin {
         project.task('beforeIntegrationTest_' + container, type: AppBeforeIntegrationTestTask) {
           servletContainer = container
           integrationTestTask 'integrationTest_' + container
-          
-          JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(it)
         }
 
         project.task('afterIntegrationTest_' + container, type: AppAfterIntegrationTestTask) {
           integrationTestTask 'integrationTest_' + container
-          JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(it)
         }
       }
 
