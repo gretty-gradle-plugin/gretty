@@ -18,7 +18,6 @@ class IntegrationTestPlugin extends BasePlugin {
   protected void applyPlugins(Project project) {
     super.applyPlugins(project)
     project.apply plugin: 'groovy' // this is needed for spock
-    project.apply plugin: JavaToolchainIntegrationTestPlugin
   }
 
   @Override
@@ -51,6 +50,13 @@ class IntegrationTestPlugin extends BasePlugin {
 
     project.extensions.add(JavaVersion, 'javaVersion', JavaToolchainIntegrationTestPlugin.getToolchainJavaVersion(project))
 
+    /**
+     * The caller project integration test would react on -PtoolchainJavaVersion=17 parameter and define appropriate toolchain DSL
+     **/
+    project.ext.defineAsJavaToolchainAwareIntegrationTest = {
+      JavaToolchainIntegrationTestPlugin.applyPluginConditionally(project)
+    }
+
     project.ext.defineIntegrationTest = {
 
       def integrationTestTask_ = project.tasks.findByName('integrationTest')
@@ -66,7 +72,10 @@ class IntegrationTestPlugin extends BasePlugin {
           testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
 
-        JavaToolchainIntegrationTestPlugin.forceTaskToUseGradleJvm(it)
+        JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(it)
+        JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+          plugin.forceTaskToUseGradleJvm(it)
+        }
       }
 
       integrationTestTask_
@@ -80,6 +89,11 @@ class IntegrationTestPlugin extends BasePlugin {
         return integrationTestAllContainersTask
 
       integrationTestAllContainersTask = project.task('integrationTestAllContainers')
+
+      JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(integrationTestAllContainersTask)
+      JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+        plugin.forceTaskToUseGradleJvm(integrationTestAllContainersTask)
+      }
 
       if (!integrationTestContainers)
         integrationTestContainers = ServletContainerConfig.getConfigNames().collect() // returns immutable and we want to filter later
@@ -116,7 +130,10 @@ class IntegrationTestPlugin extends BasePlugin {
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
           classpath = project.sourceSets.integrationTest.runtimeClasspath
 
-          JavaToolchainIntegrationTestPlugin.forceTaskToUseGradleJvm(thisTask)
+          JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(thisTask)
+          JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+            plugin.forceTaskToUseGradleJvm(thisTask)
+          }
         }
 
         integrationTestAllContainersTask.dependsOn project.tasks['integrationTest_' + container]
@@ -124,10 +141,13 @@ class IntegrationTestPlugin extends BasePlugin {
         project.task('beforeIntegrationTest_' + container, type: AppBeforeIntegrationTestTask) {
           servletContainer = container
           integrationTestTask 'integrationTest_' + container
+          
+          JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(it)
         }
 
         project.task('afterIntegrationTest_' + container, type: AppAfterIntegrationTestTask) {
           integrationTestTask 'integrationTest_' + container
+          JavaToolchainIntegrationTestPlugin.skipIrrelevantTasks(it)
         }
       }
 
@@ -194,8 +214,10 @@ class IntegrationTestPlugin extends BasePlugin {
           srcDir 'src/integrationTest/resources'
         }
         runtimeClasspath += project.rootProject.files('config/gebConfig')
-        
-        JavaToolchainIntegrationTestPlugin.forceSourceSetToUseGradleJvm(project, it)
+
+        JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+          plugin.forceSourceSetToUseGradleJvm(project, it)
+        }
       }
     }
   }

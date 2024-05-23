@@ -14,11 +14,11 @@ gretty {
   if (project.javaVersion.isJava9Compatible()) jvmArgs  "--add-opens", "java.base/java.lang=ALL-UNNAMED"
 }
 
+defineAsJavaToolchainAwareIntegrationTest()
 defineIntegrationTest()
 testAll.dependsOn defineIntegrationTestAllContainers(['jetty8', 'jetty9', 'jetty10', 'tomcat85', 'tomcat9'])
 
 tasks.withType(Test).configureEach {
-//  enabled = project.findProperty('toolchainJavaVersion') as boolean
   if(project.findProperty('toolchainJavaVersion')) {
     systemProperty 'toolchainJavaVersion', project.findProperty('toolchainJavaVersion')
   }

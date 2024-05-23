@@ -1,6 +1,8 @@
 package org.akhikhl.gretty.internal.integrationTests
 
+import org.gradle.api.Action
 import org.gradle.api.JavaVersion
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSet
@@ -11,13 +13,30 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class JavaToolchainIntegrationTestPlugin extends BasePlugin {
+import java.util.function.Consumer
+
+class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
+    public static final String PLUGIN_ID = "org.gretty.internal.integrationTests.JavaToolchainIntegrationTestPlugin"
     private static final Logger log = LoggerFactory.getLogger(IntegrationTestPlugin)
 
-    protected void configureExtensions(Project project) {
+    static void applyPluginConditionally(Project project) {
         if (project.findProperty('toolchainJavaVersion')) {
-            defineToolchainDSL(project, Integer.parseInt("${project.toolchainJavaVersion}"))
+            project.apply plugin: PLUGIN_ID
         }
+    }
+    
+    static void whenApplied(Project project, Consumer<JavaToolchainIntegrationTestPlugin> config) {
+        project.plugins.withId(PLUGIN_ID, new Action<Plugin>() {
+            @Override
+            void execute(Plugin plugin) {
+                config.accept((JavaToolchainIntegrationTestPlugin) plugin)
+            }
+        })
+    }
+
+    @Override
+    void apply(Project project) {
+        defineToolchainDSL(project, Integer.parseInt("${project.toolchainJavaVersion}"))
     }
 
     private void defineToolchainDSL(Project project, int javaVersion) {
@@ -28,27 +47,23 @@ class JavaToolchainIntegrationTestPlugin extends BasePlugin {
         }
     }
 
-    public static void forceSourceSetToUseGradleJvm(Project project, SourceSet sourceSet) {
-        if (isPluginApplied(project)) {
-            project.tasks.named(sourceSet.getCompileTaskName('java')).configure({ forceTaskToUseGradleJvm(it) })
-            project.tasks.named(sourceSet.getCompileTaskName('groovy')).configure({ forceTaskToUseGradleJvm(it) })
-        }
+    public void forceSourceSetToUseGradleJvm(Project project, SourceSet sourceSet) {
+        project.tasks.named(sourceSet.getCompileTaskName('java')).configure({ forceTaskToUseGradleJvm(it) })
+        project.tasks.named(sourceSet.getCompileTaskName('groovy')).configure({ forceTaskToUseGradleJvm(it) })
     }
 
-    public static void forceTaskToUseGradleJvm(Task task) {
+    public void forceTaskToUseGradleJvm(Task task) {
         task.project.with { proj ->
-            if (isPluginApplied(proj)) {
-                if (task instanceof JavaCompile) {
-                    task.javaCompiler.value(proj.javaToolchains.compilerFor(gradleJvmSpec))
-                }
+            if (task instanceof JavaCompile) {
+                task.javaCompiler.value(proj.javaToolchains.compilerFor(gradleJvmSpec))
+            }
 
-                if (task instanceof GroovyCompile) {
-                    task.javaLauncher.value(proj.javaToolchains.launcherFor(gradleJvmSpec))
-                }
+            if (task instanceof GroovyCompile) {
+                task.javaLauncher.value(proj.javaToolchains.launcherFor(gradleJvmSpec))
+            }
 
-                if (task instanceof Test) {
-                    task.javaLauncher.value(proj.javaToolchains.launcherFor(gradleJvmSpec))
-                }
+            if (task instanceof Test) {
+                task.javaLauncher.value(proj.javaToolchains.launcherFor(gradleJvmSpec))
             }
         }
     }
@@ -64,13 +79,20 @@ class JavaToolchainIntegrationTestPlugin extends BasePlugin {
         return JavaVersion.current()
     }
 
+    public static void skipIrrelevantTasks(Task task) {
+        task.project.with {
+            if (task.project.findProperty('toolchainJavaVersion')) {
+                task.enabled = false
+            }
+
+            whenApplied(task.project) {
+                task.enabled = true
+            }
+        }
+    }
+
     private static def getGradleJvmSpec() {
         def gradleJvmVerson = Integer.valueOf(getGradleJavaVersion().getMajorVersion())
         return { languageVersion = JavaLanguageVersion.of(gradleJvmVerson) }
-    }
-
-    private static boolean isPluginApplied(Project project) {
-        return project.plugins.hasPlugin(JavaToolchainIntegrationTestPlugin.class) ||
-                project.plugins.hasPlugin(JavaToolchainIntegrationTestPlugin.class.name)
     }
 }
