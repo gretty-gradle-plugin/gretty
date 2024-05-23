@@ -114,7 +114,7 @@ jobs:
             --warning-mode all \
             -PprivateRepoDir=$PRIVATE_REPO \
             $EXTRA_PROPERTIES \
-            $TOOLCHAIN_JAVA_ARGS
+            $TOOLCHAIN_JAVA_ARGS \
             -PgeckoDriverPlatform=linux64 \
             -PtestAllContainers=$TEST_ALL_CONTAINERS \
             testAll
