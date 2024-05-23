@@ -77,7 +77,7 @@ jobs:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
       GRADLE_VERSION: ${{ matrix.gradle }}
       EXTRA_PROPERTIES: ${{ matrix.properties }}
-      TOOLCHAIN_JAVA_ARGS: "-PtoolchainJavaVersion=${{ matrix.toolchainJavaVersion }}"
+      TOOLCHAIN_JAVA_ARGS: "${{ matrix.toolchainJavaVersion && format('-PtoolchainJavaVersion={0}', matrix.toolchainJavaVersion) || '' }}"
 
     steps:
       - uses: actions/checkout@v3
@@ -113,8 +113,7 @@ jobs:
           ../gradlew --no-daemon \
             --warning-mode all \
             -PprivateRepoDir=$PRIVATE_REPO \
-            $EXTRA_PROPERTIES \
-            $TOOLCHAIN_JAVA_ARGS \
+            $EXTRA_PROPERTIES $TOOLCHAIN_JAVA_ARGS \
             -PgeckoDriverPlatform=linux64 \
             -PtestAllContainers=$TEST_ALL_CONTAINERS \
             testAll
