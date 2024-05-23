@@ -37,7 +37,7 @@ jobs:
           path: ${{ env.PRIVATE_REPO }}
 
   test:
-    name: Gradle ${{ matrix.gradle }} on Java ${{ matrix.java }}
+    name: Gradle ${{ matrix.gradle }} on Java ${{ matrix.java }}${{ matrix.toolchainJavaVersion && format(' (container on Java {0})', matrix.toolchainJavaVersion) || '' }}
     runs-on: ubuntu-latest
     needs: build
 
@@ -56,7 +56,7 @@ jobs:
           - java: 11
             gradle: '6.9.4'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
-            properties: '-PtoolchainJavaVersion=17'
+            toolchainJavaVersion: 17
           
           - java: 17
             gradle: '7.6.4'
@@ -66,7 +66,8 @@ jobs:
           - java: 17
             gradle: '7.6.4'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
-            properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1 -PtoolchainJavaVersion=17'
+            toolchainJavaVersion: 17
+            properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
 
           # TODO: add a JDK-21 build but fix the following issue before that:
           # groovy.lang.MissingPropertyException: Could not set unknown property 'classifier' for task ':libs:gretty:javadocJar' of type org.gradle.api.tasks.bundling.Jar
@@ -76,6 +77,7 @@ jobs:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
       GRADLE_VERSION: ${{ matrix.gradle }}
       EXTRA_PROPERTIES: ${{ matrix.properties }}
+      TOOLCHAIN_JAVA_ARGS: "-PtoolchainJavaVersion=${{ matrix.toolchainJavaVersion }}"
 
     steps:
       - uses: actions/checkout@v3
@@ -112,6 +114,7 @@ jobs:
             --warning-mode all \
             -PprivateRepoDir=$PRIVATE_REPO \
             $EXTRA_PROPERTIES \
+            $TOOLCHAIN_JAVA_ARGS
             -PgeckoDriverPlatform=linux64 \
             -PtestAllContainers=$TEST_ALL_CONTAINERS \
             testAll
