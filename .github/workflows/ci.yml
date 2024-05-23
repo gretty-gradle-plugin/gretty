@@ -37,7 +37,7 @@ jobs:
           path: ${{ env.PRIVATE_REPO }}
 
   test:
-    name: Gradle ${{ matrix.gradle }} on Java ${{ matrix.java }}${{ matrix.toolchainJavaVersion && format(' (container on Java {0})', matrix.toolchainJavaVersion) || '' }}
+    name: Gradle ${{ matrix.gradle }} on Java ${{ matrix.java }}${{ matrix.toolchainJavaVersion && format(' (Java {0} Container)', matrix.toolchainJavaVersion) || '' }}
     runs-on: ubuntu-latest
     needs: build
 
