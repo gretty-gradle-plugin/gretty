@@ -48,7 +48,8 @@ class IntegrationTestPlugin extends BasePlugin {
     super.configureExtensions(project)
 
     /**
-     * The caller project integration test would react on -PtoolchainJavaVersion=17 parameter and define appropriate toolchain DSL
+     * Makes the project aware of java toolchain if it has -PtoolchainJavaVersion=17 parameter.
+     * Toolchain DSL is configured automatically for the provided version of java.
      **/
     project.ext.defineAsJavaToolchainAwareIntegrationTest = {
       JavaToolchainIntegrationTestPlugin.applyPluginConditionally(project)

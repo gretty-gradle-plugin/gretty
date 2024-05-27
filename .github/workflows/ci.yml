@@ -78,6 +78,7 @@ jobs:
       GRADLE_VERSION: ${{ matrix.gradle }}
       EXTRA_PROPERTIES: ${{ matrix.properties }}
       TOOLCHAIN_JAVA_ARGS: "${{ matrix.toolchainJavaVersion && format('-PtoolchainJavaVersion={0}', matrix.toolchainJavaVersion) || '' }}"
+      GRADLE_TEST_TASK: "${{ matrix.toolchainJavaVersion && 'testAllJavaToolchain' || 'testAll' }}"
 
     steps:
       - uses: actions/checkout@v3
@@ -116,5 +117,5 @@ jobs:
             $EXTRA_PROPERTIES $TOOLCHAIN_JAVA_ARGS \
             -PgeckoDriverPlatform=linux64 \
             -PtestAllContainers=$TEST_ALL_CONTAINERS \
-            testAll
+            $GRADLE_TEST_TASK
         working-directory: integrationTests

@@ -30,13 +30,6 @@ class BasePlugin implements Plugin<Project> {
   protected void configureExtensions(Project project) {
     if (!project.extensions.findByName('javaVersion')) {
       project.extensions.add(JavaVersion, 'javaVersion', JavaToolchainIntegrationTestPlugin.getToolchainJavaVersion(project))
-
-      /**
-       * Exclude tasks that do not support toolchains when toolchainJavaVersion specified
-       */
-      if (project.findProperty('toolchainJavaVersion')) {
-        JavaToolchainIntegrationTestPlugin.enableOnlyJavaToolchainAwareProjects(project)
-      }
     }
   }
 
@@ -108,6 +101,9 @@ class BasePlugin implements Plugin<Project> {
     if(!project.rootProject.tasks.findByName('testAll'))
       project.rootProject.task 'testAll'
 
+    if(!project.rootProject.tasks.findByName('testAllJavaToolchain'))
+      project.rootProject.task 'testAllJavaToolchain'
+    
     project.tasks.withType(Test).configureEach {
       if (GradleVersion.current().baseVersion.version.startsWith("7.")) {
         useJUnitPlatform()

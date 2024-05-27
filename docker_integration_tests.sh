@@ -52,7 +52,7 @@ export common_gradle_args="--console=plain --no-daemon -Porg.gradle.java.install
   $common_gradle_args               \
   -PtestAllContainers="\"['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']\"" \
   -PtoolchainJavaVersion=17         \
-  testAll
+  testAllJavaToolchain
   
   
 #ci.yml matrix case #3 + toolchain java v21
@@ -65,4 +65,4 @@ export common_gradle_args="--console=plain --no-daemon -Porg.gradle.java.install
   -PtestAllContainers="\"['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']\"" \
   -Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1 \
   -PtoolchainJavaVersion=21       \
-  testAll
+  testAllJavaToolchain

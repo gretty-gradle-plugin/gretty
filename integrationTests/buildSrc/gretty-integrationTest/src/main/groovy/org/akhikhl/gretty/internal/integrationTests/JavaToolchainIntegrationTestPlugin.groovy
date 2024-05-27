@@ -43,6 +43,10 @@ class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
                 languageVersion = JavaLanguageVersion.of(javaVersion)
             }
         }
+
+        project.rootProject.tasks.named('testAllJavaToolchain').configure {
+            dependsOn project.tasks.testAll
+        }
     }
 
     public void forceSourceSetToUseGradleJvm(Project project, SourceSet sourceSet) {
@@ -75,27 +79,6 @@ class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
 
     public static JavaVersion getGradleJavaVersion() {
         return JavaVersion.current()
-    }
-
-    public static void enableOnlyJavaToolchainAwareProjects(Project project) {
-        ([project] + project.subprojects)*.afterEvaluate({ p ->
-            p.tasks.configureEach { t ->
-                enableOnlyJavaToolchainAwareTasks(t)
-            }
-        })
-    }
-
-    private static void enableOnlyJavaToolchainAwareTasks(Task task) {
-        task.project.with {
-            def initialFlag = task.enabled
-            if (task.project.findProperty('toolchainJavaVersion')) {
-                task.enabled = false
-            }
-
-            whenApplied(task.project) {
-                task.enabled = initialFlag
-            }
-        }
     }
 
     private static def getGradleJvmSpec() {
