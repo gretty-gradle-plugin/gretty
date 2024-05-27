@@ -17,8 +17,14 @@ defineAsJavaToolchainAwareIntegrationTest()
 defineIntegrationTest()
 testAll.dependsOn defineIntegrationTestAllContainers(['jetty8', 'jetty9', 'jetty10', 'tomcat85', 'tomcat9'])
 
-tasks.withType(Test).configureEach {
-  if(project.findProperty('toolchainJavaVersion')) {
-    systemProperty 'toolchainJavaVersion', project.findProperty('toolchainJavaVersion')
+//typical toolchain DSL
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of("${project.javaVersion.majorVersion}")
   }
+}
+
+//toolchain aware integration test
+tasks.withType(Test).configureEach {
+  systemProperty 'toolchainJavaVersion', "${project.javaVersion.majorVersion}"
 }

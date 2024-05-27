@@ -17,7 +17,7 @@ class PageSpec extends GebReportingSpec {
 
   void setupSpec() {
     baseURI = System.getProperty('gretty.baseURI')
-    toolchainJavaVersion = System.getProperty('toolchainJavaVersion') ?: System.getProperty('java.vm.version')
+    toolchainJavaVersion = Objects.requireNonNull(System.getProperty('toolchainJavaVersion'))
   }
 
   def 'should get expected static page'() {
