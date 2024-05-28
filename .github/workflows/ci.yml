@@ -122,5 +122,5 @@ jobs:
             $EXTRA_PROPERTIES $TOOLCHAIN_JAVA_ARGS \
             -PgeckoDriverPlatform=linux64 \
             -PtestAllContainers=$TEST_ALL_CONTAINERS \
-            $GRADLE_TEST_TASK
+            $GRADLE_TEST_TASK -s
         working-directory: integrationTests
