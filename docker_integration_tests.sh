@@ -44,13 +44,13 @@ export common_gradle_args="--console=plain --no-daemon -Porg.gradle.java.install
    
 #ci.yml matrix case #1 + toolchain java v21
 ./docker_gradlew.sh                 \
-  --java 21 --java 8                \
+  --java 17 --java 8                \
   --gradle 6                        \
   --gradle-home .docker-gradle      \
   --working-dir integrationTests    \
   $common_gradle_args               \
   -PtestAllContainers="\"['jetty9.3','jetty9.4','tomcat85','tomcat9']\"" \
-  -PtoolchainJavaVersion=21         \
+  -PtoolchainJavaVersion=17         \
   testAllJavaToolchain
 
 #ci.yml matrix case #2 + toolchain java v17
