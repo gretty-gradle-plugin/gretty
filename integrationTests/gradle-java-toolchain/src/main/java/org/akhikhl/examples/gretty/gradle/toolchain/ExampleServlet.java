@@ -33,7 +33,7 @@ public class ExampleServlet extends HttpServlet {
     VelocityContext context = new VelocityContext();
     context.put("contextPath", request.getContextPath());
     context.put("today", new java.util.Date());
-    context.put("javaVersion", System.getProperty("java.vm.version"));
+    context.put("javaVersion", System.getProperty("java.specification.version"));
     PrintWriter out = response.getWriter();
     try {
       template.merge(context, out);

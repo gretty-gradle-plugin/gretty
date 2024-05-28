@@ -49,6 +49,11 @@ jobs:
             gradle: '6.9.4'
             container: "['jetty9.3','jetty9.4','tomcat85','tomcat9']"
 
+          - java: 8
+            gradle: '6.9.4'
+            container: "['jetty9.3','jetty9.4','tomcat85','tomcat9']"
+            toolchainJavaVersion: 21
+
           - java: 11
             gradle: '6.9.4'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
@@ -56,7 +61,7 @@ jobs:
           - java: 11
             gradle: '6.9.4'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
-            toolchainJavaVersion: 17
+            toolchainJavaVersion: 21
           
           - java: 17
             gradle: '7.6.4'
