@@ -1,7 +1,5 @@
 package org.akhikhl.gretty.internal.integrationTests
 
-import org.akhikhl.gretty.ServletContainerConfig
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
@@ -29,7 +27,7 @@ class BasePlugin implements Plugin<Project> {
 
   protected void configureExtensions(Project project) {
     if (!project.extensions.findByName('javaVersion')) {
-      project.extensions.add(JavaVersion, 'javaVersion', JavaToolchainIntegrationTestPlugin.getToolchainJavaVersion(project))
+      project.extensions.add(AnyJavaVersion, 'javaVersion', JavaToolchainIntegrationTestPlugin.getToolchainJavaVersion(project))
     }
   }
 

@@ -70,11 +70,14 @@ class JavaToolchainIntegrationTestPlugin implements Plugin<Project> {
         }
     }
 
-    public static JavaVersion getToolchainJavaVersion(Project project) {
-        return Optional.ofNullable(project.findProperty('toolchainJavaVersion'))
+    public static AnyJavaVersion getToolchainJavaVersion(Project project) {
+        //java 8 compatible, Optional.or() available from java 9
+        String majorVersion = project.findProperty('toolchainJavaVersion') ?: JavaVersion.current().majorVersion
+        
+        return Optional.ofNullable(majorVersion)
                 .map({ Integer.parseInt("$it") })
-                .map({ JavaVersion.toVersion(it) })
-                .orElse(JavaVersion.current())
+                .map({ AnyJavaVersion.of(it) })
+                .get()
     }
 
     public static JavaVersion getGradleJavaVersion() {
