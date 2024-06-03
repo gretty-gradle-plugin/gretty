@@ -21,6 +21,7 @@ product {
   additionalFiles = ['./farm/README.md': './README.md']
 }
 
+defineAsJavaToolchainAwareIntegrationTest()
 defineIntegrationTest()
 
 testAll.dependsOn defineFarmIntegrationTestAllContainers({

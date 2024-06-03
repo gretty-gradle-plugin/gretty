@@ -16,7 +16,7 @@ gretty {
   realm = 'auth'
   realmConfigFile = '../security'
   singleSignOn = true
-  if (JavaVersion.current().isJava9Compatible()) jvmArgs  "--add-opens", "java.base/java.lang=ALL-UNNAMED"
+  if (project.javaVersion.isJava9Compatible()) jvmArgs  "--add-opens", "java.base/java.lang=ALL-UNNAMED"
 }
 
 farm {

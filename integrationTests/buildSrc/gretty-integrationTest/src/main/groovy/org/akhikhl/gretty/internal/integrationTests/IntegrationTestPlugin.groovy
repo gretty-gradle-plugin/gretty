@@ -3,7 +3,6 @@ package org.akhikhl.gretty.internal.integrationTests
 import org.akhikhl.gretty.AppAfterIntegrationTestTask
 import org.akhikhl.gretty.AppBeforeIntegrationTestTask
 import org.akhikhl.gretty.ServletContainerConfig
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.testing.Test
@@ -48,6 +47,14 @@ class IntegrationTestPlugin extends BasePlugin {
   protected void configureExtensions(Project project) {
     super.configureExtensions(project)
 
+    /**
+     * Makes the project aware of java toolchain if it has -PtoolchainJavaVersion=17 parameter.
+     * Toolchain DSL is configured automatically for the provided version of java.
+     **/
+    project.ext.defineAsJavaToolchainAwareIntegrationTest = {
+      JavaToolchainIntegrationTestPlugin.applyPluginConditionally(project)
+    }
+
     project.ext.defineIntegrationTest = {
 
       def integrationTestTask_ = project.tasks.findByName('integrationTest')
@@ -62,6 +69,10 @@ class IntegrationTestPlugin extends BasePlugin {
         else
           testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
+
+        JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+          plugin.forceTaskToUseGradleJvm(it)
+        }
       }
 
       integrationTestTask_
@@ -76,16 +87,20 @@ class IntegrationTestPlugin extends BasePlugin {
 
       integrationTestAllContainersTask = project.task('integrationTestAllContainers')
 
+      JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+        plugin.forceTaskToUseGradleJvm(integrationTestAllContainersTask)
+      }
+
       if (!integrationTestContainers)
         integrationTestContainers = ServletContainerConfig.getConfigNames().collect() // returns immutable and we want to filter later
 
-      if (JavaVersion.current().isJava9Compatible()) {
+      if (project.javaVersion.isJava9Compatible()) {
         // excluding jetty7 and jetty8 under JDK9, can no longer compile JSPs to default 1.5 target,
         // see https://github.com/gretty-gradle-plugin/gretty/issues/15
         integrationTestContainers -= ['jetty7', 'jetty8']
       }
 
-      if (JavaVersion.current().isJava10Compatible()) {
+      if (project.javaVersion.isJava10Compatible()) {
         // excluding jetty9 under JDK10, can no longer compile JSPs to default 1.7 target,
         integrationTestContainers -= ['jetty9']
       }
@@ -110,6 +125,10 @@ class IntegrationTestPlugin extends BasePlugin {
           else
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
           classpath = project.sourceSets.integrationTest.runtimeClasspath
+
+          JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+            plugin.forceTaskToUseGradleJvm(thisTask)
+          }
         }
 
         integrationTestAllContainersTask.dependsOn project.tasks['integrationTest_' + container]
@@ -187,6 +206,10 @@ class IntegrationTestPlugin extends BasePlugin {
           srcDir 'src/integrationTest/resources'
         }
         runtimeClasspath += project.rootProject.files('config/gebConfig')
+
+        JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+          plugin.forceSourceSetToUseGradleJvm(project, it)
+        }
       }
     }
   }

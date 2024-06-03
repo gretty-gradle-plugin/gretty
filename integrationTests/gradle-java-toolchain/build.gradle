@@ -1,0 +1,30 @@
+apply plugin: 'org.gretty'
+apply plugin: 'org.gretty.internal.integrationTests.IntegrationTestPlugin'
+
+dependencies {
+  implementation localGroovy()
+  implementation 'org.webjars:bootstrap:3.2.0'
+  implementation 'org.webjars:jquery:2.1.1'
+  // We use Velocity for example of template processing within the webapp.
+  implementation 'org.apache.velocity:velocity:1.7'
+}
+
+gretty {
+  if (project.javaVersion.isJava9Compatible()) jvmArgs  "--add-opens", "java.base/java.lang=ALL-UNNAMED"
+}
+
+defineAsJavaToolchainAwareIntegrationTest()
+defineIntegrationTest()
+testAll.dependsOn defineIntegrationTestAllContainers(['jetty8', 'jetty9', 'jetty10', 'tomcat85', 'tomcat9'])
+
+//typical toolchain DSL
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of("${project.javaVersion.majorVersion}")
+  }
+}
+
+//toolchain aware integration test
+tasks.withType(Test).configureEach {
+  systemProperty 'toolchainJavaVersion', "${project.javaVersion.majorVersion}"
+}
