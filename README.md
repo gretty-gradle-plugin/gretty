@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg?branch=gretty-3.x)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2024.svg)
-[![Latest release](https://img.shields.io/badge/release-3.1.3-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.1.3)
-[![Snapshot](https://img.shields.io/badge/current-3.1.4--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/gretty-3.x)
+[![Latest release](https://img.shields.io/badge/release-3.1.4-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v3.1.4)
+[![Snapshot](https://img.shields.io/badge/current-3.1.5--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/gretty-3.x)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -20,10 +20,15 @@ If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.g
 
 #### :star: What's new
 
+June 8, 2024, Gretty 3.1.4 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Changes in this version:
+* Make Gretty aware of Gradle Java Toolchain (thanks [@mr-serjey](https://github.com/mr-serjey))
+
 May 20, 2024, Gretty 3.1.3 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
 * Changes in this version:
-* Fix jetty redeploy with custom jetty-env.xml 
+* Fix jetty redeploy with custom jetty-env.xml
 * Support folders under "src/resources" in fastReload configuration property
 
 November 06, 2023, Gretty 3.1.2 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).

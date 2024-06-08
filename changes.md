@@ -2,9 +2,13 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.4
+
+* Make Gretty aware of Gradle Java Toolchain (thanks [@mr-serjey](https://github.com/mr-serjey))
+
 ### Version 3.1.3
 
-* Fix jetty redeploy with custom jetty-env.xml 
+* Fix jetty redeploy with custom jetty-env.xml
 * Support folders under "src/resources" in fastReload configuration property
 
 ### Version 3.1.2
@@ -29,7 +33,7 @@
 
 ### Version 3.0.8
 
-* Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258  
+* Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258
   Adding the patterns fixes a bug which gave preference to the `commons-cli` and `commons-io` versions
   that Gretty uses, rather than using the JARs bundled with the webapp (which is the correct behavior).
 
