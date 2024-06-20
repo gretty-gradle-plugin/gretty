@@ -11,3 +11,4 @@ build
 *.iws
 bin/
 .DS_Store
+.docker-gradle/
