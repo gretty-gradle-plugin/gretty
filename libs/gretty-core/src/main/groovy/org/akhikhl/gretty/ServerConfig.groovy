@@ -21,7 +21,7 @@ import groovy.transform.TypeCheckingMode
 class ServerConfig {
 
   static final int RANDOM_FREE_PORT = -1
-
+  String jvmExecutable
   List<String> jvmArgs
   Map<String, String> systemProperties
   String servletContainer
@@ -136,5 +136,9 @@ class ServerConfig {
         systemProperties = [:]
       systemProperties << m
     }
+  }
+
+  void jvmExecutable(String jvmExecutable) {
+    this.jvmExecutable = jvmExecutable
   }
 }

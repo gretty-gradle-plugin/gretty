@@ -112,6 +112,11 @@ class DefaultLauncher extends LauncherBase {
         }
         log.info 'DEBUG MODE, port={}, suspend={}', params.debugPort, params.debugSuspend
       }
+
+      if (params.jvmExecutable) {
+        spec.executable params.jvmExecutable
+      }
+
       spec.jvmArgs jvmArgs
       spec.systemProperties params.systemProperties
       spec.mainClass.set(params.main)

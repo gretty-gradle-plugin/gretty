@@ -19,6 +19,8 @@ class JavaExecParams {
 
   String main
 
+  String jvmExecutable
+  
   List<String> jvmArgs = []
 
   List<String> args = []
@@ -28,6 +30,10 @@ class JavaExecParams {
   boolean debugSuspend = true
 
   Map<String, String> systemProperties = [:]
+
+  void jvmExecutable(String jvmExecutable) {
+    this.jvmExecutable = jvmExecutable
+  }
 
   void arg(String a) {
     args.add(a)

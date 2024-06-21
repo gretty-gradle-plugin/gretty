@@ -2,4 +2,5 @@ apply plugin: 'war'
 apply plugin: 'org.gretty'
 apply plugin: 'org.gretty.internal.integrationTests.IntegrationTestPlugin'
 
+defineAsJavaToolchainAwareIntegrationTest()
 defineIntegrationTest()

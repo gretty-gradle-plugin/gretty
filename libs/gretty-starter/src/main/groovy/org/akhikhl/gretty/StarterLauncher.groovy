@@ -57,13 +57,17 @@ class StarterLauncher extends LauncherBase {
 
   @Override
   protected void javaExec(JavaExecParams params) {
-    String javaExe = PlatformUtils.isWindows() ? 'java.exe' : 'java'
-    String javaPath = new File(System.getProperty("java.home"), "bin/$javaExe").absolutePath
+    String jvmExecutable = Optional.ofNullable(params.jvmExecutable).orElseGet({
+      String javaExe = PlatformUtils.isWindows() ? 'java.exe' : 'java'
+      String javaPath = new File(System.getProperty("java.home"), "bin/$javaExe").absolutePath
+      return javaPath
+    })
+
     def classPath = [ new File(basedir, 'runner/*') ]
     classPath = classPath.collect { it.absolutePath }.join(System.getProperty('path.separator'))
     // Note that JavaExecParams debugging properties are intentionally ignored.
     // It is supposed that webapp debugging is performed via DefaultLauncher.
-    def procParams = [ javaPath ] + params.jvmArgs + ['-DgrettyProduct=true'] + params.systemProperties.collect { k, v -> "-D$k=$v" } + [ '-cp', classPath, params.main ] + params.args
+    def procParams = [ jvmExecutable ] + params.jvmArgs + ['-DgrettyProduct=true'] + params.systemProperties.collect { k, v -> "-D$k=$v" } + [ '-cp', classPath, params.main ] + params.args
     log.debug 'Launching runner process: {}', procParams.join(' ')
     Process proc = procParams.execute()
     proc.waitForProcessOutput(System.out, System.err)
