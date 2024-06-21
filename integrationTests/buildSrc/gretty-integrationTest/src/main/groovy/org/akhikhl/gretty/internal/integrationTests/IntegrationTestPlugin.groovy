@@ -47,6 +47,14 @@ class IntegrationTestPlugin extends BasePlugin {
   protected void configureExtensions(Project project) {
     super.configureExtensions(project)
 
+    /**
+     * Makes the project aware of java toolchain if it has -PtoolchainJavaVersion=17 parameter.
+     * Toolchain DSL is configured automatically for the provided version of java.
+     **/
+    project.ext.defineAsJavaToolchainAwareIntegrationTest = {
+      JavaToolchainIntegrationTestPlugin.applyPluginConditionally(project)
+    }
+
     project.ext.defineIntegrationTest = {
 
       def integrationTestTask_ = project.tasks.findByName('integrationTest')
@@ -61,6 +69,10 @@ class IntegrationTestPlugin extends BasePlugin {
         else
           testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
+
+        JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+          plugin.forceTaskToUseGradleJvm(it)
+        }
       }
 
       integrationTestTask_
@@ -74,6 +86,10 @@ class IntegrationTestPlugin extends BasePlugin {
         return integrationTestAllContainersTask
 
       integrationTestAllContainersTask = project.task('integrationTestAllContainers')
+
+      JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+        plugin.forceTaskToUseGradleJvm(integrationTestAllContainersTask)
+      }
 
       if (!integrationTestContainers)
         integrationTestContainers = ServletContainerConfig.getConfigNames().collect() // returns immutable and we want to filter later
@@ -92,6 +108,10 @@ class IntegrationTestPlugin extends BasePlugin {
           else
             testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
           classpath = project.sourceSets.integrationTest.runtimeClasspath
+
+          JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+            plugin.forceTaskToUseGradleJvm(thisTask)
+          }
         }
 
         integrationTestAllContainersTask.dependsOn project.tasks['integrationTest_' + container]
@@ -169,6 +189,10 @@ class IntegrationTestPlugin extends BasePlugin {
           srcDir 'src/integrationTest/resources'
         }
         runtimeClasspath += project.rootProject.files('config/gebConfig')
+
+        JavaToolchainIntegrationTestPlugin.whenApplied(project) { plugin ->
+          plugin.forceSourceSetToUseGradleJvm(project, it)
+        }
       }
     }
   }

@@ -27,7 +27,9 @@ class BasePlugin implements Plugin<Project> {
   }
 
   protected void configureExtensions(Project project) {
-    // does nothing by default
+    if (!project.extensions.findByName('javaVersion')) {
+      project.extensions.add(AnyJavaVersion, 'javaVersion', JavaToolchainIntegrationTestPlugin.getToolchainJavaVersion(project))
+    }
   }
 
   protected void configurePublications(Project project) {
@@ -98,6 +100,9 @@ class BasePlugin implements Plugin<Project> {
     if(!project.rootProject.tasks.findByName('testAll'))
       project.rootProject.task 'testAll'
 
+    if(!project.rootProject.tasks.findByName('testAllJavaToolchain'))
+      project.rootProject.task 'testAllJavaToolchain'
+    
     project.tasks.withType(Test).configureEach {
       if (GradleVersion.current().baseVersion.version.startsWith("7.")) {
         useJUnitPlatform()
