@@ -1,4 +1,3 @@
-apply plugin: 'war'
 apply plugin: 'org.gretty'
 apply plugin: 'org.gretty.internal.integrationTests.IntegrationTestPlugin'
 
@@ -10,9 +9,21 @@ dependencies {
 }
 
 gretty {
-  extraResourceBase 'extra1'
+  if (project.javaVersion.isJava9Compatible()) jvmArgs  "--add-opens", "java.base/java.lang=ALL-UNNAMED"
 }
 
 defineAsJavaToolchainAwareIntegrationTest()
 defineIntegrationTest()
 testAll.dependsOn defineIntegrationTestAllContainers()
+
+//typical toolchain DSL
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of("${project.javaVersion.majorVersion}")
+  }
+}
+
+//toolchain aware integration test
+tasks.withType(Test).configureEach {
+  systemProperty 'toolchainJavaVersion', "${project.javaVersion.majorVersion}"
+}
