@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2024.svg)
-[![Latest release](https://img.shields.io/badge/release-4.1.4-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.4)
-[![Snapshot](https://img.shields.io/badge/current-4.1.5--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
+[![Latest release](https://img.shields.io/badge/release-4.1.5-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.5)
+[![Snapshot](https://img.shields.io/badge/current-4.1.6--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -22,9 +22,15 @@ If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.g
 
 #### :star: What's new
 
+### Version 4.1.5
+July 15, 2024, Gretty 4.1.5  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Make Gretty aware of Gradle Java Toolchain (thanks [@mr-serjey](https://github.com/mr-serjey))
+
+### Version 4.1.4
 May 22, 2024, Gretty 4.1.4 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
-* Fix jetty redeploy with custom jetty-env.xml 
+* Fix jetty redeploy with custom jetty-env.xml
 * Support folders under "src/resources" in fastReload configuration property
 
 ### Version 4.1.3
@@ -75,7 +81,7 @@ June 2, 2022, Gretty 4.0.2 is out and available at [Gradle Plugins](https://plug
 
 * Use Gradle 7.4.2 for testing Gretty
 
-* Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258  
+* Added exclusion patterns for `commons-cli` and `commons-io` classes to FilteringClassLoader #258
   Adding the patterns fixes a bug which gave preference to the `commons-cli` and `commons-io` versions
   that Gretty uses, rather than using the JARs bundled with the webapp (which is the correct behavior).
 
