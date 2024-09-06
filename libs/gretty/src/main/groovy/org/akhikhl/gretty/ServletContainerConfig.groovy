@@ -120,7 +120,7 @@ class ServletContainerConfig {
     servletContainer = servletContainer ?: 'jetty11'
     def result = configs[servletContainer.toString()]
     if(!result)
-      throw new Exception("Unsupported servlet container: $servletContainer")
+      throw new Exception("Unsupported servlet container: $servletContainer. Only ${configs.keySet()} are supported")
     result
   }
 
