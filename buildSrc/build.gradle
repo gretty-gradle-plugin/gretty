@@ -9,6 +9,9 @@ repositories {
 
 dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation "org._10ne.gradle:rest-gradle-plugin:0.4.2"
+    implementation('org._10ne.gradle:rest-gradle-plugin:0.4.2') {
+        // the following is needed because of https://github.com/grails/grails-core/issues/13587
+        exclude group: 'org.codehaus.groovy.modules.http-builder', module: 'http-builder'
+    }
     implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
 }
