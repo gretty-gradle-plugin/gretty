@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.5
+
+* Fix product runs (thanks [@aindlq](https://github.com/aindlq))
+
 ### Version 3.1.4
 
 * Make Gretty aware of Gradle Java Toolchain (thanks [@mr-serjey](https://github.com/mr-serjey))
