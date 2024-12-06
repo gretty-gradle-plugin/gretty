@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2024.svg)
-[![Latest release](https://img.shields.io/badge/release-4.1.5-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.5)
-[![Snapshot](https://img.shields.io/badge/current-4.1.6--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
+[![Latest release](https://img.shields.io/badge/release-4.1.6-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.6)
+[![Snapshot](https://img.shields.io/badge/current-4.1.7--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -21,6 +21,12 @@ You are looking at Gretty's `master` branch which is for Gretty 4. You also migh
 If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.github.io/gretty-doc/Getting-started.html) page.
 
 #### :star: What's new
+
+### Version 4.1.6
+December 6, 2024, Gretty 4.1.6  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Fix product runs (thanks [@aindlq](https://github.com/aindlq))
+* Provide a clear list of supported containers (thanks [@ljcyu](https://github.com/ljcyu))
 
 ### Version 4.1.5
 July 15, 2024, Gretty 4.1.5  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
