@@ -28,10 +28,14 @@ final class ProjectUtils {
 
   // #231 If we decide to drop Gradle 6 / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
   static Configuration getCurrentGroovy(Project project) {
+    String groovyVersion = GroovySystem.version
+    String group = (groovyVersion.startsWith("2.") || groovyVersion.startsWith("3."))
+        ? "org.codehaus.groovy"
+        : "org.apache.groovy"
     project.configurations.detachedConfiguration(
             project.dependencies.localGroovy(),
-            project.dependencies.create("org.codehaus.groovy:groovy-cli-commons:${GroovySystem.version}"),
-            project.dependencies.create("org.codehaus.groovy:groovy-json:${GroovySystem.version}"),
+            project.dependencies.create("$group:groovy-cli-commons:$groovyVersion"),
+            project.dependencies.create("$group:groovy-json:$groovyVersion"),
     )
   }
 
