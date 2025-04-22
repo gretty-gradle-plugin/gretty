@@ -16,10 +16,10 @@ jobs:
       GRADLE_VERSION: "7.6.4"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up JDK ${{ env.JDK_VERSION }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: ${{ env.JDK_VERSION }}
@@ -31,7 +31,7 @@ jobs:
           ./gradlew --no-daemon --warning-mode all -PprivateRepoDir=$PRIVATE_REPO build
           set +e
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: gretty-private-repository
           path: ${{ env.PRIVATE_REPO }}
@@ -54,16 +54,16 @@ jobs:
 
           - java: 17
             gradle: '7.6.4'
-            
+
           - java: 17
             gradle: '7.6.4'
             toolchainJavaVersion: 21
 
           - java: 17
-            gradle: '8.6'
-          
+            gradle: '8.13'
+
           - java: 17
-            gradle: '8.6'
+            gradle: '8.13'
             toolchainJavaVersion: 21
 
     env:
@@ -74,15 +74,15 @@ jobs:
       GRADLE_TEST_TASK: "${{ matrix.toolchainJavaVersion && 'testAllJavaToolchain' || 'testAll' }}"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: gretty-private-repository
           path: ${{ env.PRIVATE_REPO }}
 
       - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
@@ -109,5 +109,5 @@ jobs:
             $EXTRA_PROPERTIES $TOOLCHAIN_JAVA_ARGS \
             -PgeckoDriverPlatform=linux64 \
             -PtestAllContainers=$TEST_ALL_CONTAINERS \
-            $GRADLE_TEST_TASK 
+            $GRADLE_TEST_TASK
         working-directory: integrationTests
