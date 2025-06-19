@@ -64,12 +64,12 @@ jobs:
             toolchainJavaVersion: 17
 
           - java: 17
-            gradle: '7.6.4'
+            gradle: '7.6.5'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
             properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
 
           - java: 17
-            gradle: '7.6.4'
+            gradle: '7.6.5'
             container: "['jetty9.3','jetty9.4','jetty10','tomcat85','tomcat9']"
             toolchainJavaVersion: 21
             properties: '-Pspock_version=2.3-groovy-3.0 -PgebVersion=5.1'
