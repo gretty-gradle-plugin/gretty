@@ -37,8 +37,8 @@ JDK["17"]="17.0.11-amzn"
 JDK["21"]="21.0.3-amzn"
  
 GRADLE["6"]="6.9.4"
-GRADLE["7"]="7.6.4"
-GRADLE["8"]="8.6"
+GRADLE["7"]="7.6.5"
+GRADLE["8"]="8.14.12"
 
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
