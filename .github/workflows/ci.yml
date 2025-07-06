@@ -66,6 +66,13 @@ jobs:
             gradle: '8.14.2'
             toolchainJavaVersion: 21
 
+          - java: 17
+            gradle: '9.0.0-rc-1'
+
+          - java: 17
+            gradle: '9.0.0-rc-1'
+            toolchainJavaVersion: 21
+
     env:
       TEST_ALL_CONTAINERS: ${{ matrix.container }}
       GRADLE_VERSION: ${{ matrix.gradle }}
@@ -97,7 +104,7 @@ jobs:
             --warning-mode all \
             -PprivateRepoDir=$PRIVATE_REPO \
             publishToPrivateRepo
-        if: "startsWith(env.GRADLE_VERSION, '8.')"
+        if: ${{ ! startsWith(env.GRADLE_VERSION, '7.') }}
         working-directory: integrationTests/buildSrc
       # end workaround
 
