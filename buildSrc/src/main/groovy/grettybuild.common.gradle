@@ -132,7 +132,7 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
+if (hasProperty('mavenCentralTokenUsername') && hasProperty('mavenCentralTokenPassword')) {
     afterEvaluate {
         tasks.named('publishMavenJavaPublicationToMavenRepository').configure {
             dependsOn assertJDKVersion
@@ -142,12 +142,12 @@ if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
     publishing {
         repositories {
             maven {
-                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
                 url = project.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
                 credentials {
-                    username = ossrhUsername
-                    password = ossrhPassword
+                    username = mavenCentralTokenUsername
+                    password = mavenCentralTokenPassword
                 }
             }
         }
