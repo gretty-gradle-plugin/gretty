@@ -17,7 +17,6 @@ import org.apache.catalina.LifecycleListener
 import org.apache.catalina.authenticator.SingleSignOn
 import org.apache.catalina.connector.Connector
 import org.apache.catalina.core.StandardContext
-import org.apache.catalina.loader.WebappLoader
 import org.apache.catalina.realm.MemoryRealm
 import org.apache.catalina.startup.Catalina
 import org.apache.catalina.startup.Tomcat
@@ -225,10 +224,6 @@ class TomcatServerConfigurer {
     context.setParentClassLoader(classLoader)
     context.setJarScanner(configurer.createJarScanner(context.getJarScanner(), new JarSkipPatterns()))
     context.setParentClassLoader(classLoader)
-    WebappLoader loader = new WebappLoader()
-    loader.setLoaderClass(TomcatEmbeddedWebappClassLoader.class.getName())
-    loader.setDelegate(true)
-    context.setLoader(loader)
 
     webapp.initParameters?.each { key, value ->
       context.addParameter(key, value)
