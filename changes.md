@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 3.1.7
+
+* Re-publish of 3.1.6
+
 ### Version 3.1.6
 
 * Check for Groovy >= 4 and use correct coordinates (thanks [@octylFractal](https://github.com/octylFractal))
