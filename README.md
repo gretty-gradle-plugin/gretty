@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2025.svg)
-[![Latest release](https://img.shields.io/badge/release-4.1.6-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.6)
-[![Snapshot](https://img.shields.io/badge/current-4.1.7--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
+[![Latest release](https://img.shields.io/badge/release-4.1.7-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.7)
+[![Snapshot](https://img.shields.io/badge/current-4.1.8--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -21,6 +21,12 @@ You are looking at Gretty's `master` branch which is for Gretty 4. You also migh
 If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.github.io/gretty-doc/Getting-started.html) page.
 
 #### :star: What's new
+
+### Version 4.1.7
+July 22, 2025, Gretty 4.1.7  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+
+* Check for Groovy >= 4 and use correct coordinates (thanks [@octylFractal](https://github.com/octylFractal))
+* Fix clobbering webapp classpath with Gretty stuff (thanks [@Artur-](https://github.com/Artur-) and [@Yasushi](https://github.com/Yasushi))
 
 ### Version 4.1.6
 December 6, 2024, Gretty 4.1.6  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).

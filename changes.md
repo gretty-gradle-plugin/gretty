@@ -2,6 +2,11 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.1.7
+
+* Check for Groovy >= 4 and use correct coordinates (thanks [@octylFractal](https://github.com/octylFractal))
+* Fix clobbering webapp classpath with Gretty stuff (thanks [@Artur-](https://github.com/Artur-) and [@Yasushi](https://github.com/Yasushi))
+
 ### Version 4.1.6
 
 * Fix product runs (thanks [@aindlq](https://github.com/aindlq))
