@@ -25,8 +25,8 @@ CTRL-D
 gradle.publish.key=<secret>
 gradle.publish.secret=<secret>
 
-ossrhUsername=javabrett
-ossrhPassword=<secret>
+mavenCentralTokenUsername=javabrett
+mavenCentralTokenPassword=<secret>
 
 signing.gnupg.useLegacyGpg=true
 signing.gnupg.keyName=<secret>
@@ -45,12 +45,8 @@ signing.gnupg.keyName=<secret>
 ./gradlew publishMavenJavaPublicationToMavenRepository
 ```
 
-... then visit https://oss.sonatype.org/ to review uploads and approve/promote/release:
-
-- Go to `Staging Repositories`.
-- Select the newly created repository.
-- Click `Close` and wait for the process to complete. You can follow the progress in the `Activity` tab below by using the `Refresh` button.
-- Click `Release` and be sure that `Automatically Drop` is checked. Again wait the process and check the progress.
+Run the two needed requests explained [here](https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/#2-make-separate-requests).
+Then visit https://central.sonatype.com/publishing to review uploads and hit `Publish`.
 
 Wait until the new version is available at `https://repo1.maven.org/maven2/org/gretty/gretty/x.x.x/` (takes a while - maybe half an hour - and note the last `/` - it's important!).
 
