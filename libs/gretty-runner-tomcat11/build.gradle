@@ -1,0 +1,18 @@
+plugins {
+    id 'grettybuild.library'
+}
+
+dependencies {
+    // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+    compileOnly localGroovy()
+
+    api project(':libs:gretty-runner-tomcat'), {
+      exclude group: 'org.apache.tomcat.embed'
+      exclude group: 'jakarta.servlet', module: 'jakarta.servlet-api'
+    }
+    api "org.apache.tomcat.embed:tomcat-embed-core:$tomcat11_version"
+    api "org.apache.tomcat.embed:tomcat-embed-el:$tomcat11_version"
+    api "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcat11_version"
+    api "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcat11_version"
+    api "jakarta.servlet:jakarta.servlet-api:$tomcat11_servlet_api_version"
+}

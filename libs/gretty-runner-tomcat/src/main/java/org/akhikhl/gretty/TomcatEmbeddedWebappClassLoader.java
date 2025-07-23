@@ -88,13 +88,13 @@ public class TomcatEmbeddedWebappClassLoader extends WebappClassLoader {
 	}
 
 	private void checkPackageAccess(String name) throws ClassNotFoundException {
-		if (this.securityManager != null && name.lastIndexOf('.') >= 0) {
-			try {
-				this.securityManager.checkPackageAccess(name.substring(0, name.lastIndexOf('.')));
-			}
-			catch (SecurityException ex) {
-				throw new ClassNotFoundException("Security Violation, attempt to use Restricted Class: " + name, ex);
-			}
-		}
-	}
+    SecurityManager sm = System.getSecurityManager(); // Use system-wide SecurityManager
+    if (sm != null && name.lastIndexOf('.') >= 0) {
+      try {
+        sm.checkPackageAccess(name.substring(0, name.lastIndexOf('.')));
+      } catch (SecurityException ex) {
+        throw new ClassNotFoundException("Security Violation, attempt to use Restricted Class: " + name, ex);
+      }
+    }
+  }
 }

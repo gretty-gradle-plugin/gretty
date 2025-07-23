@@ -837,6 +837,10 @@ class GrettyPlugin implements Plugin<Project> {
         tomcat10Version = Externalized.getString('tomcat10Version')
       if(!has('tomcat10ServletApiVersion'))
         tomcat10ServletApiVersion = Externalized.getString('tomcat10ServletApiVersion')
+      if(!has('tomcat11Version'))
+        tomcat11Version = Externalized.getString('tomcat11Version')
+      if(!has('tomcat11ServletApiVersion'))
+        tomcat11ServletApiVersion = Externalized.getString('tomcat11ServletApiVersion')
       if(!has('asmVersion'))
         asmVersion = Externalized.getString('asmVersion')
     }
