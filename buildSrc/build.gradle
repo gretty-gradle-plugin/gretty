@@ -1,7 +1,13 @@
 plugins {
     id 'groovy-gradle-plugin'
 }
-
+allprojects {
+    repositories {
+        maven { url 'https://groovy.jfrog.io/artifactory/libs-release/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 repositories {
     gradlePluginPortal()
     mavenCentral()
