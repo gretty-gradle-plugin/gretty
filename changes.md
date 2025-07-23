@@ -6,6 +6,7 @@
 
 * Check for Groovy >= 4 and use correct coordinates (thanks [@octylFractal](https://github.com/octylFractal))
 * Fix clobbering webapp classpath with Gretty stuff (thanks [@Artur-](https://github.com/Artur-) and [@Yasushi](https://github.com/Yasushi))
+* Migrate `groovy.util.XmlSlurper` to `groovy.xml.XmlSlurper` (thanks [@TWiStErRob](https://github.com/TWiStErRob))
 
 ### Version 4.1.6
 
