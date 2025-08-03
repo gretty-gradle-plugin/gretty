@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-  api "jakarta.servlet:jakarta.servlet-api:$jetty11_servlet_api_version"
+  api "jakarta.servlet:jakarta.servlet-api:$jetty12_servlet_api_version"
   api 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1', {
     exclude group: 'commons-logging', module: 'commons-logging'
   }

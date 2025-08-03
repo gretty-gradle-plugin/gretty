@@ -55,17 +55,17 @@ class ServletContainerConfig {
     String grettyVersion = Externalized.getString('grettyVersion')
     def runnerGroup = "org.gretty"
     def configs = [:]
-    configs['jetty11'] = [
+    configs['jetty12'] = [
       servletContainerType: 'jetty',
-      servletContainerVersion: { project -> project.ext.jetty11Version },
-      servletContainerDescription: { project -> "Jetty ${project.ext.jetty11Version}" },
-      servletContainerRunnerConfig: 'grettyRunnerJetty11',
+      servletContainerVersion: { project -> project.ext.jetty12Version },
+      servletContainerDescription: { project -> "Jetty ${project.ext.jetty12Version}" },
+      servletContainerRunnerConfig: 'grettyRunnerjetty12',
       servletContainerRunnerDependencies: { project ->
-        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-jetty11:$grettyVersion"
+        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-jetty12:$grettyVersion"
         addRedirectFilter(project, servletContainerRunnerConfig)
         project.configurations[servletContainerRunnerConfig].resolutionStrategy {
-          force "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty11ServletApiVersion}"
-          def jettyVersion = project.ext.jetty11Version
+          force "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
+          def jettyVersion = project.ext.jetty12Version
           force "org.eclipse.jetty:jetty-server:$jettyVersion"
           force "org.eclipse.jetty:jetty-servlet:$jettyVersion"
           force "org.eclipse.jetty:jetty-webapp:$jettyVersion"
@@ -79,10 +79,10 @@ class ServletContainerConfig {
           force "org.ow2.asm:asm-commons:$asm_version"
         }
       },
-      servletApiVersion: { project -> project.ext.jetty11ServletApiVersion },
+      servletApiVersion: { project -> project.ext.jetty12ServletApiVersion },
       servletApiDependencies: { project ->
         project.dependencies {
-          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty11ServletApiVersion}"
+          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
           grettyProvidedCompile 'jakarta.websocket:jakarta.websocket-api:2.0.0'
         }
       }
@@ -117,7 +117,7 @@ class ServletContainerConfig {
   }
 
   static getConfig(servletContainer) {
-    servletContainer = servletContainer ?: 'jetty11'
+    servletContainer = servletContainer ?: 'jetty12'
     def result = configs[servletContainer.toString()]
     if(!result)
       throw new Exception("Unsupported servlet container: $servletContainer. Only ${configs.keySet()} are supported")
@@ -141,7 +141,7 @@ class ServletContainerConfig {
     }
     if(compatibleConfigEntry)
       return compatibleConfigEntry.key
-    String defaultJettyServletContainer = 'jetty11'
+    String defaultJettyServletContainer = 'jetty12'
     log.warn 'Cannot find jetty container with compatible servlet-api to {}, defaulting to {}', servletContainer, defaultJettyServletContainer
     defaultJettyServletContainer
   }
