@@ -33,6 +33,9 @@ class WebInfConfigurationEx extends WebInfConfiguration implements BaseResourceC
 
   @Override
   void unpack (WebAppContext context) throws IOException {
+    if (!context.getResourceBase()) {
+      context.setResourceBase(context.getWar())
+    }
     super.unpack(context)
     if(extraResourceBases) {
       Resource res = context.getBaseResource()

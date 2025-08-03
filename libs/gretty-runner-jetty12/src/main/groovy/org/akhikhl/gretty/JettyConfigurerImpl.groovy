@@ -14,33 +14,19 @@ import org.eclipse.jetty.ee10.annotations.AnnotationConfiguration
 import org.eclipse.jetty.ee10.plus.webapp.EnvConfiguration
 import org.eclipse.jetty.ee10.plus.webapp.PlusConfiguration
 import org.eclipse.jetty.ee10.servlet.SessionHandler
-import org.eclipse.jetty.ee10.webapp.Configuration
-import org.eclipse.jetty.ee10.webapp.FragmentConfiguration
-import org.eclipse.jetty.ee10.webapp.JettyWebXmlConfiguration
-import org.eclipse.jetty.ee10.webapp.MetaInfConfiguration
-import org.eclipse.jetty.ee10.webapp.WebXmlConfiguration
+import org.eclipse.jetty.ee10.webapp.*
 import org.eclipse.jetty.logging.JettyLevel
 import org.eclipse.jetty.logging.JettyLogger
-
 import org.eclipse.jetty.security.HashLoginService
-import org.eclipse.jetty.server.Connector
-import org.eclipse.jetty.server.Handler
-import org.eclipse.jetty.server.HttpConfiguration
-import org.eclipse.jetty.server.HttpConnectionFactory
-import org.eclipse.jetty.server.SecureRequestCustomizer
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.server.ServerConnector
-import org.eclipse.jetty.server.SslConnectionFactory
+import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.handler.ContextHandlerCollection
 import org.eclipse.jetty.util.ClassMatcher
-import org.eclipse.jetty.util.resource.PathResource
 import org.eclipse.jetty.util.resource.Resource
 import org.eclipse.jetty.util.resource.ResourceFactory
 import org.eclipse.jetty.util.ssl.SslContextFactory
 import org.eclipse.jetty.xml.XmlConfiguration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
 /**
  *
  * @author akhikhl
@@ -78,7 +64,8 @@ class JettyConfigurerImpl implements JettyConfigurer {
   void applyContextConfigFile(webAppContext, URL contextConfigFile) {
     if(contextConfigFile) {
       log.info 'Configuring {} with {}', webAppContext.contextPath, contextConfigFile
-      XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResource(contextConfigFile))
+      Resource contextResource = ResourceFactory.root().newResource(contextConfigFile)
+      XmlConfiguration xmlConfiguration = new XmlConfiguration(contextResource)
       xmlConfiguration.configure(webAppContext)
     }
   }
@@ -87,7 +74,8 @@ class JettyConfigurerImpl implements JettyConfigurer {
   void applyJettyXml(server, String jettyXml) {
     if(jettyXml != null) {
       log.info 'Configuring server with {}', jettyXml
-      XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResource(new File(jettyXml)))
+      Resource jettyXmlResource = ResourceFactory.root().newResource(new File(jettyXml).toPath())
+      XmlConfiguration xmlConfiguration = new XmlConfiguration(jettyXmlResource)
       xmlConfiguration.configure(server)
     }
   }
@@ -101,8 +89,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
       http_config.setSecurePort(params.httpsPort)
     }
 
-    Connector httpConn = findHttpConnector(server)
-
+    ServerConnector httpConn = findHttpConnector(server)
     boolean newHttpConnector = false
     if(params.httpEnabled && !httpConn) {
       newHttpConnector = true
@@ -110,24 +97,20 @@ class JettyConfigurerImpl implements JettyConfigurer {
     }
 
     if(httpConn) {
-      if(!httpConn.host)
-        httpConn.host = params.host ?: ServerDefaults.defaultHost
+      if(!httpConn.getHost())
+        httpConn.setHost(params.host ?: ServerDefaults.defaultHost)
 
-      if(!httpConn.port)
-        httpConn.port = params.httpPort ?: ServerDefaults.defaultHttpPort
+      if(!httpConn.getPort())
+        httpConn.setPort(params.httpPort ?: ServerDefaults.defaultHttpPort)
 
-      if(httpConn.port == ServerDefaults.RANDOM_FREE_PORT)
-        httpConn.port = 0
+      if(httpConn.getPort() == ServerDefaults.RANDOM_FREE_PORT)
+        httpConn.setPort(0)
 
       if(params.httpIdleTimeout)
-        httpConn.idleTimeout = params.httpIdleTimeout
-
-      if(newHttpConnector)
-        server.addConnector(httpConn)
+        httpConn.setIdleTimeout(params.httpIdleTimeout as long)
     }
 
-    Connector httpsConn = findHttpsConnector(server)
-
+    ServerConnector httpsConn = findHttpsConnector(server)
     boolean newHttpsConnector = false
     if(params.httpsEnabled && !httpsConn) {
       newHttpsConnector = true
@@ -139,24 +122,24 @@ class JettyConfigurerImpl implements JettyConfigurer {
     }
 
     if(httpsConn) {
-      if(!httpsConn.host)
-        httpsConn.host = params.host ?: ServerDefaults.defaultHost
+      if(!httpsConn.getHost())
+        httpsConn.setHost(params.host ?: ServerDefaults.defaultHost)
 
-      if(!httpsConn.port)
-        httpsConn.port = params.httpsPort ?: ServerDefaults.defaultHttpsPort
+      if(!httpsConn.getPort())
+        httpsConn.setPort(params.httpsPort ?: ServerDefaults.defaultHttpsPort)
 
-      if(httpsConn.port == ServerDefaults.RANDOM_FREE_PORT)
-        httpsConn.port = 0
+      if(httpsConn.getPort() == ServerDefaults.RANDOM_FREE_PORT)
+        httpsConn.setPort(0)
 
       def sslContextFactory = httpsConn.getConnectionFactories().find { it instanceof SslConnectionFactory }?.getSslContextFactory()
       if(sslContextFactory) {
         if(params.sslKeyStorePath) {
-          if(params.sslKeyStorePath.startsWith('classpath:')) {
+          if(params.sslKeyStorePath.toString().startsWith('classpath:')) {
             String resString = params.sslKeyStorePath - 'classpath:'
             URL url = getClass().getResource(resString)
             if(url == null)
               throw new Exception("Could not resource referenced in sslKeyStorePath: '${resString}'")
-            sslContextFactory.setKeyStoreResource(new PathResource(url))
+            sslContextFactory.setKeyStoreResource(ResourceFactory.root().newResource(url))
           }
           else
             sslContextFactory.setKeyStorePath(params.sslKeyStorePath)
@@ -166,12 +149,12 @@ class JettyConfigurerImpl implements JettyConfigurer {
         if(params.sslKeyManagerPassword)
           sslContextFactory.setKeyManagerPassword(params.sslKeyManagerPassword)
         if(params.sslTrustStorePath) {
-          if(params.sslTrustStorePath.startsWith('classpath:')) {
+          if(params.sslTrustStorePath.toString().startsWith('classpath:')) {
             String resString = params.sslTrustStorePath - 'classpath:'
             URL url = getClass().getResource(resString)
             if(url == null)
               throw new Exception("Could not resource referenced in sslTrustStorePath: '${resString}'")
-            sslContextFactory.setTrustStoreResource(new PathResource(url))
+            sslContextFactory.setKeyStoreResource(ResourceFactory.root().newResource(url))
           }
           else
             sslContextFactory.setTrustStorePath(params.sslTrustStorePath)
@@ -185,14 +168,17 @@ class JettyConfigurerImpl implements JettyConfigurer {
       if(params.httpsIdleTimeout)
         httpsConn.idleTimeout = params.httpsIdleTimeout
 
-      if(newHttpsConnector)
-        server.addConnector(httpsConn)
+      List<Connector> connectors = []
+      if (httpConn) connectors.add(httpConn)
+      if (httpsConn) connectors.add(httpsConn)
+      server.setConnectors(connectors as Connector[])
     }
   }
 
   @Override
   void configureSecurity(context, String realm, String realmConfigFile, boolean singleSignOn) {
-    context.securityHandler.loginService = new HashLoginService(realm, realmConfigFile)
+    def securityRealmFile = ResourceFactory.root().newResource(new File(realmConfigFile).toPath());
+    context.securityHandler.loginService = new HashLoginService(realm, securityRealmFile)
     if(singleSignOn) {
       if(ssoAuthenticatorFactory == null)
         ssoAuthenticatorFactory = new SSOAuthenticatorFactory()
@@ -221,8 +207,6 @@ class JettyConfigurerImpl implements JettyConfigurer {
 
   @Override
   def createServer() {
-    // fix for issue https://github.com/akhikhl/gretty/issues/24
-    org.eclipse.jetty.util.resource.Resource.defaultUseCaches = false
     return new Server()
   }
 
@@ -237,7 +221,7 @@ class JettyConfigurerImpl implements JettyConfigurer {
     context.setAttribute(MetaInfConfiguration.CONTAINER_JAR_PATTERN,
         '.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$');
 
-    context.addSystemClassMatcher(new ClassMatcher().tap {
+    context.addProtectedClassMatcher(new ClassMatcher().tap {
       // I do not know if the servlet classes are system classes in the truest sense.
       // However, those must be loaded by the app class loader. Otherwise the check in
       // org.eclipse.jetty.servlet.ServletHolder#checkServletType does not succeed, because

@@ -36,7 +36,30 @@ class JettyWebAppContext extends WebAppContext {
 
     @Override
     List<Handler> getHandlers() {
-        return super.getHandlers();
+        Handler handler = super.getHandler()
+        return (handler == null) ? Collections.emptyList() : Collections.singletonList(handler)
+    }
+
+    @Override
+    void setExtraClasspath(String classpath) {
+        def resourceFactory = getResourceFactory()
+        // Explicitly declare the list type to satisfy the static type checker
+        List<Resource> resources = []
+
+        if (classpath != null && !classpath.isEmpty()) {
+            classpath.split(File.pathSeparator).each { path ->
+                try {
+                    Resource resource = resourceFactory.newResource(path)
+
+                    if (resource != null && resource.exists()) {
+                        resources.add(resource)
+                    }
+                } catch (IOException e) {
+                    LOG.warn("Failed to create resource for classpath entry: " + path, e)
+                }
+            }
+        }
+        super.setExtraClasspath(resources)
     }
 
     @Override
