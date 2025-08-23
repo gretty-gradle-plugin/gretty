@@ -33,21 +33,33 @@ class WebInfConfigurationEx extends WebInfConfiguration implements BaseResourceC
 
   @Override
   void unpack (WebAppContext context) throws IOException {
-    if (!context.getResourceBase()) {
-      context.setResourceBase(context.getWar())
+    if (!context.getBaseResource()) {
+      def war = context.getWar()
+      if (war != null && war.trim()) {
+        context.setBaseResource(ResourceFactory.root().newResource(war))
+      } else {
+        def tempDir = java.nio.file.Files.createTempDirectory("gretty-empty-base")
+        context.setBaseResource(ResourceFactory.root().newResource(tempDir))
+      }
     }
+
     super.unpack(context)
-    if(extraResourceBases) {
+
+    if (extraResourceBases) {
       Resource res = context.getBaseResource()
       List<Resource> resources = new ArrayList<>()
-      if(res != null)
+      if (res != null)
         resources.add(res)
-      for(def e in extraResourceBases)
-        resources.add(Resource.newInstance(e))
 
-      context.setBaseResource(ResourceFactory.of(resources as Resource[]))
+      extraResourceBases.findAll { it?.trim() }.each { e ->
+        resources.add(ResourceFactory.root().newResource(e))
+      }
+
+      context.setBaseResource(ResourceFactory.root().combine(resources as Resource[]))
     }
-    for(Closure closure in baseResourceListeners)
+
+    for (Closure closure in baseResourceListeners)
       closure(context)
   }
+
 }

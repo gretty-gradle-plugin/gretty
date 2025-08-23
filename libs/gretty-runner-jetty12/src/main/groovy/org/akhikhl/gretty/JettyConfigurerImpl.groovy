@@ -246,9 +246,23 @@ class JettyConfigurerImpl implements JettyConfigurer {
 
   @Override
   URL findResourceURL(baseResource, String path) {
-    Resource res = baseResource.addPath(path)
-    if(res.exists())
-      return res.getURI().toURL()
+    def cl = Thread.currentThread().getContextClassLoader()
+    def cp = cl?.getResource(path)
+    if (cp != null) {
+      return cp  //return classpath resource if found
+    }
+
+    // 2) Fallback: resolve manually against baseResource
+    def factory = ResourceFactory.root()
+    try {
+      def resolved = factory.newResource(baseResource.getURI().resolve(path))  //manual resolve instead of addPath
+      if (resolved.exists()) {
+        return resolved.getURI().toURL()
+      }
+    } catch (Throwable ignore) {
+      //safe fallback, ignore errors
+    }
+
     null
   }
 
