@@ -105,6 +105,7 @@ class TomcatServerConfigurer {
         assert httpConn.setProperty('keepAliveTimeout', params.httpIdleTimeout.toString())
 
       httpConn.maxPostSize = -1 // unlimited post size
+      httpConn.maxPartCount = -1
 
       if(newHttpConnector) {
         service.addConnector(httpConn)
@@ -185,6 +186,7 @@ class TomcatServerConfigurer {
         assert httpsConn.setProperty('keepAliveTimeout', params.httpsIdleTimeout.toString())
 
       httpsConn.maxPostSize = -1  // unlimited
+      httpsConn.maxPartCount = -1
 
       if(newHttpsConnector) {
         service.addConnector(httpsConn)
