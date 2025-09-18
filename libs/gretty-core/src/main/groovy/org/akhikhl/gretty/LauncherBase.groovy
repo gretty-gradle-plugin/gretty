@@ -75,7 +75,7 @@ abstract class LauncherBase implements Launcher {
   private getRunConfigJson() {
     def json = new JsonBuilder()
     json {
-      writeRunConfigJson(delegate)
+      this.writeRunConfigJson(delegate)
     }
     json
   }
