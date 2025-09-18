@@ -94,8 +94,10 @@ class JettyServerConfigurer {
 
     File resourceFile = new File(webapp.resourceBase)
 
-    if (resourceFile.isDirectory())
-      context.setResourceBase(webapp.resourceBase)
+    if (resourceFile.isDirectory()) {
+      def aliases = ["/": webapp.resourceBase]
+      context.setResourceAliases(aliases)
+    }
     else
       context.setWar(webapp.resourceBase)
 

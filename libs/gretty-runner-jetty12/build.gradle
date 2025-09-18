@@ -1,0 +1,29 @@
+plugins {
+  id 'grettybuild.library'
+}
+
+configurations {
+  api {
+    exclude group: 'org.eclipse.jetty.orbit', module: 'javax.servlet'
+  }
+}
+
+dependencies {
+  // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+  compileOnly localGroovy()
+
+  api project(':libs:gretty-runner-jetty')
+  api "jakarta.servlet:jakarta.servlet-api:$jetty12_servlet_api_version"
+  api "org.eclipse.jetty:jetty-server:$jetty12_version"
+  api "org.eclipse.jetty.ee10:jetty-ee10-servlet:$jetty12_version" 
+  api "org.eclipse.jetty.ee10:jetty-ee10-webapp:$jetty12_version" 
+  api "org.eclipse.jetty:jetty-security:$jetty12_version"
+  api "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:$jetty12_version" 
+  api "org.eclipse.jetty.ee10:jetty-ee10-annotations:$jetty12_version" 
+  api "org.eclipse.jetty:jetty-plus:$jetty12_version"
+  api "org.eclipse.jetty:jetty-slf4j-impl:$jetty12_version"
+  api "org.eclipse.jetty.ee10.websocket:jetty-ee10-websocket-jakarta-server:$jetty12_version" 
+  api "org.eclipse.jetty.ee10.websocket:jetty-ee10-websocket-jetty-server:$jetty12_version"
+  api "org.ow2.asm:asm:$asm_version"
+  api "org.ow2.asm:asm-commons:$asm_version"
+}

@@ -68,7 +68,7 @@ class ServerConfig {
   static ServerConfig getDefaultServerConfig(String serverName) {
     ServerConfig result = new ServerConfig()
     result.jvmArgs = []
-    result.servletContainer = 'jetty11'
+    result.servletContainer = 'jetty12'
     result.managedClassReload = false
     result.httpEnabled = true
     result.httpsEnabled = false
