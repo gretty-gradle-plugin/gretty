@@ -13,7 +13,6 @@ import groovy.transform.TypeCheckingMode
 
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.util.VersionNumber
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -154,8 +153,6 @@ class ServletContainerConfig {
             force "org.apache.tomcat.embed:tomcat-embed-core:$tomcat85_version"
             force "org.apache.tomcat.embed:tomcat-embed-el:$tomcat85_version"
             force "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcat85_version"
-            if (VersionNumber.parse(tomcat85_version) <= VersionNumber.parse('8.5.2'))
-              force "org.apache.tomcat.embed:tomcat-embed-logging-log4j:$tomcat85_version"
             force "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcat85_version"
           }
         },
