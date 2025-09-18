@@ -20,9 +20,13 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.jvm.toolchain.JavaToolchainSpec
+import org.gradle.process.ExecOperations
 import org.gradle.process.JavaForkOptions
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.work.DisableCachingByDefault
+
+import javax.inject.Inject
+
 /**
  * Base task for starting jetty
  *
@@ -54,10 +58,13 @@ abstract class StartBaseTask extends DefaultTask {
     getOutputs().upToDateWhen { false }
   }
 
+  @Inject
+  ExecOperations getExecOperations() {}
+
   @TaskAction
   void action() {
     LauncherConfig config = getLauncherConfig()
-    Launcher launcher = new DefaultLauncher(project, config)
+    Launcher launcher = new DefaultLauncher(project, config, execOperations)
     launcher.scannerManager = createScannerManager(config)
     if(getIntegrationTest()) {
       boolean result = false

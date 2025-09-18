@@ -11,6 +11,7 @@ package org.akhikhl.gretty
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.gradle.api.Project
+import org.gradle.process.ExecOperations
 import org.gradle.process.JavaExecSpec
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
@@ -33,14 +34,16 @@ class DefaultLauncher extends LauncherBase {
     (files.collect { it.toURI().toURL() }) as LinkedHashSet
   }
 
+  private final ExecOperations execOperations
   private Collection<URL> runnerClasspath
   protected Project project
 
   ScannerManager scannerManager
 
-  DefaultLauncher(Project project, LauncherConfig config) {
+  DefaultLauncher(Project project, LauncherConfig config, ExecOperations execOperations) {
     super(config)
     this.project = project
+    this.execOperations = execOperations
   }
 
   protected void afterJavaExec() {
@@ -81,12 +84,13 @@ class DefaultLauncher extends LauncherBase {
 
   @Override
   protected void javaExec(JavaExecParams params) {
-    project.javaexec { JavaExecSpec spec ->
+    def capturedRunnerClasspath = runnerClasspath
+    execOperations.javaexec { JavaExecSpec spec ->
       if(log.isDebugEnabled())
-        for(def path in runnerClasspath)
+        for(def path in capturedRunnerClasspath)
           log.debug 'Runner classpath: {}', path
 
-      spec.classpath = project.files(runnerClasspath)
+      spec.classpath = project.files(capturedRunnerClasspath)
       def jvmArgs = params.jvmArgs
 
       if(params.debug) {
