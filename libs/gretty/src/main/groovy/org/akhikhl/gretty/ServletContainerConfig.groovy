@@ -32,7 +32,11 @@ class ServletContainerConfig {
       boolean alteredDependencies = false
       File webXmlFile = new File(ProjectUtils.getWebAppDir(proj), 'WEB-INF/web.xml')
       if(webXmlFile.exists()) {
-        def webXml = new XmlSlurper().parse(webXmlFile)
+        def xmlSlurper = Class
+          .forName('groovy.' + (GroovySystem.version.startsWith('4.') ? 'xml' : 'util') + '.XmlSlurper')
+          .getConstructor()
+          .newInstance()
+        def webXml = xmlSlurper.parse(webXmlFile)
         if(webXml.filter.find { it.'filter-class'.text() == 'org.akhikhl.gretty.RedirectFilter' }) {
           project.dependencies.add 'runtimeOnly', "org.gretty:gretty-filter:${project.ext.grettyVersion}", {
             exclude group: 'javax.servlet', module: 'servlet-api'
