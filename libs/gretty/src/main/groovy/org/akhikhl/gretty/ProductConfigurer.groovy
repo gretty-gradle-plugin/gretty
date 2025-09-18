@@ -373,7 +373,7 @@ Version: ${project.version}"""
   protected writeConfigToJson() {
     def json = new JsonBuilder()
     json {
-      writeConfigToJson(delegate)
+      this.writeConfigToJson(delegate)
     }
     json
   }
