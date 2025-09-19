@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 4.1.10
+
+* Re-publish of 4.1.8 (which was wrongly marked as 4.1.9)
+
 ### Version 4.1.8
 
 * Gradle 9 support
