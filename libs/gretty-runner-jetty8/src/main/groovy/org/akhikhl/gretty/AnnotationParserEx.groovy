@@ -8,6 +8,7 @@
  */
 package org.akhikhl.gretty
 
+import groovy.transform.CompileStatic
 import org.eclipse.jetty.annotations.AnnotationParser
 import org.eclipse.jetty.annotations.ClassNameResolver
 import org.eclipse.jetty.util.MultiException
@@ -22,6 +23,7 @@ import java.util.jar.JarInputStream
  *
  *  @author akhikhl
  */
+@CompileStatic
 class AnnotationParserEx extends AnnotationParser {
 
   private static final Logger LOG = Log.getLogger(AnnotationParserEx.class)

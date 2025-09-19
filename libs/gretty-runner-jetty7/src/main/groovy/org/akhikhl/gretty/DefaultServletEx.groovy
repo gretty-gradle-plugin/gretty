@@ -8,6 +8,7 @@
  */
 package org.akhikhl.gretty
 
+import groovy.transform.CompileStatic
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.util.resource.FileResource
 import org.eclipse.jetty.util.resource.Resource
@@ -17,6 +18,7 @@ import org.eclipse.jetty.util.resource.Resource
  *
  * @author akhikhl
  */
+@CompileStatic
 class DefaultServletEx extends DefaultServlet {
   
   Resource getResource(String pathInContext) {

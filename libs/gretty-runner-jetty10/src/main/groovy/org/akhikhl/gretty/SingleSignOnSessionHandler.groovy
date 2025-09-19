@@ -1,8 +1,10 @@
 package org.akhikhl.gretty
 
+import groovy.transform.CompileStatic
 import org.eclipse.jetty.server.session.Session
 import org.eclipse.jetty.server.session.SessionHandler
 
+@CompileStatic
 class SingleSignOnSessionHandler extends SessionHandler {
 
     @Override

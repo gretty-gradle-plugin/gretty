@@ -1,7 +1,6 @@
 package org.akhikhl.gretty.scanner
 
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 import org.akhikhl.gretty.ServerConfig
 import org.akhikhl.gretty.WebAppConfig
 import org.gradle.api.Project
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author timur.shakurov@dz.ru
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 final class JDKScannerManager extends BaseScannerManager {
     private static final Logger logger = LoggerFactory.getLogger(JDKScannerManager)
     private static final WatchEvent.Kind[] KINDS = [StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY]

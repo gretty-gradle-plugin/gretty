@@ -29,6 +29,7 @@ abstract class AbstractTomcatConfigurerImpl implements TomcatConfigurer {
 
     new ContextConfig() {
 
+      @CompileStatic
       protected Map<String,WebXml> processJarsForWebFragments(WebXml application) {
         def fragments = super.processJarsForWebFragments(application)
         // here we enable annotation processing for non-jar urls on the classpath

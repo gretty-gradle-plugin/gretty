@@ -8,6 +8,7 @@
  */
 package org.akhikhl.gretty
 
+import groovy.transform.CompileStatic
 import org.eclipse.jetty.util.URIUtil
 import org.eclipse.jetty.util.log.Log
 import org.eclipse.jetty.util.log.Logger
@@ -19,6 +20,7 @@ import org.eclipse.jetty.webapp.WebAppContext
  *
  *  @author sala
  */
+@CompileStatic
 class JettyWebAppContext extends WebAppContext {
 
   private static final Logger LOG = Log.getLogger(JettyWebAppContext.class)

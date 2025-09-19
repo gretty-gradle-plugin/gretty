@@ -9,9 +9,8 @@
 package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 class FarmConfig {
 
   @Delegate
@@ -24,7 +23,7 @@ class FarmConfig {
   protected final List integrationTestProjects_ = []
 
   FarmConfig(Map options) {
-    serverConfig = options.serverConfig ?: new ServerConfig()
+    serverConfig = (ServerConfig) options.serverConfig ?: new ServerConfig()
     webAppRefs_ = [:]
     if(options.containsKey('webAppRefs'))
       webAppRefs_ << (options.webAppRefs as Map)

@@ -43,6 +43,7 @@ class AnnotationConfigurationEx extends AnnotationConfiguration {
     MultiMap map = new MultiMap()
     context.setAttribute(CLASS_INHERITANCE_MAP, map)
     _classInheritanceHandler = new ClassInheritanceHandler(map) {
+      @CompileStatic
       public void handle(String className, int version, int access, String signature, String superName, String[] interfaces) {
         super.handle(className, version, access, signature, superName, interfaces)
       }

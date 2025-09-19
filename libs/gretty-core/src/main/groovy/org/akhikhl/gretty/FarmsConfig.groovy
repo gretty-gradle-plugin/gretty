@@ -9,19 +9,18 @@
 package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 
 /**
  *
  * @author akhikhl
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 class FarmsConfig {
 
   protected final Map farmsMap_ = [:]
 
   FarmConfig createFarm() {
-    new FarmConfig()
+    new FarmConfig([:])
   }
 
   void farm(String name = null, Closure closure) {
