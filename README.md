@@ -31,6 +31,7 @@ September 19, 2025, Gretty 4.1.10  is out and available at [Gradle Plugins](http
 September 19, 2025, Gretty 4.1.8  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
 * Gradle 9 support
+* Increase maxPartCount in Tomcat connector (thanks [@fesse](https://github.com/fesse))
 
 ### Version 4.1.7
 July 22, 2025, Gretty 4.1.7  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).

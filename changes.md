@@ -9,6 +9,7 @@
 ### Version 4.1.8
 
 * Gradle 9 support
+* Increase maxPartCount in Tomcat connector (thanks [@fesse](https://github.com/fesse))
 
 ### Version 4.1.7
 
