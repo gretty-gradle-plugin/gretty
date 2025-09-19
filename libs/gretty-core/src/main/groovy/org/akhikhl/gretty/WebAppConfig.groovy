@@ -10,28 +10,27 @@ package org.akhikhl.gretty
 
 import groovy.transform.ToString
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 import org.apache.commons.io.FilenameUtils
 
 /**
  *
  * @author akhikhl
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 @ToString
 class WebAppConfig {
 
-  def contextPath
-  def initParameters
+  String contextPath
+  Map initParameters
   def realm
   def realmConfigFile
   def contextConfigFile
-  def scanDirs
+  List scanDirs
   /**
    * Specifies if Gretty should automatically add dependencyProjects' sourceSets to scanDirs
    */
   Boolean scanDependencies
-  def fastReload
+  Collection fastReload
   Boolean recompileOnSourceChange
   Boolean reloadOnClassChange
   Boolean reloadOnConfigChange
@@ -170,7 +169,7 @@ class WebAppConfig {
 
   void setFastReload(newValue) {
     if(newValue == null || Collection.class.isAssignableFrom(newValue.getClass()))
-      fastReload = newValue
+      fastReload = (Collection) newValue
     else
       fastReload = [ newValue ]
   }

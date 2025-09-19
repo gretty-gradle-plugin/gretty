@@ -29,6 +29,7 @@ class AppAfterIntegrationTestTask extends AppStopTask {
   private String integrationTestTask_
   private boolean integrationTestTaskAssigned
 
+  @CompileStatic
   @TaskAction
   void action() {
     super.action()

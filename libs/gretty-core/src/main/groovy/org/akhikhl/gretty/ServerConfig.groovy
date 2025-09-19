@@ -10,13 +10,12 @@ package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
 import groovy.transform.ToString
-import groovy.transform.TypeCheckingMode
 
 /**
  *
  * @author akhikhl
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 @ToString
 class ServerConfig {
 
@@ -45,10 +44,10 @@ class ServerConfig {
   def serverConfigFile
   String interactiveMode
   Integer scanInterval
-  List<Closure> onStart
-  List<Closure> onStop
-  List<Closure> onScan
-  List<Closure> onScanFilesChanged
+  List<Closure> onStart = []
+  List<Closure> onStop = []
+  List<Closure> onScan = []
+  List<Closure> onScanFilesChanged = []
 
   Boolean secureRandom
   String springBootVersion
@@ -84,7 +83,7 @@ class ServerConfig {
     RANDOM_FREE_PORT
   }
 
-  void jvmArg(Object a) {
+  void jvmArg(String a) {
     if(a) {
       if(jvmArgs == null)
         jvmArgs = []
@@ -92,7 +91,7 @@ class ServerConfig {
     }
   }
 
-  void jvmArgs(Object... args) {
+  void jvmArgs(String... args) {
     if(args) {
       if(jvmArgs == null)
         jvmArgs = []
@@ -101,36 +100,28 @@ class ServerConfig {
   }
 
   void onScan(Closure newValue) {
-    if(onScan == null)
-      onScan = []
     onScan.add newValue
   }
 
   void onScanFilesChanged(Closure newValue) {
-    if(onScanFilesChanged == null)
-      onScanFilesChanged = []
     onScanFilesChanged.add newValue
   }
 
   void onStart(Closure newValue) {
-    if(onStart == null)
-      onStart = []
     onStart.add newValue
   }
 
   void onStop(Closure newValue) {
-    if(onStop == null)
-      onStop = []
     onStop.add newValue
   }
 
-  void systemProperty(String name, Object value) {
+  void systemProperty(String name, String value) {
     if(systemProperties == null)
       systemProperties = [:]
     systemProperties[name] = value
   }
 
-  void systemProperties(Map<String, Object> m) {
+  void systemProperties(Map<String, String> m) {
     if(m) {
       if(systemProperties == null)
         systemProperties = [:]

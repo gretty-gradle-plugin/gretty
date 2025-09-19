@@ -8,6 +8,7 @@
  */
 package org.akhikhl.gretty
 
+import groovy.transform.CompileStatic
 import org.apache.juli.logging.Log
 import org.apache.juli.logging.LogFactory
 import org.apache.tomcat.Jar
@@ -71,6 +72,7 @@ class SkipPatternJarScanner extends StandardJarScanner {
   }
 
   @Override
+  @CompileStatic
   public void setJarScanFilter(JarScanFilter newFilter) {
     super.setJarScanFilter(newFilter)
     jarScanner.setJarScanFilter(new TomcatJarScanFilter(newFilter))

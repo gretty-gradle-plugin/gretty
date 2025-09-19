@@ -10,8 +10,8 @@ package org.akhikhl.gretty
 
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 import org.apache.commons.io.IOUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,7 +22,7 @@ import java.util.concurrent.Future
  *
  * @author akhikhl
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 abstract class LauncherBase implements Launcher {
 
   protected static final Logger log = LoggerFactory.getLogger(LauncherBase)
@@ -72,7 +72,7 @@ abstract class LauncherBase implements Launcher {
 
   protected abstract File getPortPropertiesFile()
 
-  private getRunConfigJson() {
+  private JsonBuilder getRunConfigJson() {
     def json = new JsonBuilder()
     json {
       this.writeRunConfigJson(delegate)
@@ -181,7 +181,7 @@ abstract class LauncherBase implements Launcher {
         try {
           JavaExecParams params = new JavaExecParams()
           params.main = 'org.akhikhl.gretty.Runner'
-          params.args = ["--statusPort=${reader.port}", "--serverManagerFactory=${getServerManagerFactory()}"]
+          params.args = ["--statusPort=${reader.port}".toString(), "--serverManagerFactory=${getServerManagerFactory()}".toString()]
           if (log.isDebugEnabled()) {
             params.args += "--debug"
           }
@@ -232,10 +232,10 @@ abstract class LauncherBase implements Launcher {
     writer.write(runConfigJson.toString())
     def status = futureResponse.get()
     log.debug 'Got start status: {}', status
-    serverStartInfo = new JsonSlurper().parseText(status)
+    serverStartInfo = (Map) new JsonSlurper().parseText(status)
 
     if(serverStartInfo.error)
-      throw new Exception(serverStartInfo.errorMessage)
+      throw new Exception((String) serverStartInfo.errorMessage)
 
     thread
   }
@@ -251,6 +251,7 @@ abstract class LauncherBase implements Launcher {
     writer.write('stop')
   }
 
+  @CompileDynamic
   protected void writeRunConfigJson(json) {
     def self = this
     json.with {
@@ -329,6 +330,7 @@ abstract class LauncherBase implements Launcher {
     }
   }
 
+  @CompileDynamic
   protected void writeWebAppClassPath(json, WebAppConfig webAppConfig) {
     def classPathResolver = config.getWebAppClassPathResolver()
     if(classPathResolver) {

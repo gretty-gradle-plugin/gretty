@@ -35,6 +35,7 @@ class FarmAfterIntegrationTestTask extends FarmStopTask {
   // list of projects or project paths
   protected final List integrationTestProjects = []
 
+  @CompileStatic
   @TaskAction
   void action() {
     super.action()

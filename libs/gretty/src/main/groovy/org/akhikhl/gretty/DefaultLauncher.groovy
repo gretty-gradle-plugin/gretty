@@ -8,8 +8,8 @@
  */
 package org.akhikhl.gretty
 
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 import org.gradle.api.Project
 import org.gradle.process.ExecOperations
 import org.gradle.process.JavaExecSpec
@@ -22,7 +22,7 @@ import java.util.concurrent.Future
  *
  * @author akhikhl
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 class DefaultLauncher extends LauncherBase {
 
   static File getPortPropertiesFile(Project project, ServerConfig serverConfig) {
@@ -73,6 +73,7 @@ class DefaultLauncher extends LauncherBase {
   }
 
   @Override
+  @CompileDynamic
   protected String getServletContainerDescription() {
     ServletContainerConfig.getConfig(sconfig.servletContainer).servletContainerDescription(project)
   }
@@ -83,6 +84,7 @@ class DefaultLauncher extends LauncherBase {
   }
 
   @Override
+  @CompileDynamic
   protected void javaExec(JavaExecParams params) {
     def capturedRunnerClasspath = runnerClasspath
     execOperations.javaexec { JavaExecSpec spec ->
