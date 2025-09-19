@@ -13,7 +13,6 @@ import groovy.transform.TypeCheckingMode
 
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.util.VersionNumber
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -33,7 +32,11 @@ class ServletContainerConfig {
       boolean alteredDependencies = false
       File webXmlFile = new File(ProjectUtils.getWebAppDir(proj), 'WEB-INF/web.xml')
       if(webXmlFile.exists()) {
-        def webXml = new XmlSlurper().parse(webXmlFile)
+        def xmlSlurper = Class
+          .forName('groovy.' + (GroovySystem.version.startsWith('4.') ? 'xml' : 'util') + '.XmlSlurper')
+          .getConstructor()
+          .newInstance()
+        def webXml = xmlSlurper.parse(webXmlFile)
         if(webXml.filter.find { it.'filter-class'.text() == 'org.akhikhl.gretty.RedirectFilter' }) {
           project.dependencies.add 'runtimeOnly', "org.gretty:gretty-filter:${project.ext.grettyVersion}", {
             exclude group: 'javax.servlet', module: 'servlet-api'
@@ -154,8 +157,6 @@ class ServletContainerConfig {
             force "org.apache.tomcat.embed:tomcat-embed-core:$tomcat85_version"
             force "org.apache.tomcat.embed:tomcat-embed-el:$tomcat85_version"
             force "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcat85_version"
-            if (VersionNumber.parse(tomcat85_version) <= VersionNumber.parse('8.5.2'))
-              force "org.apache.tomcat.embed:tomcat-embed-logging-log4j:$tomcat85_version"
             force "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcat85_version"
           }
         },

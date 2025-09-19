@@ -15,6 +15,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.file.FileCollection
+import org.gradle.util.GradleVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 /**
@@ -149,7 +150,7 @@ final class ProjectUtils {
     if (!dependencyConfig) return
     projectClosure(project)
     dependencyConfig.allDependencies.withType(ProjectDependency).each {
-      walkProjectDependencies(it.dependencyProject, dependencyConfigName, projectClosure)
+      walkProjectDependencies(getDependencyProject(project, it), dependencyConfigName, projectClosure)
     }
   }
 
@@ -497,7 +498,16 @@ final class ProjectUtils {
   }
 
   static List<Project> getDependencyProjects(Project project, String configurationName) {
-    project.configurations[configurationName].dependencies.withType(ProjectDependency).collect{ it.dependencyProject }
+    project.configurations[configurationName].dependencies.withType(ProjectDependency).collect { getDependencyProject(project, it) }
+  }
+
+  static Project getDependencyProject(Project project, ProjectDependency dependency) {
+    def gradleVersion = GradleVersion.current().baseVersion.version
+    if (gradleVersion.startsWith('6.') || gradleVersion.startsWith('7.')) {
+      dependency.dependencyProject
+    } else {
+      project.project(dependency.path)
+    }
   }
 
   /**
