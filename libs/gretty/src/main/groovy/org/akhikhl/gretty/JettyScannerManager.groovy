@@ -67,7 +67,7 @@ final class JettyScannerManager extends BaseScannerManager implements ScannerMan
     for(File f in scanDirs)
       log.info 'scanDir: {}', f
     log.info 'fastReloadMap={}', fastReloadMap
-    scanner.scanDirs = scanDirs
+    scanner.scanDirs = scanDirs.collect{it.toPath()}
     configureScanner()
     log.info 'Enabling hot deployment with interval of {} second(s)', sconfig.scanInterval
     scanner.start()
