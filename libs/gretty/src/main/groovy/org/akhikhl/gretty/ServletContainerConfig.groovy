@@ -113,6 +113,32 @@ class ServletContainerConfig {
         }
       }
     ]
+
+    configs['tomcat11'] = [
+      servletContainerType: 'tomcat',
+      servletContainerVersion: { project -> project.ext.tomcat11Version },
+      servletContainerDescription: { project -> "Tomcat ${project.ext.tomcat11Version}" },
+      servletContainerRunnerConfig: 'grettyRunnerTomcat11',
+      servletContainerRunnerDependencies: { project ->
+        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-tomcat11:$grettyVersion"
+        addRedirectFilter(project, servletContainerRunnerConfig)
+        project.configurations[servletContainerRunnerConfig].resolutionStrategy {
+          force "jakarta.servlet:jakarta.servlet-api:${project.ext.tomcat11ServletApiVersion}"
+          def tomcatVersion = project.ext.tomcat11Version
+          force "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+          force "org.apache.tomcat.embed:tomcat-embed-el:$tomcatVersion"
+          force "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcatVersion"
+          force "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcatVersion"
+        }
+      },
+      servletApiVersion: { project -> project.ext.tomcat11ServletApiVersion },
+      servletApiDependencies: { project ->
+        project.dependencies {
+          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.tomcat11ServletApiVersion}"
+          grettyProvidedCompile 'jakarta.websocket:jakarta.websocket-api:2.1.0'
+        }
+      }
+    ]
     return configs
   }
 
