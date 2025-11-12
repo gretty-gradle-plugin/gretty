@@ -48,9 +48,9 @@ jobs:
           # - java: 11
           #   gradle: '7.6.6'
 
-          - java: 11
-            gradle: '7.6.6'
-            toolchainJavaVersion: 17
+          # - java: 11
+          #   gradle: '7.6.6'
+          #   toolchainJavaVersion: 17
 
           - java: 17
             gradle: '7.6.6'
