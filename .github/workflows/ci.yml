@@ -45,8 +45,8 @@ jobs:
       matrix:
         include:
 
-          - java: 11
-            gradle: '7.6.6'
+          # - java: 11
+          #   gradle: '7.6.6'
 
           - java: 11
             gradle: '7.6.6'
