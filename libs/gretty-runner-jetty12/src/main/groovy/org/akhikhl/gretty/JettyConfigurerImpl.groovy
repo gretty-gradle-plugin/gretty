@@ -63,7 +63,7 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
   void applyContextConfigFile(webAppContext, URL contextConfigFile) {
     if(contextConfigFile) {
       log.info 'Configuring {} with {}', webAppContext.contextPath, contextConfigFile
-      XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResource(contextConfigFile))
+      XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResource(Path.of(contextConfigFile.toURI())))
       xmlConfiguration.configure(webAppContext)
     }
   }
