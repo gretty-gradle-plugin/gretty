@@ -172,6 +172,12 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
       // This includes Jetty servlet classes needed by DefaultServlet in webdefault.xml
       exclude 'org.eclipse.jetty.ee10.servlet.'
       exclude 'org.eclipse.jetty.ee10.servlet.listener.'
+      // JSP classes must also be available from server classloader for Jetty to find JettyJspServlet
+      exclude 'org.eclipse.jetty.ee10.jsp.'
+      exclude 'org.eclipse.jetty.ee10.apache.jsp.'
+      // Apache Jasper and Juli classes for JSP compilation
+      exclude 'org.apache.jasper.'
+      exclude 'org.apache.juli.'
     })
 
     context.addSystemClassMatcher(new ClassMatcher().tap {
