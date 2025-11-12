@@ -9,6 +9,7 @@ dependencies {
   implementation 'org.apache.velocity:velocity:1.7'
 
   grettyRunnerTomcat10 'org.apache.tomcat:jakartaee-migration:1.0.7'
+  grettyRunnerTomcat11 'org.apache.tomcat:jakartaee-migration:1.0.7'
 }
 
 gretty {
@@ -16,4 +17,4 @@ gretty {
 }
 
 defineIntegrationTest()
-testAll.dependsOn defineIntegrationTestAllContainers(['tomcat10']), 'buildProduct'
+testAll.dependsOn defineIntegrationTestAllContainers(['tomcat10', 'tomcat11']), 'buildProduct'
