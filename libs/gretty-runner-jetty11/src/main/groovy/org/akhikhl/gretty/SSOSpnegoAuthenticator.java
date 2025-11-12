@@ -34,9 +34,16 @@ public class SSOSpnegoAuthenticator extends ConfigurableSpnegoAuthenticator {
 
     private static final Logger LOG = Log.getLogger(SSOSpnegoAuthenticator.class);
 
+    /**
+     * Default constructor.
+     */
     public SSOSpnegoAuthenticator() {
     }
 
+    /**
+     * Constructor with custom authentication method.
+     * @param authMethod the authentication method name
+     */
     public SSOSpnegoAuthenticator(String authMethod) {
       super(authMethod);
     }

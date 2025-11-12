@@ -6,7 +6,7 @@ plugins {
 dependencies {
   api project(':libs:gretty-core')
   api "org.springframework.boot:spring-boot-loader-tools:${springBootVersion}"
-  api "org.eclipse.jetty:jetty-util:$jetty11_version"
+  api "org.eclipse.jetty:jetty-util:$jetty12_version"
   api gradleApi()
 }
 

@@ -7,4 +7,9 @@ dependencies {
   compileOnly localGroovy()
 
   api project(':libs:gretty-runner-api')
+
+  // CompileOnly dependencies for base class - actual version provided by submodules (jetty11, jetty12, etc.)
+  compileOnly "org.eclipse.jetty:jetty-server:$jetty11_version"
+  compileOnly "org.eclipse.jetty:jetty-util:$jetty11_version"
+  compileOnly "org.slf4j:slf4j-api:$slf4j_version"
 }
