@@ -95,7 +95,8 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
 
   @Override
   void configureSecurity(context, String realm, String realmConfigFile, boolean singleSignOn) {
-    context.securityHandler.loginService = new HashLoginService(realm, realmConfigFile)
+    def loginService = new HashLoginService(realm, new PathResource(Path.of(realmConfigFile)))
+    context.securityHandler.loginService = loginService
     if(singleSignOn) {
       log.warn 'Single Sign-On is not currently supported in Jetty 12 due to API changes. ' +
                'SSO configuration will be ignored. Use Jetty 11 if SSO is required.'
