@@ -72,19 +72,19 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
   void applyJettyXml(server, String jettyXml) {
     if(jettyXml != null) {
       log.info 'Configuring server with {}', jettyXml
-      XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResource(new File(jettyXml)))
+      XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResource(Path.of(jettyXml)))
       xmlConfiguration.configure(server)
     }
   }
 
   @Override
   protected void setSslKeyStoreResource(sslContextFactory, URL url) {
-    sslContextFactory.setKeyStoreResource(new PathResource(url))
+    sslContextFactory.setKeyStoreResource(new PathResource(Path.of(url.toURI())))
   }
 
   @Override
   protected void setSslTrustStoreResource(sslContextFactory, URL url) {
-    sslContextFactory.setTrustStoreResource(new PathResource(url))
+    sslContextFactory.setTrustStoreResource(new PathResource(Path.of(url.toURI())))
   }
 
   @Override
