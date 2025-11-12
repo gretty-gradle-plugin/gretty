@@ -142,10 +142,6 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
     WebAppContext context = new WebAppContext()
     context.setThrowUnavailableOnStartupException(true)
 
-    // Use custom webdefault to exclude IntrospectorCleaner which causes classloading issues
-    // but keep DefaultServlet for static content support
-    context.setDefaultsDescriptor('org/akhikhl/gretty/webdefault-gretty-jetty12.xml')
-
     // In Jetty 12, setExtraClasspath requires directories to end with "/"
     if(webappClassPath && !webappClassPath.isEmpty()) {
       // Convert file:// URLs to paths first, then filter and format
