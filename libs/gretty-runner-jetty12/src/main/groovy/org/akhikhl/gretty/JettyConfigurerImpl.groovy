@@ -105,13 +105,19 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
 
   @Override
   void configureSessionManager(server, context, Map serverParams, Map webappParams) {
-    SessionHandler sessionHandler = new SessionHandler()
+    SessionHandler sessionHandler = context.getSessionHandler()
+    if (sessionHandler == null) {
+      sessionHandler = new SessionHandler()
+      sessionHandler.setServer(server)
+      context.setSessionHandler(sessionHandler)
+    } else {
+      sessionHandler.setServer(server)
+    }
     sessionHandler.setMaxInactiveInterval(60 * 30) // 30 minutes
     if(serverParams.singleSignOn) {
       log.warn 'Single Sign-On session handling is not currently supported in Jetty 12. ' +
                'Standard session handling will be used instead.'
     }
-    context.setSessionHandler(sessionHandler)
   }
 
   @Override
