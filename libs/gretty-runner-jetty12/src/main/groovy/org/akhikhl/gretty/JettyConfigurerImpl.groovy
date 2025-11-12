@@ -140,8 +140,9 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
   @Override
   def createWebAppContext(Map serverParams, Map webappParams) {
     List<String> webappClassPath = webappParams.webappClassPath
-    WebAppContext context = new WebAppContext()
+    JettyWebAppContext context = new JettyWebAppContext()
     context.setThrowUnavailableOnStartupException(true)
+    context.setWebInfLib(webappClassPath.findAll { it.endsWith('.jar') }.collect { new File(it) })
 
     // In Jetty 12, setExtraClasspath requires directories to end with "/"
     if(webappClassPath && !webappClassPath.isEmpty()) {
