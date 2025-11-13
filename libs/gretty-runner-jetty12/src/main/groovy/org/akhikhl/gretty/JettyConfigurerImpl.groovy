@@ -105,15 +105,6 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
 
   @Override
   void configureSessionManager(server, context, Map serverParams, Map webappParams) {
-    SessionHandler sessionHandler = context.getSessionHandler()
-    if (sessionHandler == null) {
-      sessionHandler = new SessionHandler()
-      sessionHandler.setServer(server)
-      context.setSessionHandler(sessionHandler)
-    } else {
-      sessionHandler.setServer(server)
-    }
-    sessionHandler.setMaxInactiveInterval(60 * 30) // 30 minutes
     if(serverParams.singleSignOn) {
       log.warn 'Single Sign-On session handling is not currently supported in Jetty 12. ' +
                'Standard session handling will be used instead.'
@@ -186,6 +177,13 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
       // Apache Jasper and Juli classes for JSP compilation
       exclude 'org.apache.jasper.'
       exclude 'org.apache.juli.'
+      // WebSocket classes must be available from server classloader
+      // Based on JettyWebSocketConfiguration and JakartaWebSocketConfiguration
+      exclude 'org.eclipse.jetty.websocket.api.'
+      exclude 'org.eclipse.jetty.websocket.server.'
+      exclude 'org.eclipse.jetty.ee10.websocket.server.'
+      exclude 'org.eclipse.jetty.ee10.websocket.servlet.'
+      exclude 'org.eclipse.jetty.ee10.websocket.jakarta.'
     })
 
     context.addSystemClassMatcher(new ClassMatcher().tap {

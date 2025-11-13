@@ -35,7 +35,14 @@ class JettyWebAppContext extends WebAppContext {
 
   @Override
   List getHandlers() {
-    // WebAppContext doesn't have child handlers in the traditional sense
+    // In Jetty 12, WebAppContext manages handlers internally through the handler hierarchy
+    // (SessionHandler -> SecurityHandler -> ServletHandler) via getHandler() (singular)
+    // WebAppContext itself is a wrapper handler, not a container for multiple handlers
+    // We return the internal handler if it exists
+    def handler = getHandler()
+    if (handler != null) {
+      return Collections.singletonList(handler)
+    }
     return Collections.emptyList()
   }
 
@@ -51,6 +58,12 @@ class JettyWebAppContext extends WebAppContext {
     }
 
     super.doStart()
+
+    // Configure session handler after the handler chain is initialized
+    def sessionHandler = getSessionHandler()
+    if (sessionHandler != null) {
+      sessionHandler.setMaxInactiveInterval(60 * 30) // 30 minutes
+    }
   }
 
   @Override
