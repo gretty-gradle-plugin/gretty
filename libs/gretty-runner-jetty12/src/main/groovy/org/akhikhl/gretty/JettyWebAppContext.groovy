@@ -58,12 +58,6 @@ class JettyWebAppContext extends WebAppContext {
     }
 
     super.doStart()
-
-    // Configure session handler after the handler chain is initialized
-    def sessionHandler = getSessionHandler()
-    if (sessionHandler != null) {
-      sessionHandler.setMaxInactiveInterval(60 * 30) // 30 minutes
-    }
   }
 
   @Override

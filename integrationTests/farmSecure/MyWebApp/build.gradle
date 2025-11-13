@@ -17,6 +17,7 @@ gretty {
 }
 
 farm {
+  singleSignOn = true
   webapp project
   webapp ':farmSecure:MyWebService'
 }
@@ -24,6 +25,7 @@ farm {
 defineIntegrationTest()
 
 testAll.dependsOn defineFarmIntegrationTestAllContainers({
+  singleSignOn = true
   webapp project
   webapp ':farmSecure:MyWebService'
 })

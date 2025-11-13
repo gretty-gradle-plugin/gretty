@@ -43,6 +43,8 @@ import java.net.URI
 @CompileStatic(TypeCheckingMode.SKIP)
 class JettyConfigurerImpl extends JettyConfigurerBase {
 
+  private SSOAuthenticatorFactory ssoAuthenticatorFactory
+
   @Override
   def beforeStart(boolean isDebug) {
     setLevel('org.akhikhl.gretty', isDebug ? JettyLevel.DEBUG : JettyLevel.INFO)
@@ -97,18 +99,25 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
   void configureSecurity(context, String realm, String realmConfigFile, boolean singleSignOn) {
     def loginService = new HashLoginService(realm, new PathResource(Path.of(realmConfigFile)))
     context.securityHandler.loginService = loginService
-    if(singleSignOn) {
-      log.warn 'Single Sign-On is not currently supported in Jetty 12 due to API changes. ' +
-               'SSO configuration will be ignored. Use Jetty 11 if SSO is required.'
+    if (singleSignOn) {
+      if (ssoAuthenticatorFactory == null)
+        ssoAuthenticatorFactory = new SSOAuthenticatorFactory()
+      context.securityHandler.authenticatorFactory = ssoAuthenticatorFactory
     }
   }
 
   @Override
   void configureSessionManager(server, context, Map serverParams, Map webappParams) {
-    if(serverParams.singleSignOn) {
-      log.warn 'Single Sign-On session handling is not currently supported in Jetty 12. ' +
-               'Standard session handling will be used instead.'
+    org.eclipse.jetty.ee10.servlet.SessionHandler sessionHandler
+    if (serverParams.singleSignOn) {
+      sessionHandler = new SingleSignOnSessionHandler()
+      sessionHandler.setMaxInactiveInterval(60 * 30) // 30 minutes
+      sessionHandler.getSessionCookieConfig().setPath('/')
+    } else {
+      sessionHandler = new org.eclipse.jetty.ee10.servlet.SessionHandler()
+      sessionHandler.setMaxInactiveInterval(60 * 30) // 30 minutes
     }
+    context.setSessionHandler(sessionHandler)
   }
 
   @Override
@@ -184,6 +193,8 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
       exclude 'org.eclipse.jetty.ee10.websocket.server.'
       exclude 'org.eclipse.jetty.ee10.websocket.servlet.'
       exclude 'org.eclipse.jetty.ee10.websocket.jakarta.'
+      // Session classes must be available from server classloader for SSO to work
+      exclude 'org.eclipse.jetty.session.'
     })
 
     context.addSystemClassMatcher(new ClassMatcher().tap {
