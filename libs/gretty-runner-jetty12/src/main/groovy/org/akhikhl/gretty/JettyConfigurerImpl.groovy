@@ -149,9 +149,12 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
     JettyWebAppContext context = new JettyWebAppContext()
     context.setThrowUnavailableOnStartupException(true)
     context.setWebInfLib(webappClassPath.findAll { it.endsWith('.jar') }.collect { new File(it) })
-    // Convert file:// URLs to paths, add trailing slash to directories, join with comma
+    // Convert file:// URLs to paths, filter existing paths, add trailing slash to directories
     context.setExtraClasspath(webappClassPath.collect {
-      String path = it.startsWith('file:') ? new File(new URI(it)).absolutePath : it
+      it.startsWith('file:') ? new File(new URI(it)).absolutePath : it
+    }.findAll { path ->
+      new File(path).exists()
+    }.collect { path ->
       path.endsWith('.jar') ? path : (path.endsWith('/') ? path : path + '/')
     }.join(','))
 
