@@ -39,7 +39,6 @@ public class SSOBasicAuthenticator extends BasicAuthenticator {
             Session session = request.getSession(true);
             AuthenticationState cached = new SessionAuthentication(getAuthenticationType(), user, password);
             session.setAttribute(SessionAuthentication.AUTHENTICATED_ATTRIBUTE, cached);
-            LOG.info("SSO BASIC: Cached authentication for user {} in session {}", username, session.getId());
         }
         return user;
     }
@@ -56,8 +55,6 @@ public class SSOBasicAuthenticator extends BasicAuthenticator {
 
             if (authenticationState != null)
             {
-                LOG.info("SSO BASIC: Found cached authentication in session {}: {}", session.getId(), authenticationState);
-
                 // Validate that the authentication is still valid
                 if (authenticationState instanceof LoginAuthenticator.UserAuthenticationSucceeded)
                 {
@@ -75,10 +72,6 @@ public class SSOBasicAuthenticator extends BasicAuthenticator {
                         session.removeAttribute(SessionAuthentication.AUTHENTICATED_ATTRIBUTE);
                     }
                 }
-            }
-            else
-            {
-                LOG.info("SSO BASIC: No cached authentication in session {}", session.getId());
             }
         }
 

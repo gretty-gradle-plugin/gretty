@@ -167,7 +167,6 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
       if (!validPaths.isEmpty()) {
         String extraClasspath = validPaths.join(',')
         context.setExtraClasspath(extraClasspath)
-        log.info "Set extra classpath for Jetty 12: ${extraClasspath}"
       }
     }
 
