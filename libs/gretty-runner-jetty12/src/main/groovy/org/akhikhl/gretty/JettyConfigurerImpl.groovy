@@ -37,8 +37,6 @@ import java.net.URI
  * Note: Single Sign-On (SSO) is not currently supported in Jetty 12 due to
  * significant API changes in the Jetty 12 Core security architecture.
  * SSO support may be added in a future release once Jetty provides appropriate hooks.
- *
- * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
 class JettyConfigurerImpl extends JettyConfigurerBase {

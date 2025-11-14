@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * SSO Client Certificate Authenticator for Jetty 11
  * Enables session sharing for Client Certificate authentication
+ *
+ * @author akhikhl
  */
 public class SSOClientCertAuthenticator extends ClientCertAuthenticator {
 

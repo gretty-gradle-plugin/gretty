@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory
 /**
  * Base class for Jetty configurers, containing common logic shared across Jetty versions.
  * Subclasses implement version-specific behavior.
- *
- * @author akhikhl
  */
 @CompileStatic(TypeCheckingMode.SKIP)
 abstract class JettyConfigurerBase implements JettyConfigurer {

@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * SSO Basic Authenticator for Jetty 11
  * Enables session sharing between FORM and BASIC authentication
+ *
+ * @author akhikhl
  */
 public class SSOBasicAuthenticator extends BasicAuthenticator {
 

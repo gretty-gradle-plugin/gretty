@@ -17,8 +17,6 @@ import org.eclipse.jetty.server.Server;
 /**
  * SSO Authenticator Factory for Jetty 12
  * Returns SSO-enabled authenticators that share session authentication
- *
- * @author akhikhl
  */
 public class SSOAuthenticatorFactory extends DefaultAuthenticatorFactory {
 

@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * SSO SPNEGO Authenticator for Jetty 11
  * Enables session sharing for SPNEGO/Kerberos authentication
+ *
+ * @author akhikhl
  */
 public class SSOSpnegoAuthenticator extends ConfigurableSpnegoAuthenticator {
 

@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 /**
  * SSO Digest Authenticator for Jetty 11
  * Enables session sharing for Digest authentication
+ *
+ * @author akhikhl
  */
 class SSODigestAuthenticator extends DigestAuthenticator {
 
