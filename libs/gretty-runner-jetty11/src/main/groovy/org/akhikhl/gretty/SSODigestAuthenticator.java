@@ -9,42 +9,30 @@
 package org.akhikhl.gretty;
 
 import org.eclipse.jetty.security.ServerAuthException;
-import org.eclipse.jetty.security.authentication.DeferredAuthentication;
 import org.eclipse.jetty.security.authentication.DigestAuthenticator;
-import org.eclipse.jetty.security.authentication.SessionAuthentication;
 import org.eclipse.jetty.server.Authentication;
-import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.UserIdentity;
-import org.eclipse.jetty.util.MultiMap;
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.log.Logger;
 
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
-
-import static org.eclipse.jetty.security.authentication.FormAuthenticator.*;
 
 /**
- *
- * @author akhikhl
+ * SSO Digest Authenticator for Jetty 11
+ * Enables session sharing for Digest authentication
  */
 class SSODigestAuthenticator extends DigestAuthenticator {
 
     private static final Logger LOG = Log.getLogger(SSODigestAuthenticator.class);
 
-    // "login" is copied without changes from FormAuthenticator
     @Override
     public UserIdentity login(String username, Object password, ServletRequest request)
     {
-
-        UserIdentity user = super.login(username,password,request);
-        if (user!=null)
-        {
-            HttpSession session = ((HttpServletRequest)request).getSession(true);
-            Authentication cached=new SessionAuthentication(getAuthMethod(),user,password);
-            session.setAttribute(SessionAuthentication.__J_AUTHENTICATED, cached);
+        UserIdentity user = super.login(username, password, request);
+        if (user != null) {
+            SSOHelper.cacheAuthentication(((HttpServletRequest)request).getSession(true), getAuthMethod(), user, password);
         }
         return user;
     }
@@ -52,62 +40,7 @@ class SSODigestAuthenticator extends DigestAuthenticator {
     @Override
     public Authentication validateRequest(ServletRequest req, ServletResponse res, boolean mandatory) throws ServerAuthException
     {
-        HttpServletRequest request = (HttpServletRequest)req;
-
-        if (!mandatory)
-            return new DeferredAuthentication(this);
-
-        // ++ copied from FormAuthenticator
-
-        HttpSession session = request.getSession(true);
-
-        // Look for cached authentication
-        Authentication authentication = (Authentication) session.getAttribute(SessionAuthentication.__J_AUTHENTICATED);
-        if (authentication != null)
-        {
-            // Has authentication been revoked?
-            if (authentication instanceof Authentication.User &&
-                _loginService!=null &&
-                !_loginService.validate(((Authentication.User)authentication).getUserIdentity()))
-            {
-                LOG.debug("auth revoked {}",authentication);
-                session.removeAttribute(SessionAuthentication.__J_AUTHENTICATED);
-            }
-            else
-            {
-                synchronized (session)
-                {
-                    String j_uri=(String)session.getAttribute(__J_URI);
-                    if (j_uri!=null)
-                    {
-                        //check if the request is for the same url as the original and restore
-                        //params if it was a post
-                        LOG.debug("auth retry {}->{}",authentication,j_uri);
-                        StringBuffer buf = request.getRequestURL();
-                        if (request.getQueryString() != null)
-                            buf.append("?").append(request.getQueryString());
-
-                        if (j_uri.equals(buf.toString()))
-                        {
-                            MultiMap<String> j_post = (MultiMap<String>)session.getAttribute(__J_POST);
-                            if (j_post!=null)
-                            {
-                                LOG.debug("auth rePOST {}->{}",authentication,j_uri);
-                                Request base_request = Request.getBaseRequest(request);
-                                base_request.setContentParameters(j_post);
-                            }
-                            session.removeAttribute(__J_URI);
-                            session.removeAttribute(__J_METHOD);
-                            session.removeAttribute(__J_POST);
-                        }
-                    }
-                }
-                LOG.debug("auth {}",authentication);
-                return authentication;
-            }
-        }
-        // -- copied from FormAuthenticator
-
-        return super.validateRequest(req, res, mandatory);
+        Authentication cached = SSOHelper.checkCachedAuthentication(req, res, mandatory, _loginService, LOG);
+        return cached != null ? cached : super.validateRequest(req, res, mandatory);
     }
 }
