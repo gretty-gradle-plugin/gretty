@@ -149,26 +149,11 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
     JettyWebAppContext context = new JettyWebAppContext()
     context.setThrowUnavailableOnStartupException(true)
     context.setWebInfLib(webappClassPath.findAll { it.endsWith('.jar') }.collect { new File(it) })
-
-    // In Jetty 12, setExtraClasspath requires directories to end with "/"
-    if(webappClassPath && !webappClassPath.isEmpty()) {
-      // Convert file:// URLs to paths first, then filter and format
-      List<String> validPaths = webappClassPath.collect { pathStr ->
-        // Convert file:// URLs to absolute paths once
-        pathStr.startsWith('file:') ? new File(new URI(pathStr)).absolutePath : pathStr
-      }.findAll { path ->
-        // Filter out non-existent paths
-        new File(path).exists()
-      }.collect { path ->
-        // Add trailing slash to directories (JARs don't need it)
-        path.endsWith('.jar') ? path : (path.endsWith('/') ? path : path + '/')
-      }
-
-      if (!validPaths.isEmpty()) {
-        String extraClasspath = validPaths.join(',')
-        context.setExtraClasspath(extraClasspath)
-      }
-    }
+    // Convert file:// URLs to paths, add trailing slash to directories, join with comma
+    context.setExtraClasspath(webappClassPath.collect {
+      String path = it.startsWith('file:') ? new File(new URI(it)).absolutePath : it
+      path.endsWith('.jar') ? path : (path.endsWith('/') ? path : path + '/')
+    }.join(','))
 
     context.setInitParameter('org.eclipse.jetty.servlet.Default.useFileMappedBuffer', serverParams.productMode ? 'true' : 'false')
     context.setAttribute(MetaInfConfiguration.CONTAINER_JAR_PATTERN,
