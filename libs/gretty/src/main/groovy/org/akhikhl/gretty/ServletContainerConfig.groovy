@@ -51,10 +51,48 @@ class ServletContainerConfig {
     }
   }
 
+  /**
+   * Creates a Tomcat servlet container configuration
+   * @param version The Tomcat version number (e.g., '10', '11')
+   * @param websocketApiVersion The Jakarta WebSocket API version (e.g., '2.0.0', '2.1.0')
+   */
+  private static Map createTomcatConfig(String version, String websocketApiVersion, String runnerGroup, String grettyVersion) {
+    String versionProp = "tomcat${version}Version"
+    String servletApiProp = "tomcat${version}ServletApiVersion"
+    String runnerConfig = "grettyRunnerTomcat${version}"
+
+    return [
+      servletContainerType: 'tomcat',
+      servletContainerVersion: { project -> project.ext."$versionProp" },
+      servletContainerDescription: { project -> "Tomcat ${project.ext."$versionProp"}" },
+      servletContainerRunnerConfig: runnerConfig,
+      servletContainerRunnerDependencies: { project ->
+        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-tomcat${version}:$grettyVersion"
+        addRedirectFilter(project, servletContainerRunnerConfig)
+        project.configurations[servletContainerRunnerConfig].resolutionStrategy {
+          force "jakarta.servlet:jakarta.servlet-api:${project.ext."$servletApiProp"}"
+          def tomcatVersion = project.ext."$versionProp"
+          force "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
+          force "org.apache.tomcat.embed:tomcat-embed-el:$tomcatVersion"
+          force "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcatVersion"
+          force "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcatVersion"
+        }
+      },
+      servletApiVersion: { project -> project.ext."$servletApiProp" },
+      servletApiDependencies: { project ->
+        project.dependencies {
+          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext."$servletApiProp"}"
+          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:$websocketApiVersion"
+        }
+      }
+    ]
+  }
+
   private static createConfigs() {
     String grettyVersion = Externalized.getString('grettyVersion')
     def runnerGroup = "org.gretty"
     def configs = [:]
+
     configs['jetty11'] = [
       servletContainerType: 'jetty',
       servletContainerVersion: { project -> project.ext.jetty11Version },
@@ -121,31 +159,10 @@ class ServletContainerConfig {
       }
     ]
 
-    configs['tomcat10'] = [
-      servletContainerType: 'tomcat',
-      servletContainerVersion: { project -> project.ext.tomcat10Version },
-      servletContainerDescription: { project -> "Tomcat ${project.ext.tomcat10Version}" },
-      servletContainerRunnerConfig: 'grettyRunnerTomcat10',
-      servletContainerRunnerDependencies: { project ->
-        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-tomcat10:$grettyVersion"
-        addRedirectFilter(project, servletContainerRunnerConfig)
-        project.configurations[servletContainerRunnerConfig].resolutionStrategy {
-          force "jakarta.servlet:jakarta.servlet-api:${project.ext.tomcat10ServletApiVersion}"
-          def tomcatVersion = project.ext.tomcat10Version
-          force "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion"
-          force "org.apache.tomcat.embed:tomcat-embed-el:$tomcatVersion"
-          force "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcatVersion"
-          force "org.apache.tomcat.embed:tomcat-embed-websocket:$tomcatVersion"
-        }
-      },
-      servletApiVersion: { project -> project.ext.tomcat10ServletApiVersion },
-      servletApiDependencies: { project ->
-        project.dependencies {
-          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.tomcat10ServletApiVersion}"
-          grettyProvidedCompile 'jakarta.websocket:jakarta.websocket-api:2.0.0'
-        }
-      }
-    ]
+    // Tomcat configurations (using helper method to reduce duplication)
+    configs['tomcat10'] = createTomcatConfig('10', '2.0.0', runnerGroup, grettyVersion)
+    configs['tomcat11'] = createTomcatConfig('11', '2.1.0', runnerGroup, grettyVersion)
+
     return configs
   }
 
