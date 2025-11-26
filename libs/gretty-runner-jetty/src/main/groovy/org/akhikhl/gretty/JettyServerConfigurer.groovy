@@ -94,10 +94,7 @@ class JettyServerConfigurer {
 
     File resourceFile = new File(webapp.resourceBase)
 
-    if (resourceFile.isDirectory())
-      context.setResourceBase(webapp.resourceBase)
-    else
-      context.setWar(webapp.resourceBase)
+    configurer.setWebAppResourceBaseOrWar(context, webapp.resourceBase, resourceFile.isDirectory())
 
     configurer.configureSessionManager(server, context, params, webapp)
 

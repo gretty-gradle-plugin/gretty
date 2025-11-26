@@ -126,6 +126,39 @@ class ServletContainerConfig {
       }
     ]
 
+    configs['jetty12'] = [
+      servletContainerType: 'jetty',
+      servletContainerVersion: { project -> project.ext.jetty12Version },
+      servletContainerDescription: { project -> "Jetty ${project.ext.jetty12Version}" },
+      servletContainerRunnerConfig: 'grettyRunnerJetty12',
+      servletContainerRunnerDependencies: { project ->
+        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-jetty12:$grettyVersion"
+        addRedirectFilter(project, servletContainerRunnerConfig)
+        project.configurations[servletContainerRunnerConfig].resolutionStrategy {
+          force "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
+          def jettyVersion = project.ext.jetty12Version
+          force "org.eclipse.jetty:jetty-server:$jettyVersion"
+          force "org.eclipse.jetty.ee10:jetty-ee10-servlet:$jettyVersion"
+          force "org.eclipse.jetty.ee10:jetty-ee10-webapp:$jettyVersion"
+          force "org.eclipse.jetty:jetty-security:$jettyVersion"
+          force "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:$jettyVersion"
+          force "org.eclipse.jetty.ee10:jetty-ee10-annotations:$jettyVersion"
+          force "org.eclipse.jetty.ee10:jetty-ee10-plus:$jettyVersion"
+          force "org.eclipse.jetty.ee10.websocket:jetty-ee10-websocket-jakarta-server:$jettyVersion"
+          def asm_version = project.ext.asmVersion
+          force "org.ow2.asm:asm:$asm_version"
+          force "org.ow2.asm:asm-commons:$asm_version"
+        }
+      },
+      servletApiVersion: { project -> project.ext.jetty12ServletApiVersion },
+      servletApiDependencies: { project ->
+        project.dependencies {
+          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
+          grettyProvidedCompile 'jakarta.websocket:jakarta.websocket-api:2.1.0'
+        }
+      }
+    ]
+
     // Tomcat configurations (using helper method to reduce duplication)
     configs['tomcat10'] = createTomcatConfig('10', '2.0.0', runnerGroup, grettyVersion)
     configs['tomcat11'] = createTomcatConfig('11', '2.1.0', runnerGroup, grettyVersion)
