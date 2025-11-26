@@ -5,20 +5,11 @@ export common_gradle_args="--console=plain --no-daemon -Porg.gradle.java.install
 
 #ci.yml plugin build step
 ./docker_gradlew.sh                 \
-  --java 11                         \
+  --java 17                         \
   --gradle 7                        \
   --gradle-home .docker-gradle      \
   $common_gradle_args               \
   publishToPrivateRepo
-
-#ci.yml matrix case #1
-./docker_gradlew.sh                 \
-  --java 11                         \
-  --gradle 7                        \
-  --gradle-home .docker-gradle      \
-  --working-dir integrationTests    \
-  $common_gradle_args               \
-  testAll
 
 #ci.yml matrix case #2
 ./docker_gradlew.sh                 \
@@ -39,16 +30,6 @@ export common_gradle_args="--console=plain --no-daemon -Porg.gradle.java.install
   testAll
 
 # a set of tests with java toolchain:
-
-#ci.yml matrix case #1 + toolchain java v17
-./docker_gradlew.sh                 \
-  --java 17 --java 11               \
-  --gradle 7                        \
-  --gradle-home .docker-gradle      \
-  --working-dir integrationTests    \
-  $common_gradle_args               \
-  -PtoolchainJavaVersion=17         \
-  testAllJavaToolchain
 
 #ci.yml matrix case #2 + toolchain java v21
 ./docker_gradlew.sh                 \
