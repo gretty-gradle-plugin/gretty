@@ -2,8 +2,8 @@
 
 ![Build Status](https://github.com/gretty-gradle-plugin/gretty/workflows/CI/badge.svg)
 ![Maintenance Status](https://img.shields.io/maintenance/yes/2025.svg)
-[![Latest release](https://img.shields.io/badge/release-4.1.10-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v4.1.10)
-[![Snapshot](https://img.shields.io/badge/current-4.1.11--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
+[![Latest release](https://img.shields.io/badge/release-5.0.0-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/v5.0.0)
+[![Snapshot](https://img.shields.io/badge/current-5.0.1--SNAPSHOT-47b31f.svg)](https://github.com/gretty-gradle-plugin/gretty/tree/master)
 [![License](https://img.shields.io/badge/license-MIT-47b31f.svg)](#copyright-and-license)
 
 Gretty is a feature-rich Gradle plugin for running web-apps on embedded servlet containers.
@@ -23,7 +23,7 @@ If you are new with Gretty, try [getting started](https://gretty-gradle-plugin.g
 #### :star: What's new
 
 ### Version 5.0.0
-September 19, 2025, Gretty 4.1.10  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+November 27, 2025, Gretty 5.0.0 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
 * Support Tomcat 11 and Jetty 12 (thanks [@codeconsole](https://github.com/codeconsole))
 

@@ -3,7 +3,7 @@
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
 ### Version 5.0.0
-September 19, 2025, Gretty 5.0.0  is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
+November 27, 2025, Gretty 5.0.0 is out and available at [Gradle Plugins](https://plugins.gradle.org/plugin/org.gretty) and [Maven Central](https://search.maven.org/artifact/org.gretty/gretty).
 
 * Support Tomcat 11 and Jetty 12 (thanks [@codeconsole](https://github.com/codeconsole))
 
