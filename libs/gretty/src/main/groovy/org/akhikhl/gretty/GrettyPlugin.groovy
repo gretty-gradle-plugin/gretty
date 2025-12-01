@@ -742,6 +742,10 @@ class GrettyPlugin implements Plugin<Project> {
 
     if(project.extensions.findByName('gretty')) {
 
+      if (!project.gretty.servletContainer && project.hasProperty('servletContainer')) {
+        project.gretty.servletContainer = project.servletContainer
+      }
+
       addConfigurationsAfterEvaluate(project)
       addTaskDependencies(project)
       new ProductsConfigurer(project).configureProducts()
