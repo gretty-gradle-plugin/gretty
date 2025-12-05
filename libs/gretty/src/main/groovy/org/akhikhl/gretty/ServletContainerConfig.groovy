@@ -32,8 +32,9 @@ class ServletContainerConfig {
       boolean alteredDependencies = false
       File webXmlFile = new File(ProjectUtils.getWebAppDir(proj), 'WEB-INF/web.xml')
       if(webXmlFile.exists()) {
+        String groovyVersion = GroovySystem.version
         def xmlSlurper = Class
-          .forName('groovy.' + (GroovySystem.version.startsWith('4.') ? 'xml' : 'util') + '.XmlSlurper')
+          .forName('groovy.' + (groovyVersion.startsWith('2.') || groovyVersion.startsWith('3.') ? 'util' : 'xml') + '.XmlSlurper')
           .getConstructor()
           .newInstance()
         def webXml = xmlSlurper.parse(webXmlFile)
