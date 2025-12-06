@@ -9,7 +9,6 @@
 package org.akhikhl.gretty
 
 import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
 import org.eclipse.jetty.util.URIUtil
 import org.eclipse.jetty.util.resource.Resource
 import org.eclipse.jetty.util.resource.ResourceFactory
@@ -20,7 +19,7 @@ import java.nio.file.Path
 /**
  * Custom WebAppContext for Jetty 12 that makes runtime JARs visible in WEB-INF/lib
  */
-@CompileStatic(TypeCheckingMode.SKIP)
+@CompileStatic
 class JettyWebAppContext extends WebAppContext {
 
   private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JettyWebAppContext.class)
