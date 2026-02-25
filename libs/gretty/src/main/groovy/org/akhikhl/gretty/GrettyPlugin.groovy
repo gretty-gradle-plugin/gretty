@@ -296,7 +296,7 @@ class GrettyPlugin implements Plugin<Project> {
 
       if(project.gretty.overlays) {
 
-        project.ext.finalArchivePath = archiveTask.archivePath
+        project.ext.finalArchivePath = archiveTask.archiveFile.get().asFile
 
         archiveTask.archiveFileName = 'partial.' + (project.tasks.findByName('war') ? 'war' : 'jar')
 
@@ -309,7 +309,7 @@ class GrettyPlugin implements Plugin<Project> {
           dependsOn archiveTask
           for(String overlay in project.gretty.overlays)
             inputs.file { ProjectUtils.getFinalArchivePath(project.project(overlay)) }
-          inputs.file archiveTask.archivePath
+          inputs.file archiveTask.archiveFile.get().asFile
           outputs.dir "${project.buildDir}/explodedWebapp"
           doLast {
             ProjectUtils.prepareExplodedWebAppFolder(project)

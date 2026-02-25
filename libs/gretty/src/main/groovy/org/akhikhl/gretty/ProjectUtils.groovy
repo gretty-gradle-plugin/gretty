@@ -66,7 +66,7 @@ final class ProjectUtils {
       if(proj.extensions.findByName('gretty'))
         for(def overlay in proj.gretty.overlays) {
           overlay = proj.project(overlay)
-          File archivePath = overlay.tasks.findByName('jar')?.archivePath
+          File archivePath = overlay.tasks.findByName('jar')?.archiveFile.get().asFile
           if(archivePath)
             overlayJars.add(archivePath)
           addOverlayJars(overlay) // recursion
@@ -159,7 +159,7 @@ final class ProjectUtils {
     if(project != null) {
       def addProjectClassPath
       addProjectClassPath = { Project proj ->
-        urls.addAll(project.tasks.jar.archivePath.toURI().toURL())
+        urls.addAll(project.tasks.jar.archiveFile.get().asFile.toURI().toURL())
         def files = proj.configurations[dependencyConfig]
         def grettyProvidedCompileConfig = proj.configurations.findByName('grettyProvidedCompile')
         if(grettyProvidedCompileConfig)
@@ -238,7 +238,7 @@ final class ProjectUtils {
   }
 
   static File getFinalArchivePath(Project project) {
-    project.ext.properties.containsKey('finalArchivePath') ? project.ext.finalArchivePath : (project.tasks.findByName('war') ?: project.tasks.jar).archivePath
+    project.ext.properties.containsKey('finalArchivePath') ? project.ext.finalArchivePath : (project.tasks.findByName('war') ?: project.tasks.jar).archiveFile.get().asFile
   }
 
   static File getWebAppDir(Project project) {
@@ -300,7 +300,7 @@ final class ProjectUtils {
       }
     }
     project.copy {
-      from project.zipTree((project.tasks.findByName('war') ?: project.tasks.jar).archivePath)
+      from project.zipTree((project.tasks.findByName('war') ?: project.tasks.jar).archiveFile)
       into "${project.buildDir}/explodedWebapp"
     }
   }
