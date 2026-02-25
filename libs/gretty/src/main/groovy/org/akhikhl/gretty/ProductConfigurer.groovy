@@ -171,7 +171,7 @@ class ProductConfigurer {
       from outputDir, { into outputDir.name }
 
       doLast {
-        ant.checksum file: it.archivePath
+        ant.checksum file: it.archiveFile.get().asFile
       }
     }
 
