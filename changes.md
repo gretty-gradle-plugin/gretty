@@ -2,6 +2,10 @@
 
 [![logo](https://gretty-gradle-plugin.github.io/gretty-doc/images/gretty_logo.png "gretty logo")](https://github.com/gretty-gradle-plugin/gretty)
 
+### Version 5.0.2
+
+* Fix using the deprecated `archivePath` property
+
 ### Version 5.0.1
 
 * Fix running Jetty 12 (thanks [@codeconsole](https://github.com/codeconsole))
