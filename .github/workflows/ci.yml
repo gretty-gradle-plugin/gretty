@@ -60,10 +60,10 @@ jobs:
             toolchainJavaVersion: 21
 
           - java: 17
-            gradle: '8.14.3'
+            gradle: '8.14.4'
 
           - java: 17
-            gradle: '8.14.3'
+            gradle: '8.14.4'
             toolchainJavaVersion: 21
 
     env:
