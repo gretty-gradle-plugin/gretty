@@ -225,15 +225,19 @@ class GrettyPlugin implements Plugin<Project> {
         group = 'gretty'
         description = 'Copies webAppDir of this web-app and all overlays (if any) to ${buildDir}/inplaceWebapp'
 
-        def getInplaceMode = {
-          project.tasks.findByName('appRun').effectiveInplaceMode
+        // Capture inplaceMode at configuration time to avoid accessing project at execution time
+        def inplaceModeProvider = project.provider {
+          def appRunTask = project.tasks.findByName('appRun')
+          appRunTask?.effectiveInplaceMode ?: 'soft'
         }
 
         // We should track changes in inplaceMode value or plugin would show UP-TO-DATE for this task
         // even if inplaceMode was changed
-        inputs.property('inplaceMode', getInplaceMode)
+        inputs.property('inplaceMode', inplaceModeProvider)
 
-        onlyIf { getInplaceMode() != 'hard' }
+        onlyIf {
+          inplaceModeProvider.get() != 'hard'
+        }
 
         // Attention: call order is important here! Overlay files must be copied prior to this web-app files.
 
@@ -248,6 +252,7 @@ class GrettyPlugin implements Plugin<Project> {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         def closure = project.gretty.webappCopy
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure = closure.rehydrate(it, closure.owner, closure.thisObject)
         closure()
 
