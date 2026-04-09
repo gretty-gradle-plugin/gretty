@@ -225,13 +225,14 @@ class GrettyPlugin implements Plugin<Project> {
         group = 'gretty'
         description = 'Copies webAppDir of this web-app and all overlays (if any) to ${buildDir}/inplaceWebapp'
 
-        def getInplaceMode = {
-          project.tasks.findByName('appRun').effectiveInplaceMode
-        }
-
+        // Compute effective inplace mode from gretty extension at configuration time.
+        // addTasks() is invoked from afterProjectEvaluate, so the extension is fully configured here.
+        // Using an eagerly-computed String avoids capturing the project instance inside task closures,
+        // which is required for Gradle configuration cache compatibility ( issue #332)
+        String inplaceMode = project.gretty.webAppConfig inplaceMode ?: 'soft'
         // We should track changes in inplaceMode value or plugin would show UP-TO-DATE for this task
         // even if inplaceMode was changed
-        inputs.property('inplaceMode', getInplaceMode)
+        inputs.property('inplaceMode', inplaceMode)
 
         onlyIf { getInplaceMode() != 'hard' }
 
@@ -239,7 +240,9 @@ class GrettyPlugin implements Plugin<Project> {
 
         for (String overlay in project.gretty.overlays) {
           Project overlayProject = project.project(overlay)
-          dependsOn { overlayProject.tasks.findByName('prepareInplaceWebAppFolder') }
+          // Use a string-based task path instead of a Project-capturing closure so that this
+          // dependsOn declartion is compatible with the Gradle configuration cache ( issue #332)
+          dependsOn "#overlay:prepareInplaceWebAppFolder"
           from "${overlayProject.buildDir}/inplaceWebapp"
         }
 
