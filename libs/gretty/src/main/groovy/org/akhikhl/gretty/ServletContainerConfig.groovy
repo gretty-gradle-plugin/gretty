@@ -54,11 +54,11 @@ class ServletContainerConfig {
   /**
    * Creates a Tomcat servlet container configuration
    * @param version The Tomcat version number (e.g., '10', '11')
-   * @param websocketApiVersion The Jakarta WebSocket API version (e.g., '2.0.0', '2.1.0')
    */
-  private static Map createTomcatConfig(String version, String websocketApiVersion, String runnerGroup, String grettyVersion) {
+  private static Map createTomcatConfig(String version, String runnerGroup, String grettyVersion) {
     String versionProp = "tomcat${version}Version"
     String servletApiProp = "tomcat${version}ServletApiVersion"
+    String websocketApiProp = "tomcat${version}WebsocketApiVersion"
     String runnerConfig = "grettyRunnerTomcat${version}"
 
     return [
@@ -82,7 +82,7 @@ class ServletContainerConfig {
       servletApiDependencies: { project ->
         project.dependencies {
           grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext."$servletApiProp"}"
-          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:$websocketApiVersion"
+          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:${project.ext."$websocketApiProp"}"
         }
       }
     ]
@@ -121,7 +121,7 @@ class ServletContainerConfig {
       servletApiDependencies: { project ->
         project.dependencies {
           grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty11ServletApiVersion}"
-          grettyProvidedCompile 'jakarta.websocket:jakarta.websocket-api:2.0.0'
+          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:${project.ext.jetty11WebsocketApiVersion}"
         }
       }
     ]
@@ -154,14 +154,14 @@ class ServletContainerConfig {
       servletApiDependencies: { project ->
         project.dependencies {
           grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
-          grettyProvidedCompile 'jakarta.websocket:jakarta.websocket-api:2.1.0'
+          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:${project.ext.jetty12WebsocketApiVersion}"
         }
       }
     ]
 
     // Tomcat configurations (using helper method to reduce duplication)
-    configs['tomcat10'] = createTomcatConfig('10', '2.0.0', runnerGroup, grettyVersion)
-    configs['tomcat11'] = createTomcatConfig('11', '2.1.0', runnerGroup, grettyVersion)
+    configs['tomcat10'] = createTomcatConfig('10', runnerGroup, grettyVersion)
+    configs['tomcat11'] = createTomcatConfig('11', runnerGroup, grettyVersion)
 
     return configs
   }
