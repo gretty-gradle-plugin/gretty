@@ -23,6 +23,11 @@ class RequestResponseIT extends GebReportingSpec {
     contextPath = System.getProperty('gretty.contextPath')
   }
   
+  def 'should listen on the port set in jetty.xml'() {
+  expect:
+    port == 7777
+  }
+
   def 'should get expected static page'() {
   when:
     go "http://${host}:${port}${contextPath}/index.html"

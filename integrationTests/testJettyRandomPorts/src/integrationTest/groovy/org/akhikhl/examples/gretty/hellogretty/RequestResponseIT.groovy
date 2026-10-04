@@ -24,6 +24,11 @@ class RequestResponseIT extends GebReportingSpec {
     contextPath = System.getProperty('gretty.contextPath')
   }
   
+  def 'should use the context path set in jetty-env.xml'() {
+  expect:
+    contextPath == '/abc'
+  }
+
   def 'should get expected static page'() {
   when:
     go "http://${host}:${port}${contextPath}/index.html"
