@@ -52,6 +52,51 @@ class ServletContainerConfig {
   }
 
   /**
+   * Creates a Jetty 12 servlet container configuration
+   * @param name The container name, which also prefixes its version properties (e.g., 'jetty12')
+   * @param environment The Jetty environment the runner deploys webapps to (e.g., 'ee10', 'ee11')
+   */
+  private static Map createJetty12Config(String name, String environment, String runnerGroup, String grettyVersion) {
+    String versionProp = "${name}Version"
+    String servletApiProp = "${name}ServletApiVersion"
+    String websocketApiProp = "${name}WebsocketApiVersion"
+    String runnerConfig = "grettyRunner${name.capitalize()}"
+
+    return [
+      servletContainerType: 'jetty',
+      servletContainerVersion: { project -> project.ext."$versionProp" },
+      servletContainerDescription: { project -> "Jetty ${project.ext."$versionProp"} ($environment)" },
+      servletContainerRunnerConfig: runnerConfig,
+      servletContainerRunnerDependencies: { project ->
+        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-${name}:$grettyVersion"
+        addRedirectFilter(project, servletContainerRunnerConfig)
+        project.configurations[servletContainerRunnerConfig].resolutionStrategy {
+          force "jakarta.servlet:jakarta.servlet-api:${project.ext."$servletApiProp"}"
+          def jettyVersion = project.ext."$versionProp"
+          force "org.eclipse.jetty:jetty-server:$jettyVersion"
+          force "org.eclipse.jetty.${environment}:jetty-${environment}-servlet:$jettyVersion"
+          force "org.eclipse.jetty.${environment}:jetty-${environment}-webapp:$jettyVersion"
+          force "org.eclipse.jetty:jetty-security:$jettyVersion"
+          force "org.eclipse.jetty.${environment}:jetty-${environment}-apache-jsp:$jettyVersion"
+          force "org.eclipse.jetty.${environment}:jetty-${environment}-annotations:$jettyVersion"
+          force "org.eclipse.jetty.${environment}:jetty-${environment}-plus:$jettyVersion"
+          force "org.eclipse.jetty.${environment}.websocket:jetty-${environment}-websocket-jakarta-server:$jettyVersion"
+          def asm_version = project.ext.asmVersion
+          force "org.ow2.asm:asm:$asm_version"
+          force "org.ow2.asm:asm-commons:$asm_version"
+        }
+      },
+      servletApiVersion: { project -> project.ext."$servletApiProp" },
+      servletApiDependencies: { project ->
+        project.dependencies {
+          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext."$servletApiProp"}"
+          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:${project.ext."$websocketApiProp"}"
+        }
+      }
+    ]
+  }
+
+  /**
    * Creates a Tomcat servlet container configuration
    * @param version The Tomcat version number (e.g., '10', '11')
    */
@@ -126,38 +171,9 @@ class ServletContainerConfig {
       }
     ]
 
-    configs['jetty12'] = [
-      servletContainerType: 'jetty',
-      servletContainerVersion: { project -> project.ext.jetty12Version },
-      servletContainerDescription: { project -> "Jetty ${project.ext.jetty12Version}" },
-      servletContainerRunnerConfig: 'grettyRunnerJetty12',
-      servletContainerRunnerDependencies: { project ->
-        project.dependencies.add servletContainerRunnerConfig, "${runnerGroup}:gretty-runner-jetty12:$grettyVersion"
-        addRedirectFilter(project, servletContainerRunnerConfig)
-        project.configurations[servletContainerRunnerConfig].resolutionStrategy {
-          force "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
-          def jettyVersion = project.ext.jetty12Version
-          force "org.eclipse.jetty:jetty-server:$jettyVersion"
-          force "org.eclipse.jetty.ee10:jetty-ee10-servlet:$jettyVersion"
-          force "org.eclipse.jetty.ee10:jetty-ee10-webapp:$jettyVersion"
-          force "org.eclipse.jetty:jetty-security:$jettyVersion"
-          force "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:$jettyVersion"
-          force "org.eclipse.jetty.ee10:jetty-ee10-annotations:$jettyVersion"
-          force "org.eclipse.jetty.ee10:jetty-ee10-plus:$jettyVersion"
-          force "org.eclipse.jetty.ee10.websocket:jetty-ee10-websocket-jakarta-server:$jettyVersion"
-          def asm_version = project.ext.asmVersion
-          force "org.ow2.asm:asm:$asm_version"
-          force "org.ow2.asm:asm-commons:$asm_version"
-        }
-      },
-      servletApiVersion: { project -> project.ext.jetty12ServletApiVersion },
-      servletApiDependencies: { project ->
-        project.dependencies {
-          grettyProvidedCompile "jakarta.servlet:jakarta.servlet-api:${project.ext.jetty12ServletApiVersion}"
-          grettyProvidedCompile "jakarta.websocket:jakarta.websocket-api:${project.ext.jetty12WebsocketApiVersion}"
-        }
-      }
-    ]
+    // Jetty 12 configurations, one per Jakarta EE environment
+    configs['jetty12'] = createJetty12Config('jetty12', 'ee10', runnerGroup, grettyVersion)
+    configs['jetty12ee11'] = createJetty12Config('jetty12ee11', 'ee11', runnerGroup, grettyVersion)
 
     // Tomcat configurations (using helper method to reduce duplication)
     configs['tomcat10'] = createTomcatConfig('10', runnerGroup, grettyVersion)

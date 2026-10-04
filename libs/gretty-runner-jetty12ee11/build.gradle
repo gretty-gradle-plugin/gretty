@@ -1,0 +1,39 @@
+plugins {
+  id 'grettybuild.library'
+}
+
+configurations {
+  api {
+    exclude group: 'org.eclipse.jetty.orbit', module: 'javax.servlet'
+  }
+}
+
+// Jetty 12.1 ships the EE 10 and EE 11 environments with the same API under
+// org.eclipse.jetty.ee10 and org.eclipse.jetty.ee11, so this runner is the
+// jetty12 runner's source with the environment package switched.
+def generateSources = tasks.register('generateSources', Sync) {
+  from project(':libs:gretty-runner-jetty12').file('src/main/groovy')
+  into layout.buildDirectory.dir('generated/sources/ee11/groovy')
+  filter { String line -> line.replace('org.eclipse.jetty.ee10', 'org.eclipse.jetty.ee11') }
+}
+sourceSets.main.groovy.srcDir generateSources
+
+dependencies {
+  // #231 If we decide to drop Gradle 6 support / Groovy 2 support, we can drop choosing Groovy versions at runtime again.
+  compileOnly localGroovy()
+
+  api project(':libs:gretty-runner-jetty')
+  api "jakarta.servlet:jakarta.servlet-api:$jetty12ee11_servlet_api_version"
+  api "org.eclipse.jetty:jetty-server:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11:jetty-ee11-servlet:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11:jetty-ee11-webapp:$jetty12ee11_version"
+  api "org.eclipse.jetty:jetty-security:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11:jetty-ee11-apache-jsp:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11:jetty-ee11-annotations:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11:jetty-ee11-plus:$jetty12ee11_version"
+  api "org.eclipse.jetty:jetty-slf4j-impl:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11.websocket:jetty-ee11-websocket-jakarta-server:$jetty12ee11_version"
+  api "org.eclipse.jetty.ee11.websocket:jetty-ee11-websocket-jetty-server:$jetty12ee11_version"
+  api "org.ow2.asm:asm:$asm_version"
+  api "org.ow2.asm:asm-commons:$asm_version"
+}
