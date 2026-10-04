@@ -73,14 +73,13 @@ class ServletContainerConfig {
         project.configurations[servletContainerRunnerConfig].resolutionStrategy {
           force "jakarta.servlet:jakarta.servlet-api:${project.ext."$servletApiProp"}"
           def jettyVersion = project.ext."$versionProp"
-          force "org.eclipse.jetty:jetty-server:$jettyVersion"
-          force "org.eclipse.jetty.${environment}:jetty-${environment}-servlet:$jettyVersion"
-          force "org.eclipse.jetty.${environment}:jetty-${environment}-webapp:$jettyVersion"
-          force "org.eclipse.jetty:jetty-security:$jettyVersion"
-          force "org.eclipse.jetty.${environment}:jetty-${environment}-apache-jsp:$jettyVersion"
-          force "org.eclipse.jetty.${environment}:jetty-${environment}-annotations:$jettyVersion"
-          force "org.eclipse.jetty.${environment}:jetty-${environment}-plus:$jettyVersion"
-          force "org.eclipse.jetty.${environment}.websocket:jetty-${environment}-websocket-jakarta-server:$jettyVersion"
+          // Jetty releases all of its modules together. Put every one on the chosen version: a module
+          // left at the runner's own Jetty version would pull jetty-util, jetty-io etc. along with it.
+          eachDependency { details ->
+            String group = details.requested.group
+            if ((group == 'org.eclipse.jetty' || group.startsWith('org.eclipse.jetty.')) && group != 'org.eclipse.jetty.toolchain')
+              details.useVersion jettyVersion
+          }
           def asm_version = project.ext.asmVersion
           force "org.ow2.asm:asm:$asm_version"
           force "org.ow2.asm:asm-commons:$asm_version"
