@@ -16,6 +16,7 @@ import org.eclipse.jetty.logging.JettyLogger
 import org.eclipse.jetty.ee10.plus.webapp.EnvConfiguration
 import org.eclipse.jetty.ee10.plus.webapp.PlusConfiguration
 import org.eclipse.jetty.security.HashLoginService
+import org.eclipse.jetty.util.ClassMatcher
 import org.eclipse.jetty.ee10.servlet.SessionHandler
 import org.eclipse.jetty.util.resource.PathResource
 import org.eclipse.jetty.util.resource.Resource
@@ -160,8 +161,8 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
     context.setAttribute(MetaInfConfiguration.CONTAINER_JAR_PATTERN,
         '.*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$');
 
-    context.addServerClassMatcher(new ClassMatcher().tap {
-      // Server classes must be available from the server classloader
+    context.addHiddenClassMatcher(new ClassMatcher().tap {
+      // Hidden (formerly "server") classes must be available from the server classloader
       // This includes Jetty servlet classes needed by DefaultServlet in webdefault.xml
       exclude 'org.eclipse.jetty.ee10.servlet.'
       exclude 'org.eclipse.jetty.ee10.servlet.listener.'
@@ -182,8 +183,8 @@ class JettyConfigurerImpl extends JettyConfigurerBase {
       exclude 'org.eclipse.jetty.session.'
     })
 
-    context.addSystemClassMatcher(new ClassMatcher().tap {
-      // System classes must be loaded by the app class loader to avoid type mismatches
+    context.addProtectedClassMatcher(new ClassMatcher().tap {
+      // Protected (formerly "system") classes must be loaded by the app class loader to avoid type mismatches
       include 'jakarta.'
     })
 
